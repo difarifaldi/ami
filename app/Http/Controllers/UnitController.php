@@ -13,7 +13,7 @@ class UnitController extends Controller
      */
     public function index()
     {
-        $units = Unit::paginate(10);
+        $units = Unit::paginate(11);
         return view('unit.index', compact('units'));
     }
 
