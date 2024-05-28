@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class StatusTercapai extends Model
+{
+    use HasFactory;
+
+    protected $guarded = ['id'];
+
+    public function kui()
+    {
+        $this->hasOne(kui::class, 'id_status_akhir');
+    }
+}
