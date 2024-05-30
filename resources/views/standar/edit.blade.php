@@ -46,7 +46,7 @@
                                                 @enderror"
                                                     value="{{ $standar->no_ps }}"
                                                     placeholder="Masukan Nomor Peryataan Standar"
-                                                    @hasanyrole('auditee|auditor') readonly @endhasanyrole>
+                                                    @hasanyrole('auditee|auditor|manajemen') readonly @endhasanyrole>
                                                 <!-- error message untuk no_ps -->
                                                 @error('no_ps')
                                                     <div class="d-block text-danger">{{ $message }}</div>
@@ -90,7 +90,7 @@
                                                     is-invalid
                                                 @enderror"
                                                     placeholder="Masukan Nomor Indikator"
-                                                    @hasanyrole('auditee|auditor') readonly @endhasanyrole />
+                                                    @hasanyrole('auditee|auditor|manajemen') readonly @endhasanyrole />
                                                 <!-- error message untuk no -->
                                                 @error('no')
                                                     <div class="d-block text-danger">{{ $message }}</div>
@@ -134,7 +134,8 @@
                                                         is-invalid
                                                     @enderror"
                                                             value="{{ old('keadaan', $standar->keadaan) }}"
-                                                            placeholder="Masukan Keadaan" @role('auditor') readonly @endrole>
+                                                            placeholder="Masukan Keadaan"
+                                                            @hasanyrole('auditor|manajemen') readonly @endhasanyrole>
                                                         <!-- error message untuk keadaan -->
                                                         @error('keadaan')
                                                             <div class="d-block text-danger">{{ $message }}</div>
@@ -150,18 +151,23 @@
                                                     @enderror"
                                                             value="{{ old('bukti', $standar->bukti) }}"
                                                             placeholder="Masukan Bukti Berupa Link"
-                                                            @role('auditor') readonly @endrole>
+                                                            @hasanyrole('auditor|manajemen') readonly @endhasanyrole>
                                                         <!-- error message untuk bukti -->
                                                         @error('bukti')
                                                             <div class="d-block text-danger">{{ $message }}</div>
                                                         @enderror
+
+                                                        <a href="{{ $standar->bukti }}" target="_blank"
+                                                            class="btn btn-sm btn-primary mt-2 {{ !$standar->bukti ? 'd-none' : '' }}">Buka
+                                                            Tautan</a>
                                                     </div>
 
                                                     <!--  Status Tercapai -->
                                                     <div class="form-group mt-4">
                                                         <label>Status Tercapai</label>
                                                         <select name="id_status_tercapai" id="id_status_tercapai"
-                                                            class="form-control bg-white" @role('auditor') disabled @endrole>
+                                                            class="form-control bg-white"
+                                                            @hasanyrole('auditor|manajemen') disabled @endhasanyrole>
                                                             @foreach ($status_tercapai as $trcapai)
                                                                 <option value="{{ $trcapai->id }}"
                                                                     {{ old('id_status_tercapai', $standar->id_status_tercapai) == $trcapai->id ? 'selected' : '' }}>
@@ -232,6 +238,10 @@
                                                         @error('link')
                                                             <div class="d-block text-danger">{{ $message }}</div>
                                                         @enderror
+
+                                                        <a href="{{ $standar->link }}" target="_blank"
+                                                            class="btn btn-sm btn-primary mt-2 {{ !$standar->link ? 'd-none' : '' }}">Buka
+                                                            Tautan</a>
                                                     </div>
 
                                                     <!--  Status Temuan -->

@@ -25,7 +25,8 @@ class User extends Authenticatable
         'role',
         'status',
         'id_unit',
-        'nip'
+        'nip',
+        'ttd',
     ];
 
     /**
@@ -50,5 +51,30 @@ class User extends Authenticatable
     public function unit()
     {
         return $this->belongsTo(Unit::class, 'id_unit');
+    }
+
+    public function auditAsAuditee()
+    {
+        return $this->hasMany(AuditMutuInternal::class, 'id_user_auditee');
+    }
+    public function auditAsAdmin()
+    {
+        return $this->hasMany(AuditMutuInternal::class, 'id_user_admin');
+    }
+    public function auditAsAuditorKetua()
+    {
+        return $this->hasMany(AuditMutuInternal::class, 'id_user_auditor_ketua');
+    }
+    public function auditAsAuditorAnggota1()
+    {
+        return $this->hasMany(AuditMutuInternal::class, 'id_user_auditor_anggota1');
+    }
+    public function auditAsAuditorAnggota2()
+    {
+        return $this->hasMany(AuditMutuInternal::class, 'id_user_auditor_anggota2');
+    }
+    public function auditAsManajemen()
+    {
+        return $this->hasMany(AuditMutuInternal::class, 'id_user_manajemen');
     }
 }

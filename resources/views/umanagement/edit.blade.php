@@ -30,7 +30,8 @@
                                         <h4 class="text-center my-4">Form Edit Akun</h4>
                                         <hr />
                                         <!-- Formulir edit akun -->
-                                        <form action="{{ route('admin.update-user') }}" method="POST">
+                                        <form action="{{ route('admin.update-user') }}" method="POST"
+                                            enctype="multipart/form-data">
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ $user->id }}">
                                             <div class="form-group mt-4">
@@ -68,9 +69,11 @@
                                                 <select class="form-control" name="roles" id="roles">
                                                     @foreach ($roles as $role)
                                                         @if ($user->roles->isEmpty())
-                                                            belum ada role
+                                                            <option value="{{ $role->name }}">{{ $role->name }}
+                                                            </option>
                                                         @elseif ($user->getRoleNames()[0] == $role->name)
-                                                            <option value="{{ $role->name }}" selected>{{ $role->name }}
+                                                            <option value="{{ $role->name }}" selected>
+                                                                {{ $role->name }}
                                                             </option>
                                                         @else
                                                             <option value="{{ $role->name }}">{{ $role->name }}
@@ -97,6 +100,25 @@
                                                 </select>
                                             </div>
 
+                                            <div class="form-group mt-4">
+                                                <label for="ttd" class="form-label d-block">Logo Unit</label>
+
+                                                @if ($user->ttd)
+                                                    <img src="{{ asset('/storage/' . $user->ttd) }}"
+                                                        class="img-preview img-fluid mb-3 col-sm-3">
+                                                @else
+                                                    <img class="img-preview img-fluid mb-3 col-sm-3">
+                                                @endif
+                                                <input class="form-control  @error('ttd')is-invalid @enderror"
+                                                    type="file" id="ttd" name="ttd" onchange="previewImage()">
+                                                @error('ttd')
+                                                    <div class="d-block text-danger">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+
                                             <div class="btn-group mt-3 d-flex">
                                                 <button type="submit" class="btn btn-primary btn-sm mr-2">Simpan</button>
                                                 <a href="/admin" class="btn btn-primary btn-sm">Kembali</a>
@@ -112,6 +134,17 @@
             </div>
         </div>
     </div>
+    <script>
+        function previewImage() {
+            const image = document.querySelector("#ttd");
+            const imgPreview = document.querySelector(".img-preview");
+
+            imgPreview.style.display = 'block';
+
+            const lihatgambar = URL.createObjectURL(image.files[0]);
+            imgPreview.src = lihatgambar;
+        }
+    </script>
     @if ($message = Session::get('failed'))
         <script>
             Swal.fire({

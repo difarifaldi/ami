@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -38,8 +39,13 @@ class UserController extends Controller
             'status' => 'required',
             'id_unit' => 'required',
             'nip' => 'numeric|nullable',
+            'ttd' => 'nullable|image|file'
 
         ]);
+        if ($request->file('ttd')) {
+
+            $request->file('ttd')->store('tanda-tangan', 'public');
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -48,6 +54,7 @@ class UserController extends Controller
             'status' => $request->status,
             'id_unit' => $request->id_unit,
             'nip' => $request->nip,
+            'ttd' => $request->ttd,
         ]);
         $user->assignRole($request->roles);
         return redirect()->route('umanagement.index')->with('success', 'Berhasil menambahkan akun baru');
@@ -110,7 +117,7 @@ class UserController extends Controller
 
     public function umanagement()
     {
-        $users = User::paginate(10);
+        $users = User::all();
         $roles = Role::all();
         $units = Unit::all();
 
@@ -149,14 +156,23 @@ class UserController extends Controller
                 'roles' => 'required|string|exists:roles,name',
                 'id_unit' => 'required',
                 'nip' => 'numeric|nullable',
+                'ttd' => 'nullable|image|file|max:1024',
             ]);
 
-            // Update nama dan email
+
+            if ($request->file('ttd')) {
+                if ($user->ttd) {
+                    Storage::delete($user->ttd);
+                }
+                $validatedData['ttd'] = $request->file('ttd')->store('tanda-tangan', 'public');
+            }
+
             $user->update([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
                 'nip' => $validatedData['nip'],
                 'id_unit' => $validatedData['id_unit'],
+                'ttd' => $validatedData['ttd'],
             ]);
 
             // Update password jika diisi
@@ -169,7 +185,7 @@ class UserController extends Controller
             // Hapus peran sebelumnya jika ada dan tambahkan peran baru
             $user->syncRoles([$validatedData['roles']]);
 
-            return redirect()->route('umanagement.index')->with('success', 'User updated successfully.');
+            return redirect()->route('umanagement.index')->with('success', 'Berhasil Update User.');
         } catch (Exception $e) {
             return redirect()->back()->with(['failed' => $e->getMessage()])->withInput();
         }

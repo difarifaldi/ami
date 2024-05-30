@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuditMutuInternalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
     // standar
     Route::resource('/standar', KetercapaianStandarController::class);
+    Route::resource('/audit', AuditMutuInternalController::class);
     Route::resource('/unit', UnitController::class);
 
     // superadmin

@@ -34,6 +34,7 @@
                                                 <th scope="col">NIP</th>
                                                 <th scope="col">Role</th>
                                                 <th scope="col">Unit</th>
+                                                <th scope="col">Tanda Tangan</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">Action</th>
                                             </tr>
@@ -52,6 +53,11 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $user->unit ? $user->unit->nama : 'tidak memiliki unit' }}</td>
+
+
+                                                    <td> <img src="{{ asset('storage/' . $user->ttd) }}" class="img-fluid"
+                                                            style="width: 65px"></td>
+
 
                                                     <td>
                                                         <div class="custom-control custom-switch">
@@ -79,7 +85,7 @@
                                             @endforelse
                                         </tbody>
                                     </table>
-                                    {{ $users->links() }}
+
                                 </div>
                             </div>
 

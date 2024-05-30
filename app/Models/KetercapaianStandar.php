@@ -10,7 +10,7 @@ class KetercapaianStandar extends Model
     use HasFactory;
 
     protected $guarded = [];
-    
+
     public function statusTemuan()
     {
         return $this->belongsTo(StatusTemuan::class, 'id_status_temuan');

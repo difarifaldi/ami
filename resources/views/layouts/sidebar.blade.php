@@ -38,7 +38,21 @@
                     <div class="menu-title ">Audit Mutu</div>
                 </a>
                 <ul>
-                    <li> <a href="/standar"><i class="bi bi-pencil-square"></i></i>Ketercapaian Standar</a>
+                    <li> <a href="/audit"><i class="bi bi-person-check"></i>Identitas AMI</a>
+                    </li>
+                    <li class="border-top"> <a href="/standar"><i class="bi bi-pencil-square"></i>Ketercapaian Standar
+                            <span class="rounded bg-success badge text-white mb-3 ml-1 ">
+                                @if (Auth::user()->hasRole('auditee'))
+                                    {{ App\Models\KetercapaianStandar::whereNull('id_status_tercapai')->count() }}
+                                @elseif (Auth::user()->hasRole('auditor'))
+                                    {{ App\Models\KetercapaianStandar::whereNull('id_status_temuan')->count() }}
+                                @elseif (Auth::user()->hasRole('manajemen'))
+                                    {{ App\Models\KetercapaianStandar::whereNull('id_status_akhir')->count() }}
+                                @else
+                                    {{ App\Models\KetercapaianStandar::all()->count() }}
+                                @endif
+                            </span></a>
+
                     </li>
 
 
@@ -50,13 +64,6 @@
                     </div>
                     <div class="menu-title">Test</div>
                 </a>
-                <ul>
-                    @if (Auth::user()->role === 'admin' || Auth::user()->role === 'foreman' || Auth::user()->role === 'superadmin')
-                        <li> <a href="#"><i class="bx bx-right-arrow-alt"></i>Data Standar Indikator</a>
-                        </li>
-                    @endif
-
-                </ul>
             </li>
 
             {{-- unit --}}
@@ -69,7 +76,20 @@
                         <div class="menu-title ">Unit</div>
                     </a>
                     <ul>
-                        <li> <a href="/unit"><i class="bi bi-pencil-square"></i></i>Daftar Unit</a>
+                        <li> <a href="/unit"><i class="bi bi-list-stars"></i>Daftar Unit</a>
+                        </li>
+
+
+                    </ul>
+                </li>
+                <li>
+                    <a class="has-arrow" href="javascript:;">
+                        <div class="parent-icon icon-color-1"> <i class="bi bi-person-gear"></i>
+                        </div>
+                        <div class="menu-title ">User Management</div>
+                    </a>
+                    <ul>
+                        <li> <a href="/admin"><i class="bi bi-people"></i>Daftar Pengguna</a>
                         </li>
 
 

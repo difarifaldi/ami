@@ -52,7 +52,7 @@
                                                 readonly />
                                         </div>
 
-                                        <div class="form-group mt-4">
+                                        <div class="form-group mt-4 mb-5">
                                             <label>Indikator</label>
                                             <div class="border p-2">
                                                 {!! $standar->indikator !!}
@@ -60,8 +60,9 @@
                                         </div>
 
 
-                                        @hasanyrole('auditee|auditor')
+                                        @hasanyrole('auditee|auditor|manajemen')
                                             <!-- Bagian Auditee -->
+
                                             <h3>Bagian Auditee</h3>
                                             <div class="form-group mt-4">
                                                 <label>Keadaan</label>
@@ -79,7 +80,7 @@
                                                     Tautan</a>
                                             </div>
 
-                                            <div class="form-group mt-4">
+                                            <div class="form-group mt-4 mb-5">
                                                 <label>Status Ketercapaian</label>
                                                 <input type="text" class="form-control bg-white"
                                                     value="{{ $standar->statusTercapai ? $standar->statusTercapai->nama : '-' }}"
@@ -87,7 +88,7 @@
                                             </div>
                                         @endhasanyrole
                                         <!-- Bagian Auditor -->
-                                        @role('auditor')
+                                        @hasanyrole('auditor|manajemen')
                                             <h3>Bagian Auditor</h3>
                                             <div class="form-group mt-4">
                                                 <label>Temuan</label>
@@ -108,15 +109,42 @@
                                                 <label>Link</label>
                                                 <input type="text" class="form-control bg-white"
                                                     value="{{ $standar->link }}" readonly />
+
+                                                <a href="{{ $standar->link }}" target="_blank"
+                                                    class="btn btn-sm btn-primary mt-2 {{ !$standar->link ? 'd-none' : '' }}">Buka
+                                                    Tautan</a>
                                             </div>
-                                            <div class="form-group mt-4">
+                                            <div class="form-group mt-4 mb-5">
                                                 <label>Status Temuan</label>
                                                 <input type="text" class="form-control bg-white"
                                                     value="{{ $standar->statusTemuan ? $standar->statusTemuan->nama : '-' }}"
                                                     readonly />
                                             </div>
-                                        @endrole
+                                        @endhasanyrole
 
+                                        @role('manajemen')
+                                            <h3>Bagian Manajemen</h3>
+                                            <div class="form-group mt-4">
+                                                <label>Important</label>
+                                                <input type="text" class="form-control bg-white"
+                                                    value="{{ $standar->important }}" readonly />
+                                            </div>
+                                            <div class="form-group mt-4">
+                                                <label>Urgen</label>
+                                                <input type="text" class="form-control bg-white"
+                                                    value="{{ $standar->urgen }}" readonly />
+                                            </div>
+                                            <div class="form-group mt-4">
+                                                <label>Rencana</label>
+                                                <input type="text" class="form-control bg-white"
+                                                    value="{{ $standar->rencana }}" readonly />
+                                            </div>
+                                            <div class="form-group mt-4">
+                                                <label>Status Akhir</label>
+                                                <input type="text" class="form-control bg-white"
+                                                    value="{{ $standar->statusAkhir->nama }}" readonly />
+                                            </div>
+                                        @endrole
                                     </div>
                                 </div>
                             </div>

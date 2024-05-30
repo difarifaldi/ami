@@ -65,7 +65,6 @@
                                                 // logic icons
                                                 $class = 'bi-check-lg';
                                                 $bg = '';
-                                                $color = '';
                                                 
                                                 if (auth()->user()->hasRole('auditee') && isset($standar->statusTercapai)) {
                                                     $class = 'bi-brush';
@@ -80,13 +79,25 @@
                                                     $class = 'bi-brush';
                                                 }
                                                 
-                                                if (isset($standar->statusTemuan->nama)) {
-                                                    if ($standar->statusTemuan->nama == 'belum mencapai') {
-                                                        $color = 'text-danger';
-                                                    } elseif ($standar->statusTemuan->nama == 'Tercapai') {
-                                                        $color = 'text-success';
-                                                    } elseif ($standar->statusTemuan->nama == 'Melampaui') {
-                                                        $color = 'text-primary';
+                                                $colorTemuan = '';
+                                                $colorTercapai = '';
+                                                
+                                                // Array of status names
+                                                $statusNames = ['statusTemuan' => 'colorTemuan', 'statusTercapai' => 'colorTercapai'];
+                                                
+                                                foreach ($statusNames as $statusName => $colorVar) {
+                                                    if (isset($standar->$statusName->nama)) {
+                                                        switch ($standar->$statusName->nama) {
+                                                            case 'belum mencapai':
+                                                                $$colorVar = 'text-danger';
+                                                                break;
+                                                            case 'tercapai':
+                                                                $$colorVar = 'text-success';
+                                                                break;
+                                                            case 'melampaui':
+                                                                $$colorVar = 'text-info';
+                                                                break;
+                                                        }
                                                     }
                                                 }
                                                 ?>
@@ -110,7 +121,7 @@
                                                             <a target="_blank"
                                                                 href="{{ $standar->bukti ? $standar->bukti : '' }}">{{ $standar->bukti ? $standar->bukti : '-' }}</a>
                                                         </td>
-                                                        <td class="{{ $bg }}">
+                                                        <td class="{{ $bg }} {{ $colorTercapai }}">
                                                             {{ $standar->statusTercapai ? $standar->statusTercapai->nama : '-' }}
                                                         </td>
                                                         @hasanyrole('auditor|manajemen')
@@ -122,7 +133,7 @@
                                                                     {{ $standar->link ? $standar->link : '-' }}</a>
 
                                                             </td>
-                                                            <td class="{{ $bg }} {{ $color }}">
+                                                            <td class="{{ $bg }} {{ $colorTemuan }}">
                                                                 {{ $standar->statusTemuan ? $standar->statusTemuan->nama : '-' }}
                                                             </td>
                                                         @endhasanyrole

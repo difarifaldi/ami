@@ -113,6 +113,12 @@
                                                     <option value="inactive">Tidak Aktif</option>
                                                 </select>
                                             </div>
+                                            <div class="form-group mt-4">
+                                                <label class="d-block">Tanda Tangan</label>
+                                                <img class="img-preview img-fluid col-md-3 mb-3">
+                                                <input type="file" name="ttd" id="ttd" class=" form-control"
+                                                    onchange="previewImage()">
+                                            </div>
                                             <div class="btn-group mt-3 w-100">
                                                 <button type="submit" class="btn btn-primary btn-block">Register</button>
                                             </div>
@@ -143,6 +149,17 @@
                 passwordIcon.classList.remove('bx-show');
                 passwordIcon.classList.add('bx-hide');
             }
+        }
+    </script>
+    <script>
+        function previewImage() {
+            const image = document.querySelector("#ttd");
+            const imgPreview = document.querySelector(".img-preview");
+
+            imgPreview.style.display = 'block';
+
+            const lihatgambar = URL.createObjectURL(image.files[0]);
+            imgPreview.src = lihatgambar;
         }
     </script>
 @endsection

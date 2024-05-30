@@ -17,11 +17,11 @@
                         <div class="card-body">
                             <div class="card-title">
                                 <!-- Isi judul card -->
-                                <h4 class="text-center my-4">Daftar Unit</h4>
+                                <h4 class="text-center my-4">Audit Mutu Internal</h4>
                             </div>
                             <hr />
 
-                            <a href="/unit/create" class="btn btn-md btn-success mb-3 ml-3">Unit Baru</a>
+                            <a href="/audit/create" class="btn btn-md btn-success mb-3 ml-3">Tambah Data</a>
 
                             <div class="table-responsive">
                                 <div class="card-body">
@@ -29,34 +29,43 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th scope="col">No</th>
-                                                <th scope="col">Nama</th>
-                                                <th scope="col">Logo</th>
+                                                <th scope="col">Unit</th>
+                                                <th scope="col">Admin</th>
+                                                <th scope="col">Auditee</th>
+                                                <th scope="col">Auditor Ketua</th>
+                                                <th scope="col">Auditor Anggota 1</th>
+                                                <th scope="col">Auditor Anggota 2</th>
+                                                <th scope="col">Manajamen</th>
+                                                <th scope="col">tanggal</th>
                                                 <th scope="col">Aksi</th>
 
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($units as $unit)
+                                            @forelse ($audits as $audit)
                                                 <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $unit->nama }}</td>
 
-                                                    <td> <img src="{{ asset('storage/' . $unit->gambar) }}"
-                                                            class="img-fluid" style="width: 65px"></td>
+                                                    <td>{{ $audit->unit->nama }}</td>
+                                                    <td>{{ $audit->admin->name }}</td>
+                                                    <td>{{ $audit->auditee->name }}</td>
+                                                    <td>{{ $audit->auditorKetua->name }}</td>
+                                                    <td>{{ $audit->auditorAnggota1->name }}</td>
+                                                    <td>{{ $audit->auditorAnggota2->name }}</td>
+                                                    <td>{{ $audit->manajemen->name }}</td>
+                                                    <td> {{ \Carbon\Carbon::parse($audit->tanggal)->format('d, M Y') }}
+                                                    </td>
 
                                                     <td>
-
-                                                        <a href="/unit/{{ $unit->id }}/edit"
+                                                        <a href="/audit/{{ $audit->id }}/edit"
                                                             class="btn btn-warning btn-sm"><i class="bi bi-brush"></i></a>
 
 
-                                                        <form action="/unit/{{ $unit->id }}" method="post"
+                                                        <form action="/audit/{{ $audit->id }}" method="post"
                                                             class="d-inline">
                                                             @method('delete')
                                                             @csrf
                                                             <button class="btn btn-danger btn-sm h-full  border-0"
-                                                                onclick="return confirm('Apakah yakin ingin menghapus unit?')"><i
+                                                                onclick="return confirm('Apakah yakin ingin menghapus audit?')"><i
                                                                     class="bi bi-trash"></i></button>
                                                         </form>
 
@@ -64,8 +73,10 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="6">
-                                                        <div class="alert alert-danger">Data Unit tidak tersedia.</div>
+                                                    <td colspan="9">
+                                                        <div class="alert alert-danger">
+                                                            Belum
+                                                            ada data AMI.</div>
                                                     </td>
                                                 </tr>
                                             @endforelse
