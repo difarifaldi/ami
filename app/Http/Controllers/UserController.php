@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditMutuInternal;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -29,36 +31,49 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        try {
 
-        $request->validate([
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+                'roles' => 'required|string|exists:roles,name',
+                'status' => 'required',
+                'id_unit' => 'required|integer',
+                'nip' => 'numeric|nullable',
+                'ttd' => 'nullable|image|file|max:1024', // Menambahkan ukuran maksimal file
+            ]);
 
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
-            'roles' => 'required',
-            'status' => 'required',
-            'id_unit' => 'required',
-            'nip' => 'numeric|nullable',
-            'ttd' => 'nullable|image|file'
 
-        ]);
-        if ($request->file('ttd')) {
+            if ($request->file('ttd')) {
+                $validatedData['ttd'] = $request->file('ttd')->store('tanda-tangan', 'public');
+            }
 
-            $request->file('ttd')->store('tanda-tangan', 'public');
+
+            $user = User::create([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'status' => $validatedData['status'],
+                'id_unit' => $validatedData['id_unit'],
+                'nip' => $validatedData['nip'],
+                'ttd' => $validatedData['ttd'] ?? null,
+            ]);
+
+
+            $user->assignRole($validatedData['roles']);
+
+
+            return redirect()->route('umanagement.index')->with('success', 'Berhasil menambahkan akun baru');
+        } catch (Exception $e) {
+            dd([
+                'Message' => $e->getMessage(),
+                'File' => $e->getFile(),
+                'Line' => $e->getLine(),
+            ]);
         }
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'status' => $request->status,
-            'id_unit' => $request->id_unit,
-            'nip' => $request->nip,
-            'ttd' => $request->ttd,
-        ]);
-        $user->assignRole($request->roles);
-        return redirect()->route('umanagement.index')->with('success', 'Berhasil menambahkan akun baru');
     }
+
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -105,15 +120,43 @@ class UserController extends Controller
 
     public function deleteUser($userId)
     {
+        DB::beginTransaction();
+
         try {
             $user = User::findOrFail($userId);
+
+            // Cek apakah ada relasi dengan tabel AuditMutuInternal
+            $relatedAudit = AuditMutuInternal::where(function ($query) use ($userId) {
+                $query->where('id_user_auditee', $userId)
+                    ->orWhere('id_user_auditor_ketua', $userId)
+                    ->orWhere('id_user_auditor_anggota1', $userId)
+                    ->orWhere('id_user_auditor_anggota2', $userId)
+                    ->orWhere('id_user_manajemen', $userId)
+                    ->orWhere('id_user_admin', $userId);
+            })->first();
+
+            if ($relatedAudit) {
+                DB::rollBack(); // Batalkan transaksi
+                return response()->json(['message' => 'Tidak dapat menghapus pengguna karena masih terkait dengan entitas lain.'], 400);
+            }
+
+            // Lanjutkan penghapusan jika tidak ada relasi
+            if ($user->ttd) {
+                Storage::delete('public/' . $user->ttd);
+            }
+
             $user->delete();
 
-            return response()->json(['message' => 'success'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            DB::commit();
+
+            return response()->json(['message' => 'Akun pengguna berhasil dihapus!'], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => 'Terjadi kesalahan!'], 500);
         }
     }
+
 
     public function umanagement()
     {
@@ -159,7 +202,7 @@ class UserController extends Controller
                 'ttd' => 'nullable|image|file|max:1024',
             ]);
 
-
+            // Cek jika ada file 'ttd' yang diunggah
             if ($request->file('ttd')) {
                 if ($user->ttd) {
                     Storage::delete($user->ttd);
@@ -167,13 +210,21 @@ class UserController extends Controller
                 $validatedData['ttd'] = $request->file('ttd')->store('tanda-tangan', 'public');
             }
 
-            $user->update([
+            // Persiapkan data untuk diupdate
+            $dataToUpdate = [
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
                 'nip' => $validatedData['nip'],
                 'id_unit' => $validatedData['id_unit'],
-                'ttd' => $validatedData['ttd'],
-            ]);
+            ];
+
+            // Tambahkan 'ttd' jika ada di $validatedData
+            if (isset($validatedData['ttd'])) {
+                $dataToUpdate['ttd'] = $validatedData['ttd'];
+            }
+
+            // Update user
+            $user->update($dataToUpdate);
 
             // Update password jika diisi
             if ($request->filled('password')) {
@@ -190,6 +241,7 @@ class UserController extends Controller
             return redirect()->back()->with(['failed' => $e->getMessage()])->withInput();
         }
     }
+
 
 
     public function toggleUserStatus(Request $request)

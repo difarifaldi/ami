@@ -128,7 +128,8 @@
             $('#example').DataTable({
                 order: [
                     [0, 'asc']
-                ]
+                ],
+                scrollX: true
             });
         });
     </script>

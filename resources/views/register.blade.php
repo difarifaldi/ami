@@ -32,7 +32,8 @@
                                         </div>
                                         <hr />
                                         <!-- Formulir pendaftaran -->
-                                        <form id="register-form" action="{{ route('register.store') }}" method="POST">
+                                        <form id="register-form" action="{{ route('register.store') }}" method="POST"
+                                            enctype="multipart/form-data">
                                             @csrf
 
                                             <div class="form-group mt-4">

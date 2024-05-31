@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Unit;
 use App\Http\Requests\StoreUnitRequest;
 use App\Http\Requests\UpdateUnitRequest;
+use App\Models\AuditMutuInternal;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class UnitController extends Controller
@@ -69,7 +72,7 @@ class UnitController extends Controller
 
         $validatedData = $request->validate([
             'nama' => 'required',
-            'gambar' => 'required|image|file|max:1024'
+            'gambar' => 'nullable|image|file|max:1024'
         ]);
 
         if ($request->file('gambar')) {
@@ -87,7 +90,26 @@ class UnitController extends Controller
      */
     public function destroy(Unit $unit)
     {
-        $unit->delete();
-        return redirect('/unit')->with('success', 'Unit berhasil dihapus');
+        DB::beginTransaction();
+
+        try {
+            $checkUnitUser = User::where('id_unit', $unit->id)->first();
+            $checkUnitAMI = AuditMutuInternal::where('id_unit', $unit->id)->first();
+
+            if ($checkUnitUser || $checkUnitAMI) {
+                DB::rollBack();
+                return response()->json(['message' => 'Tidak dapat menghapus Unit karena masih terkait dengan entitas lain.'], 400);
+            }
+
+            $unit->delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Unit berhasil dihapus!'], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => 'Terjadi kesalahan!'], 500);
+        }
     }
 }

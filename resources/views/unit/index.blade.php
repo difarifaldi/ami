@@ -50,14 +50,9 @@
                                                         <a href="/unit/{{ $unit->id }}/edit"
                                                             class="btn btn-warning btn-sm"><i class="bi bi-brush"></i></a>
 
-
-                                                        <form action="/unit/{{ $unit->id }}" method="post"
-                                                            class="d-inline">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <button class="btn btn-danger btn-sm h-full  border-0"
-                                                                onclick="return confirm('Apakah yakin ingin menghapus unit?')"><i
-                                                                    class="bi bi-trash"></i></button>
+                                                        <button class="btn btn-danger btn-sm h-full  border-0"
+                                                            onclick="deleteUnit({{ $unit->id }})"><i
+                                                                class="bi bi-trash"></i></button>
                                                         </form>
 
                                                     </td>
@@ -83,6 +78,77 @@
         <!--end page-wrapper-->
     </div>
     <!-- end wrapper -->
+    <div class="modal fade" id="deleteUnitModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Konfirmasi Hapus</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin menghapus unit ini?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let unitToDelete = null;
+
+        function deleteUnit(unit) {
+            unitToDelete = unit;
+            $('#deleteUnitModal').modal('show');
+        }
+
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            if (unitToDelete) {
+                fetch(`/unit/${unitToDelete}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        $('#deleteUnitModal').modal('hide');
+                        // Tampilkan pesan SweetAlert berhasil
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Unit berhasil dihapus!',
+                            timer: 1400,
+                            showConfirmButton: false
+                        });
+                        // Refresh halaman setelah berhasil menghapus Unit
+                        location.reload();
+                    })
+                    .catch(error => {
+                        $('#deleteUnitModal').modal('hide');
+                        // Tampilkan pesan SweetAlert gagal
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Anda tidak bisa menghapus unit ini!',
+                            timer: 1400,
+                            showConfirmButton: false
+                        });
+                        console.error('There was an error!', error);
+                    });
+            }
+        });
+    </script>
 
 
 
