@@ -35,29 +35,32 @@
                 <a class="has-arrow" href="javascript:;">
                     <div class="parent-icon icon-color-1"> <i class="bi bi-mortarboard"></i>
                     </div>
-                    <div class="menu-title ">Audit Mutu</div>
+                    <div class="menu-title">Audit Mutu</div>
                 </a>
                 <ul>
                     <li> <a href="/audit"><i class="bi bi-person-check"></i>Identitas AMI</a>
                     </li>
-                    <li class="border-top"> <a href="/standar"><i class="bi bi-pencil-square"></i>Ketercapaian Standar
-                            <span class="rounded bg-success badge text-white mb-3 ml-1 ">
-                                @if (Auth::user()->hasRole('auditee'))
-                                    {{ App\Models\KetercapaianStandar::whereNull('id_status_tercapai')->count() }}
-                                @elseif (Auth::user()->hasRole('auditor'))
-                                    {{ App\Models\KetercapaianStandar::whereNull('id_status_temuan')->count() }}
-                                @elseif (Auth::user()->hasRole('manajemen'))
-                                    {{ App\Models\KetercapaianStandar::whereNull('id_status_akhir')->count() }}
-                                @else
-                                    {{ App\Models\KetercapaianStandar::all()->count() }}
-                                @endif
-                            </span></a>
-
+                    <li class="border-top">
+                        <a href="/instrument"><i class="bi bi-pencil-square"></i>Ketercapaian Standar
+                            @if (Auth::user()->hasRole('admin|superadmin'))
+                                {{-- tidak ada span --}}
+                            @else
+                                <span class="rounded bg-success badge text-white mb-3 ml-1">
+                                    @if (Auth::user()->hasRole('auditee'))
+                                        {{ App\Models\InstrumenAudit::whereNull('id_status_tercapai')->count() }}
+                                    @elseif (Auth::user()->hasRole('auditor'))
+                                        {{ App\Models\InstrumenAudit::whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count() }}
+                                    @elseif (Auth::user()->hasRole('manajemen'))
+                                        {{ App\Models\InstrumenAudit::whereNull('id_status_akhir')->whereNotNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count() }}
+                                    @endif
+                                </span>
+                            @endif
+                        </a>
                     </li>
-
-
                 </ul>
             </li>
+
+
             <li>
                 <a class="has-arrow" href="javascript:;">
                     <div class="parent-icon icon-color-2"><i class="bx bx-grid-alt"></i>
@@ -69,6 +72,22 @@
             {{-- unit --}}
             @role('superadmin')
                 <li class="menu-label">Admin Section</li>
+                <li>
+                    <a class="has-arrow" href="javascript:;">
+                        <div class="parent-icon icon-color-1"> <i class="bi bi-backpack4"></i>
+                        </div>
+                        <div class="menu-title ">Indikator</div>
+                    </a>
+                    <ul>
+                        <li> <a href="/pernyataan"><i class="bi bi-card-checklist"></i>Daftar Pernyataan</a>
+                        </li>
+                        <li class="border-top"> <a href="/indikator"><i class="bi bi-calendar4-week"></i>Daftar
+                                Indikator</a>
+                        </li>
+
+
+                    </ul>
+                </li>
                 <li>
                     <a class="has-arrow" href="javascript:;">
                         <div class="parent-icon icon-color-1"> <i class="bi bi-building-gear"></i>

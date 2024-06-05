@@ -14,9 +14,9 @@
                         <div class="pl-3">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-0 p-0">
-                                    <li class="breadcrumb-item"><a href="/standar"><i class='bx bx-home-alt'></i></a>
+                                    <li class="breadcrumb-item"><a href="/indikator"><i class='bx bx-home-alt'></i></a>
                                     </li>
-                                    <li class="breadcrumb-item active" aria-current="page">Form Instrument</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Edit Indikator</li>
                                 </ol>
                             </nav>
                         </div>
@@ -28,47 +28,46 @@
                                 <div class="card border-0 shadow-sm rounded">
                                     <div class="card-body">
                                         <div>
-                                            <h4 class="text-center my-4">Form Instrument</h4>
+                                            <h4 class="text-center my-4">Edit Indikator</h4>
                                         </div>
                                         <hr />
                                         <!-- Formulir pendaftaran -->
-                                        <form id="standar-form" action="{{ route('standar.store') }}" method="POST">
+                                        <form id="indikator-form" action="{{ route('indikator.update', $indikator->id) }}"
+                                            method="POST" enctype="multipart/form-data">
                                             @csrf
+                                            @method('PATCH')
 
                                             <div class="form-group mt-4">
                                                 <label>No Pernyataan Standar</label>
-                                                <input type="text" name="no_ps" id="no_ps"
-                                                    class="form-control @error('no_ps')
-                                                    is-invalid
-                                                @enderror"
-                                                    value="{{ old('no_ps') }}"
-                                                    placeholder="Masukan Nomor Peryataan Standar" />
-                                                <!-- error message untuk no_ps -->
-                                                @error('no_ps')
+                                                <select name="id_pernyataan" id="id_pernyataan"
+                                                    class="form-control bg-white" onchange="updatePernyataanStandar()">
+                                                    <option value="">Silahkan Pilih Pernyataan Standar</option>
+                                                    @foreach ($pernyataans as $pernyataan)
+                                                        <option value="{{ $pernyataan->id }}"
+                                                            data-pernyataan="{!! htmlspecialchars($pernyataan->pernyataan_standar) !!}"
+                                                            {{ old('id_pernyataan', $indikator->id_pernyataan) == $pernyataan->id ? 'selected' : '' }}>
+                                                            {{ $pernyataan->no_ps }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+
+                                                @error('id_pernyataan')
                                                     <div class="d-block text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
 
                                             <div class="form-group mt-4">
-                                                <label>pernyataan Standar</label>
-                                                <input id="pernyataan_standar" type="hidden" name="pernyataan_standar"
-                                                    value="{{ old('pernyataan_standar') }}">
-                                                <trix-editor
-                                                    class="@error('pernyataan_standar')
-                                                    border-danger
-                                                @enderror"
-                                                    input="pernyataan_standar"></trix-editor>
-                                                <!-- error message untuk pernyataan_standar -->
-                                                @error('pernyataan_standar')
-                                                    <div class="d-block text-danger">{{ $message }}</div>
-                                                @enderror
+                                                <label>Pernyataan Standar</label>
+                                                <div class="border p-2" id="pernyataan_standar">
+                                                    {!! $pernyataan_standar ?? '' !!}
+                                                </div>
                                             </div>
 
                                             <div class="form-group mt-4">
                                                 <label>Nomor Indikator</label>
                                                 <input type="text" name="no" id="no"
-                                                    value="{{ old('no') }}"
-                                                    class="form-control @error('no')
+                                                    value="{{ $indikator->no }}"
+                                                    class="form-control bg-white @error('no')
                                                     is-invalid
                                                 @enderror"
                                                     placeholder="Masukan Nomor Indikator" />
@@ -81,11 +80,11 @@
                                             <div class="form-group mt-4">
                                                 <label>Indikator</label>
                                                 <input id="indikator" type="hidden" name="indikator"
-                                                    value="{{ old('indikator') }}">
+                                                    value="{{ $indikator->indikator }}">
                                                 <trix-editor
                                                     class="@error('indikator')
-                                                    border-danger
-                                                @enderror"
+                                                border-danger
+                                            @enderror"
                                                     input="indikator"></trix-editor>
                                                 <!-- error message untuk indikator -->
                                                 @error('indikator')
@@ -93,8 +92,9 @@
                                                 @enderror
 
 
+
                                                 <div class="btn-group mt-3 w-100">
-                                                    <button type="submit" class="btn btn-primary btn-block">Kirim</button>
+                                                    <button type="submit" class="btn btn-primary btn-block">Simpan</button>
                                                 </div>
                                         </form>
                                         <!-- End Formulir pendaftaran -->
@@ -107,4 +107,14 @@
             </div>
         </div>
     </div>
+    <script>
+        function updatePernyataanStandar() {
+            var select = document.getElementById('id_pernyataan');
+            var pernyataan = select.options[select.selectedIndex].getAttribute('data-pernyataan');
+            document.getElementById('pernyataan_standar').innerHTML = pernyataan ? pernyataan : '';
+        }
+
+        // Optionally, call the function once to set the initial value if a selection is already made.
+        updatePernyataanStandar();
+    </script>
 @endsection

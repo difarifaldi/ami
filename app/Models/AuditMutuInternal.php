@@ -38,4 +38,8 @@ class AuditMutuInternal extends Model
     {
         return $this->belongsTo(User::class, 'id_user_admin');
     }
+    public function instrument()
+    {
+        return $this->hasMany(InstrumenAudit::class, 'id_AMI');
+    }
 }

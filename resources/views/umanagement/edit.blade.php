@@ -101,7 +101,7 @@
                                             </div>
 
                                             <div class="form-group mt-4">
-                                                <label for="ttd" class="form-label d-block">Logo Unit</label>
+                                                <label for="ttd" class="form-label d-block">Tanda Tangan</label>
 
                                                 @if ($user->ttd)
                                                     <img src="{{ asset('/storage/' . $user->ttd) }}"

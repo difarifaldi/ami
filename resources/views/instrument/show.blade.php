@@ -14,7 +14,7 @@
                         <div class="pl-3">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-0 p-0">
-                                    <li class="breadcrumb-item"><a href="/standar"><i class='bx bx-home-alt'></i></a>
+                                    <li class="breadcrumb-item"><a href="/instrument"><i class='bx bx-home-alt'></i></a>
                                     </li>
                                     <li class="breadcrumb-item active" aria-current="page">Detail Instrumen</li>
                                 </ol>
@@ -37,25 +37,25 @@
                                         <div class="form-group mt-4">
                                             <label>No Pernyataan Standar</label>
                                             <input type="text" class="form-control bg-white"
-                                                value="{{ $standar->no_ps }}" readonly />
+                                                value="{{ $instrument->no_ps }}" readonly />
                                         </div>
 
                                         <div class="form-group mt-4">
                                             <label>pernyataan Standar</label>
                                             <div class="border p-2">
-                                                {!! $standar->pernyataan_standar !!}
+                                                {!! $instrument->pernyataan_standar !!}
                                             </div>
                                         </div>
                                         <div class="form-group mt-4">
                                             <label>Nomor Indikator</label>
-                                            <input type="text" class="form-control bg-white" value="{{ $standar->no }}"
-                                                readonly />
+                                            <input type="text" class="form-control bg-white"
+                                                value="{{ $instrument->no }}" readonly />
                                         </div>
 
                                         <div class="form-group mt-4 mb-5">
                                             <label>Indikator</label>
                                             <div class="border p-2">
-                                                {!! $standar->indikator !!}
+                                                {!! $instrument->indikator !!}
                                             </div>
                                         </div>
 
@@ -65,25 +65,39 @@
 
                                             <h3>Bagian Auditee</h3>
                                             <div class="form-group mt-4">
-                                                <label>Keadaan</label>
+                                                <label>Deskripsi Temuan</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->keadaan ? $standar->keadaan : '-' }}" readonly />
+                                                    value="{{ $instrument->deskripsi_temuan ? $instrument->deskripsi_temuan : '-' }}"
+                                                    readonly />
                                             </div>
 
                                             <div class="form-group mt-4">
-                                                <label for="bukti">Bukti</label>
-                                                <input type="text" class="form-control bg-white" id="bukti"
-                                                    value="{{ $standar->bukti ? $standar->bukti : '-' }}" readonly />
+                                                <label>Akar Penyebab</label>
+                                                <input type="text" class="form-control bg-white"
+                                                    value="{{ $instrument->akar_penyebab ? $instrument->akar_penyebab : '-' }}"
+                                                    readonly />
+                                            </div>
 
-                                                <a href="{{ $standar->bukti }}" target="_blank"
-                                                    class="btn btn-sm btn-primary mt-2 {{ !$standar->bukti ? 'd-none' : '' }}">Buka
+                                            <div class="form-group mt-4">
+                                                <label>Akibat</label>
+                                                <input type="text" class="form-control bg-white"
+                                                    value="{{ $instrument->akibat ? $instrument->akibat : '-' }}" readonly />
+                                            </div>
+
+                                            <div class="form-group mt-4">
+                                                <label for="bukti">Bukti Temuan</label>
+                                                <input type="text" class="form-control bg-white" id="bukti"
+                                                    value="{{ $instrument->bukti ? $instrument->bukti : '-' }}" readonly />
+
+                                                <a href="{{ $instrument->bukti }}" target="_blank"
+                                                    class="btn btn-sm btn-primary mt-2 {{ !$instrument->bukti ? 'd-none' : '' }}">Buka
                                                     Tautan</a>
                                             </div>
 
                                             <div class="form-group mt-4 mb-5">
                                                 <label>Status Ketercapaian</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->statusTercapai ? $standar->statusTercapai->nama : '-' }}"
+                                                    value="{{ $instrument->statusTercapai ? $instrument->statusTercapai->nama : '-' }}"
                                                     readonly />
                                             </div>
                                         @endhasanyrole
@@ -91,58 +105,61 @@
                                         @hasanyrole('auditor|manajemen')
                                             <h3>Bagian Auditor</h3>
                                             <div class="form-group mt-4">
-                                                <label>Temuan</label>
+                                                <label>Temuan Audit</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->temuan }}" readonly />
+                                                    value="{{ $instrument->temuan_audit ? $instrument->temuan_audit : '-' }}"
+                                                    readonly />
                                             </div>
                                             <div class="form-group mt-4">
-                                                <label>Rekomendasi</label>
+                                                <label>Rekomendasi Auditor</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->rekomendasi }}" readonly />
+                                                    value="{{ $instrument->rekomendasi_auditor ? $instrument->rekomendasi_auditor : '-' }}"
+                                                    readonly />
                                             </div>
                                             <div class="form-group mt-4">
-                                                <label>Penanggung Jawab</label>
+                                                <label>Penanggung Jawab Perbaikan</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->penanggung_jawab }}" readonly />
+                                                    value="{{ $instrument->penanggung_jawab ? $instrument->penanggung_jawab : '-' }}"
+                                                    readonly />
                                             </div>
                                             <div class="form-group mt-4">
-                                                <label>Link</label>
+                                                <label>Link Bukti Tindak Lanjut</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->link }}" readonly />
+                                                    value="{{ $instrument->link ? $instrument->link : '-' }}" readonly />
 
-                                                <a href="{{ $standar->link }}" target="_blank"
-                                                    class="btn btn-sm btn-primary mt-2 {{ !$standar->link ? 'd-none' : '' }}">Buka
+                                                <a href="{{ $instrument->link }}" target="_blank"
+                                                    class="btn btn-sm btn-primary mt-2 {{ !$instrument->link ? 'd-none' : '' }}">Buka
                                                     Tautan</a>
                                             </div>
                                             <div class="form-group mt-4 mb-5">
                                                 <label>Status Temuan</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->statusTemuan ? $standar->statusTemuan->nama : '-' }}"
+                                                    value="{{ $instrument->statusTemuan ? $instrument->statusTemuan->nama : '-' }}"
                                                     readonly />
                                             </div>
                                         @endhasanyrole
 
                                         @role('manajemen')
                                             <h3>Bagian Manajemen</h3>
+
                                             <div class="form-group mt-4">
-                                                <label>Important</label>
+                                                <label>Rencana Tindak Lanjut</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->important }}" readonly />
+                                                    value="{{ $instrument->rencana_perbaikan ? $instrument->rencana_perbaikan : '-' }}"
+                                                    readonly />
                                             </div>
+
                                             <div class="form-group mt-4">
-                                                <label>Urgen</label>
+                                                <label>Jadwal Penyelesaian</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->urgen }}" readonly />
+                                                    value="{{ $instrument->jadwal_penyelesaian ? \Carbon\Carbon::parse($instrument->jadwal_penyelesaian)->format('d, M Y') : '-' }}"
+                                                    readonly />
                                             </div>
-                                            <div class="form-group mt-4">
-                                                <label>Rencana</label>
-                                                <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->rencana }}" readonly />
-                                            </div>
+
                                             <div class="form-group mt-4">
                                                 <label>Status Akhir</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $standar->statusAkhir->nama }}" readonly />
+                                                    value="{{ $instrument->statusAkhir->nama }}" readonly />
                                             </div>
                                         @endrole
                                     </div>

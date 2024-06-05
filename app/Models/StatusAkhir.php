@@ -9,8 +9,8 @@ class StatusAkhir extends Model
 {
     use HasFactory;
 
-    public function kui()
+    public function instrument()
     {
-        $this->hasOne(kui::class, 'id_status_akhir');
+        $this->hasOne(InstrumenAudit::class, 'id_status_akhir');
     }
 }

@@ -9,7 +9,7 @@
                 <div class="page-content">
                     <!--breadcrumb-->
                     <div class="page-breadcrumb d-none d-md-flex align-items-center mb-3">
-                        <div class="breadcrumb-title pr-3">Ketercapaian Standar</div>
+                        <div class="breadcrumb-title pr-3">Ketercapaian instrument</div>
                         <div class="pl-3">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-0 p-0">
@@ -24,21 +24,22 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
-                                <h4 class="text-center my-4">Instrument</h4>
+                                <h4 class="text-center my-4">Instrument Audit</h4>
                             </div>
-                            @role('superadmin')
+                            @role('auditee')
                                 <hr />
-                                <a href="standar/create" class="btn btn-primary">Tambah Instrument</a>
+                                <a href="instrument/create" class="btn btn-primary mb-3">Audit Instrumen</a>
                             @endrole
-                            <hr />
+
 
                             <div class="table-responsive">
                                 <div class="card-body">
                                     <table id="example" class="table table-bordered text-center " style="width:100%">
                                         <thead>
                                             <th scope="col">No PS</th>
-                                            {{-- <th scope="col">Pernyataan Standar</th> --}}
+                                            {{-- <th scope="col">Pernyataan instrument</th> --}}
                                             <th scope="col">No Indikator</th>
+
                                             {{-- <th scope="col">Indikator</th> --}}
 
                                             @hasanyrole('auditee|auditor|manajemen')
@@ -49,33 +50,36 @@
                                                     <th scope="col">Temuan</th>
                                                     <th scope="col">Link tindak Lanjut</th>
                                                     <th scope="col">Status Temuan</th>
+                                                    <th scope="col">Unit</th>
+                                                    <th scope="col">Auditee</th>
+                                                    <th scope="col">Auditor</th>
                                                 @endhasanyrole
                                             @endhasanyrole
                                             @role('manajemen')
                                                 {{-- <th scope="col">Keadaan</th> --}}
-                                                <th scope="col">important</th>
+                                                <th scope="col">Jadwal</th>
                                                 <th scope="col">Status Akhir</th>
                                             @endrole
                                             <th scope="col">Aksi</th>
 
                                         </thead>
+
                                         <tbody>
-                                            @foreach ($standars as $standar)
+                                            @foreach ($instruments as $instrument)
                                                 <?php
                                                 // logic icons
                                                 $class = 'bi-check-lg';
                                                 $bg = '';
                                                 
-                                                if (auth()->user()->hasRole('auditee') && isset($standar->statusTercapai)) {
+                                                if (auth()->user()->hasRole('auditee') && isset($instrument->statusTercapai)) {
+                                                    $class = 'bi-brush';
+                                                } elseif (auth()->user()->hasRole('auditor') && isset($instrument->statusTemuan)) {
                                                     $class = 'bi-brush';
                                                     $bg = 'bg-light-success';
-                                                } elseif (auth()->user()->hasRole('auditor') && isset($standar->statusTemuan)) {
+                                                } elseif (auth()->user()->hasRole('manajemen') && isset($instrument->statusAkhir)) {
                                                     $class = 'bi-brush';
                                                     $bg = 'bg-light-success';
-                                                } elseif (auth()->user()->hasRole('manajemen') && isset($standar->statusAkhir)) {
-                                                    $class = 'bi-brush';
-                                                    $bg = 'bg-light-success';
-                                                } elseif (auth()->user()->hasRole('superadmin')) {
+                                                } elseif (auth()->user()->hasRole('admin')) {
                                                     $class = 'bi-brush';
                                                 }
                                                 
@@ -86,8 +90,8 @@
                                                 $statusNames = ['statusTemuan' => 'colorTemuan', 'statusTercapai' => 'colorTercapai'];
                                                 
                                                 foreach ($statusNames as $statusName => $colorVar) {
-                                                    if (isset($standar->$statusName->nama)) {
-                                                        switch ($standar->$statusName->nama) {
+                                                    if (isset($instrument->$statusName->nama)) {
+                                                        switch ($instrument->$statusName->nama) {
                                                             case 'belum mencapai':
                                                                 $$colorVar = 'text-danger';
                                                                 break;
@@ -104,59 +108,71 @@
 
                                                 <tr>
                                                     <td class="{{ $bg }}">
-                                                        {{ $standar->no_ps }}</td>
+                                                        {{ $instrument->indikator->pernyataan->no_ps }}</td>
                                                     {{-- <td class="{{ $bg }}">
-                                                        {{ Str::limit(strip_tags($standar->pernyataan_standar), 5, '...') }}
+                                                        {{ Str::limit(strip_tags($instrument->pernyataan_instrument), 5, '...') }}
                                                     </td> --}}
-                                                    <td class="{{ $bg }}">{{ $standar->no }}</td>
+                                                    <td class="{{ $bg }}">{{ $instrument->indikator->no }}</td>
+
                                                     {{-- <td class="{{ $bg }}">
-                                                        {{ Str::limit(strip_tags($standar->indikator), 5, '...') }}
+                                                        {{ Str::limit(strip_tags($instrument->indikator), 5, '...') }}
                                                     </td> --}}
 
                                                     @hasanyrole('auditee|auditor|manajemen')
                                                         {{-- <td class="{{ $bg }}">
-                                                        {{ Str::limit(strip_tags($standar->keadaan ? $standar->keadaan : '-'), 5, '...') }}
+                                                        {{ Str::limit(strip_tags($instrument->keadaan ? $instrument->keadaan : '-'), 5, '...') }}
                                                     </td> --}}
                                                         <td class="{{ $bg }}">
                                                             <a target="_blank"
-                                                                href="{{ $standar->bukti ? $standar->bukti : '' }}">{{ $standar->bukti ? $standar->bukti : '-' }}</a>
+                                                                href="{{ $instrument->bukti ? $instrument->bukti : '' }}">{{ $instrument->bukti ? $instrument->bukti : '-' }}</a>
                                                         </td>
                                                         <td class="{{ $bg }} {{ $colorTercapai }}">
-                                                            {{ $standar->statusTercapai ? $standar->statusTercapai->nama : '-' }}
+                                                            {{ $instrument->statusTercapai ? $instrument->statusTercapai->nama : '-' }}
                                                         </td>
+
+
                                                         @hasanyrole('auditor|manajemen')
                                                             <td class="{{ $bg }}">
-                                                                {{ $standar->temuan ? $standar->temuan : '-' }}
+                                                                {{ $instrument->temuan ? $instrument->temuan : '-' }}
                                                             </td>
                                                             <td class="{{ $bg }}">
-                                                                <a href="{{ $standar->link }}" target="_blank">
-                                                                    {{ $standar->link ? $standar->link : '-' }}</a>
+                                                                <a href="{{ $instrument->link }}" target="_blank">
+                                                                    {{ $instrument->link ? $instrument->link : '-' }}</a>
 
                                                             </td>
                                                             <td class="{{ $bg }} {{ $colorTemuan }}">
-                                                                {{ $standar->statusTemuan ? $standar->statusTemuan->nama : '-' }}
+                                                                {{ $instrument->statusTemuan ? $instrument->statusTemuan->nama : '-' }}
+                                                            </td>
+                                                            <td class="{{ $bg }}">
+                                                                {{ optional($instrument->ami->unit)->nama }}
+                                                            </td>
+                                                            <td class="{{ $bg }}">
+                                                                {{ optional($instrument->ami->auditee)->name }}
+                                                            </td>
+                                                            <td class="{{ $bg }}">
+                                                                {{ optional($instrument->ami->auditorKetua)->name }}
                                                             </td>
                                                         @endhasanyrole
                                                     @endhasanyrole
                                                     @role('manajemen')
                                                         <td class="{{ $bg }}">
-                                                            {{ $standar->important ? $standar->important : '-' }}
+                                                            {{ $instrument->jadwal_penyelesaian ? \Carbon\Carbon::parse($instrument->jadwal_penyelesaian)->format('d, M Y') : '-' }}
                                                         </td>
                                                         <td class="{{ $bg }}">
-                                                            {{ $standar->statusAkhir ? $standar->statusAkhir->nama : '-' }}
+                                                            {{ $instrument->statusAkhir ? $instrument->statusAkhir->nama : '-' }}
                                                         </td>
                                                     @endrole
                                                     <td class="{{ $bg }}">
 
-                                                        <a href="/standar/{{ $standar->id }}"
+                                                        <a href="/instrument/{{ $instrument->id }}"
                                                             class="btn btn-warning btn-sm"><i class="bi bi-eye"></i></a>
-                                                        <a href="/standar/{{ $standar->id }}/edit"
+                                                        <a href="/instrument/{{ $instrument->id }}/edit"
                                                             class="btn btn-success btn-sm">
                                                             <i class="{{ $class }}"></i>
                                                         </a>
 
-                                                        @role('superadmin')
-                                                            <form action="/standar/{{ $standar->id }}" method="post"
+                                                        @role('admin')
+                                                            <form action="/instrument/{{ $instrument->id }}" method="post"
                                                                 class="d-inline">
                                                                 @method('delete')
                                                                 @csrf

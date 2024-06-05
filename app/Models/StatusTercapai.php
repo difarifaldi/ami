@@ -11,8 +11,8 @@ class StatusTercapai extends Model
 
     protected $guarded = ['id'];
 
-    public function kui()
+    public function instrument()
     {
-        $this->hasOne(kui::class, 'id_status_akhir');
+        $this->hasOne(InstrumenAudit::class, 'id_status_akhir');
     }
 }

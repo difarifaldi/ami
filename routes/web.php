@@ -4,8 +4,11 @@ use App\Http\Controllers\AuditMutuInternalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\IndikatorController;
+use App\Http\Controllers\InstrumenAuditController;
 use App\Http\Controllers\KetercapaianStandarController;
 use App\Http\Controllers\KuiController;
+use App\Http\Controllers\PernyataanStandarController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Auth;
@@ -40,9 +43,11 @@ Route::middleware(['auth'])->group(function () {
     // Rute-rute yang memerlukan otentikasi di sini
     Route::get('/', [DashboardController::class, 'index']);
     // standar
-    Route::resource('/standar', KetercapaianStandarController::class);
+    Route::resource('/instrument', InstrumenAuditController::class);
     Route::resource('/audit', AuditMutuInternalController::class);
     Route::resource('/unit', UnitController::class);
+    Route::resource('/pernyataan', PernyataanStandarController::class);
+    Route::resource('/indikator', IndikatorController::class);
 
     // superadmin
     Route::group(['middleware' => ['role:superadmin']], function () {

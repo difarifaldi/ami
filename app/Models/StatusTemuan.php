@@ -10,8 +10,8 @@ class StatusTemuan extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    public function kui()
+    public function instrument()
     {
-        $this->hasOne(kui::class, 'id_status_temuan');
+        $this->hasOne(InstrumenAudit::class, 'id_status_temuan');
     }
 }
