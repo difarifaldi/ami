@@ -160,10 +160,22 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="card">
-                                    <div class="card-body">
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet unde iste neque
-                                            quasi doloribus et reiciendis maiores aperiam, sint mollitia. </p>
+                                    <div class="card-header">
+                                        Daftar Instrument
                                     </div>
+                                    <div class="card-body">
+                                        @foreach ($indikator_lists as $list)
+                                            <li class="mb-1" style="list-style: circle">
+                                                {{ $list->no }}
+                                                @if (in_array($list->id, $instrumentIds))
+                                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                                @else
+                                                    <i class="bi bi-x-circle-fill text-danger"></i>
+                                                @endif
+                                            </li>
+                                        @endforeach
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

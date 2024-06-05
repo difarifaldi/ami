@@ -42,13 +42,12 @@
                     </li>
                     <li class="border-top">
                         <a href="/instrument"><i class="bi bi-pencil-square"></i>Ketercapaian Standar
-                            @if (Auth::user()->hasRole('admin|superadmin'))
+                            @if (Auth::user()->hasRole('admin|superadmin|auditee'))
                                 {{-- tidak ada span --}}
                             @else
                                 <span class="rounded bg-success badge text-white mb-3 ml-1">
-                                    @if (Auth::user()->hasRole('auditee'))
-                                        {{ App\Models\InstrumenAudit::whereNull('id_status_tercapai')->count() }}
-                                    @elseif (Auth::user()->hasRole('auditor'))
+
+                                    @if (Auth::user()->hasRole('auditor'))
                                         {{ App\Models\InstrumenAudit::whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count() }}
                                     @elseif (Auth::user()->hasRole('manajemen'))
                                         {{ App\Models\InstrumenAudit::whereNull('id_status_akhir')->whereNotNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count() }}

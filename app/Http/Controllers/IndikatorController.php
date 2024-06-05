@@ -36,7 +36,7 @@ class IndikatorController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'no' => 'required',
+                'no' => 'required|unique:indikators',
                 'indikator' => 'required',
                 'id_pernyataan' => 'required',
             ]);

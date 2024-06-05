@@ -24,7 +24,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
-                                <h4 class="text-center my-4">Instrument Audit</h4>
+                                @foreach ($instruments as $instrument)
+                                    <h4 class="text-center my-4">Instrument Audit {{ $instrument->ami->unit->nama }}</h4>
+                                @endforeach
+
                             </div>
                             @role('auditee')
                                 <hr />

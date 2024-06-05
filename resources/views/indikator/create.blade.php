@@ -55,7 +55,7 @@
                                             </div>
 
                                             <div class="form-group mt-4">
-                                                <label>Pernyataan Standar</label>
+                                                <label id="pernyataan_standar_label">Pernyataan Standar</label>
                                                 <div class="border p-2" id="pernyataan_standar">
                                                     {!! $pernyataan_standar ?? '' !!}
                                                 </div>
@@ -114,6 +114,18 @@
         function updatePernyataanStandar() {
             var select = document.getElementById('id_pernyataan');
             var pernyataan = select.options[select.selectedIndex].getAttribute('data-pernyataan');
+            var selectedOption = select.options[select.selectedIndex].value;
+
+
+            if (selectedOption === '') {
+                document.getElementById('pernyataan_standar').style.display = 'none';
+                document.getElementById('pernyataan_standar_label').style.display = 'none'; // 
+                ; // 
+            } else {
+                document.getElementById('pernyataan_standar').style.display =
+                    'block';
+                document.getElementById('pernyataan_standar_label').style.display = 'block';
+            }
             document.getElementById('pernyataan_standar').innerHTML = pernyataan ? pernyataan : '';
         }
 

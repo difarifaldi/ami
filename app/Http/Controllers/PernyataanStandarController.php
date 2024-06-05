@@ -35,7 +35,7 @@ class PernyataanStandarController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'no_ps' => 'required',
+            'no_ps' => 'required|unique:pernyataan_standars|numeric',
             'pernyataan_standar' => 'required',
         ]);
 

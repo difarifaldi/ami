@@ -71,9 +71,13 @@ class InstrumenAuditController extends Controller
      */
     public function create()
     {
-        $indikators = Indikator::all();
+        $userId = Auth::id();
+        $auditMutuIds = AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id');
+        $instrumentIds = InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->pluck('id_indikator')->toArray();
+        $indikators = Indikator::whereNotIn('id', $instrumentIds)->get();
         $status_tercapai = StatusTercapai::all();
-        return view('instrument.create', compact('indikators', 'status_tercapai'));
+        $indikator_lists = Indikator::all();
+        return view('instrument.create', compact('indikators', 'status_tercapai', 'indikator_lists', 'instrumentIds'));
     }
 
     /**
