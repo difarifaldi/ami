@@ -197,17 +197,26 @@ class UserController extends Controller
                 'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
                 'password' => 'nullable|string|min:8',
                 'roles' => 'required|string|exists:roles,name',
-                'id_unit' => 'required',
+                'id_unit' => 'required|exists:units,id',
                 'nip' => 'numeric|nullable',
                 'ttd' => 'nullable|image|file|max:1024',
+                'foto' => 'nullable|image|file|max:1024',
             ]);
 
             // Cek jika ada file 'ttd' yang diunggah
             if ($request->file('ttd')) {
                 if ($user->ttd) {
-                    Storage::delete($user->ttd);
+                    Storage::disk('public')->delete($user->ttd);
                 }
                 $validatedData['ttd'] = $request->file('ttd')->store('tanda-tangan', 'public');
+            }
+
+            // Cek jika ada file 'foto' yang diunggah
+            if ($request->file('foto')) {
+                if ($user->foto) {
+                    Storage::disk('public')->delete($user->foto);
+                }
+                $validatedData['foto'] = $request->file('foto')->store('foto-profile', 'public');
             }
 
             // Persiapkan data untuk diupdate
@@ -218,9 +227,12 @@ class UserController extends Controller
                 'id_unit' => $validatedData['id_unit'],
             ];
 
-            // Tambahkan 'ttd' jika ada di $validatedData
+            // Tambahkan 'ttd' dan 'foto' jika ada di $validatedData
             if (isset($validatedData['ttd'])) {
                 $dataToUpdate['ttd'] = $validatedData['ttd'];
+            }
+            if (isset($validatedData['foto'])) {
+                $dataToUpdate['foto'] = $validatedData['foto'];
             }
 
             // Update user
@@ -241,6 +253,7 @@ class UserController extends Controller
             return redirect()->back()->with(['failed' => $e->getMessage()])->withInput();
         }
     }
+
 
 
 

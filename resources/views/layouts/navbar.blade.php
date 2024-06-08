@@ -13,6 +13,26 @@
                          <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
                              data-toggle="dropdown">
                              <div class="media user-box align-items-center">
+                                 <i class="bi bi-bell text-primary"></i>
+                             </div>
+                         </a>
+                         <div class="dropdown-menu dropdown-menu-right">
+                             <a class="dropdown-item">
+                                 <i class="bi bi-info-circle"> Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                     In magni
+                                     velit sunt incidunt aliquam <span>
+                                     </span></i>
+                                 .</a>
+
+                             <div class="dropdown-divider mb-0"></div>
+                             <a class="dropdown-item">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In magni
+                                 velit sunt incidunt aliquam.</a>
+                         </div>
+                     </li>
+                     <li class="nav-item dropdown dropdown-user-profile">
+                         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
+                             data-toggle="dropdown">
+                             <div class="media user-box align-items-center">
                                  <div class="media-body user-info">
                                      <p class="user-name mb-0">
                                          {{ Auth::user()->name ? Auth::user()->name : 'Data Nama tidak ditemukan' }} -
@@ -26,42 +46,18 @@
                              </div>
                          </a>
                          <div class="dropdown-menu dropdown-menu-right">
-                             <a class="dropdown-item" href="/reset-password"><i class="bx bx-cog"></i><span>Ubah
-                                     Password</span></a>
-
-                             <a class="dropdown-item" href="/admin"><i class="bx bx-cog"></i><span>User
-                                     Management</span></a>
+                             <a class="dropdown-item"
+                                 href="{{ route('profile.edit-user', ['id' => Auth::user()->id]) }}"><i
+                                     class="bi bi-person fa-8x"></i><span>Profile</span></a>
 
                              <div class="dropdown-divider mb-0"></div>
                              <a class="dropdown-item" href="{{ route('logout') }}">
-                                 <i class="bx bx-power-off"></i>
+                                 <i class="bi bi-power text-red"></i>
                                  <span>Logout</span>
                              </a>
                          </div>
                      </li>
-                     <!-- <li class="nav-item dropdown dropdown-language">
-       <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-toggle="dropdown">
-        <div class="lang d-flex">
-         <div><i class="flag-icon flag-icon-id"></i>
-         </div>
-         <div><span>ID</span>
-         </div>
-        </div>
-       </a>
-       <div class="dropdown-menu dropdown-menu-right">	<a class="dropdown-item" href="javascript:;"><i
-          class="flag-icon flag-icon-de"></i><span>German</span></a>
-        <a class="dropdown-item" href="javascript:;"><i
-          class="flag-icon flag-icon-fr"></i><span>French</span></a>
-        <a class="dropdown-item" href="javascript:;"><i
-          class="flag-icon flag-icon-um"></i><span>English</span></a>
-        <a class="dropdown-item" href="javascript:;"><i
-          class="flag-icon flag-icon-in"></i><span>Hindi</span></a>
-        <a class="dropdown-item" href="javascript:;"><i
-          class="flag-icon flag-icon-cn"></i><span>Chinese</span></a>
-        <a class="dropdown-item" href="javascript:;"><i
-          class="flag-icon flag-icon-ae"></i><span>Arabic</span></a>
-       </div>
-      </li> -->
+
                  </ul>
              </div>
          </nav>

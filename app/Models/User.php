@@ -27,6 +27,7 @@ class User extends Authenticatable
         'id_unit',
         'nip',
         'ttd',
+        'foto',
     ];
 
     /**

@@ -43,9 +43,8 @@ class AuditMutuInternalController extends Controller
             'id_user_auditee' => 'required',
             'id_user_auditor_ketua' => 'required',
             'id_user_auditor_anggota1' => 'required',
-            'id_user_auditor_anggota2' => 'required',
+            'id_user_auditor_anggota2' => 'nullable',
             'id_user_manajemen' => 'required',
-            'id_user_admin' => 'required',
             'tanggal' => 'required',
         ]);
 

@@ -30,7 +30,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">Unit</th>
-                                                <th scope="col">Admin</th>
+s
                                                 <th scope="col">Auditee</th>
                                                 <th scope="col">Auditor Ketua</th>
                                                 <th scope="col">Auditor Anggota 1</th>
@@ -46,7 +46,6 @@
                                                 <tr>
 
                                                     <td>{{ $audit->unit->nama }}</td>
-                                                    <td>{{ $audit->admin->name }}</td>
                                                     <td>{{ $audit->auditee->name }}</td>
                                                     <td>{{ $audit->auditorKetua->name }}</td>
                                                     <td>{{ $audit->auditorAnggota1->name }}</td>

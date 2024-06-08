@@ -37,6 +37,7 @@
                                                 <th scope="col">Unit</th>
                                                 <th scope="col">Tanda Tangan</th>
                                                 <th scope="col">Status</th>
+                                                <th scope="col">foto</th>
                                                 <th scope="col">Action</th>
                                             </tr>
                                         </thead>
@@ -75,6 +76,17 @@
                                                             <label class="custom-control-label"
                                                                 for="status_{{ $user->id }}">{{ ucfirst($user->status) }}</label>
                                                         </div>
+                                                    </td>
+
+                                                    <td>
+                                                        @if ($user->foto)
+                                                            <img src="{{ asset('storage/' . $user->foto) }}"
+                                                                class="img-fluid" style="width: 65px">
+                                                        @else
+                                                            <i class="bi bi-x-octagon-fill text-red"
+                                                                style="font-size: 1.4rem;"></i> <br>
+                                                            kosong
+                                                        @endif
                                                     </td>
                                                     <td class="text-center">
                                                         <a href="{{ route('admin.edit-user', ['id' => $user->id]) }}"

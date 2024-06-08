@@ -40,7 +40,7 @@ Route::get('/register', [UserController::class, 'index'])->name('register.index'
 Route::post('/register', [UserController::class, 'store'])->name('register.store');
 
 Route::middleware(['auth'])->group(function () {
-    // Rute-rute yang memerlukan otentikasi di sini
+
     Route::get('/', [DashboardController::class, 'index']);
     // standar
     Route::resource('/instrument', InstrumenAuditController::class);
@@ -48,6 +48,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/unit', UnitController::class);
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
+
+    // Reset Password
+    Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('user.reset-password');
+    Route::get('/reset-password', [UserController::class, 'showResetPasswordForm'])->name('user.show-reset-password-form');
+
+    // Profile
+    Route::get('/profile/edit-user/{id}', [UserController::class, 'editUser'])->name('profile.edit-user');;
 
     // superadmin
     Route::group(['middleware' => ['role:superadmin']], function () {
@@ -62,9 +69,5 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
         Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
         Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
-
-        // Reset Password
-        Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('user.reset-password');
-        Route::get('/reset-password', [UserController::class, 'showResetPasswordForm'])->name('user.show-reset-password-form');
     });
 });

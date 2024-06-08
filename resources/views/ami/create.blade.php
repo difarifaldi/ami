@@ -163,24 +163,7 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-6">
-                                                    <div class="form-group mt-4">
-                                                        <label>Admin</label>
-                                                        <select name="id_user_admin" id="id_user_admin"
-                                                            class="form-control bg-white">
-                                                            <option value="">Silahkan Pilih Admin</option>
-                                                            @foreach ($admins as $admin)
-                                                                <option value="{{ $admin->id }}"
-                                                                    {{ old('id_user_admin') == $admin->id ? 'selected' : '' }}>
-                                                                    {{ $admin->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('id_user_admin')
-                                                            <div class="d-block text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
+
                                             </div>
 
                                             <div class="btn-group mt-3 w-100">

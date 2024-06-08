@@ -28,7 +28,14 @@
                                 <div class="card border-0 shadow-sm rounded">
                                     <div class="card-body">
                                         <div>
-                                            <h4 class="text-center my-4">Edit Instrument</h4>
+                                            <?php
+                                            if (auth()->user()->hasRole('auditor') && isset($instrument->statusTemuan)) {
+                                                $heading = 'Edit Instrumen';
+                                            } else {
+                                                $heading = 'Audit Instrumen';
+                                            }
+                                            ?>
+                                            <h4 class="text-center my-4">{{ $heading }}</h4>
                                         </div>
                                         <hr />
                                         <!-- Formulir pendaftaran -->
@@ -37,22 +44,31 @@
                                             enctype="multipart/form-data">
                                             @csrf
                                             @method('patch')
-                                            <h3>Diisi Admin</h3>
+                                            <h3>Bagian Admin</h3>
 
-                                            <!--  selain admin -->
                                             <div class="form-group mt-4">
-                                                <label>pernyataan Standar</label>
+                                                <label>Nomor Pernyataan Standar</label>
                                                 <div class="border p-2">
-                                                    {!! $instrument->pernyataan_standar !!}
+                                                    {!! $instrument->indikator->pernyataan->no_ps !!}
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-4">
+                                                <label>Pernyataan Standar</label>
+                                                <div class="border p-2">
+                                                    {!! $instrument->indikator->pernyataan->pernyataan_standar !!}
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-4">
+                                                <label>Nomor Indikator</label>
+                                                <div class="border p-2">
+                                                    {!! $instrument->indikator->no !!}
                                                 </div>
                                             </div>
 
-
-                                            <!--  selain admin -->
                                             <div class="form-group mt-4">
                                                 <label>Indikator</label>
                                                 <div class="border p-2">
-                                                    {!! $instrument->indikator !!}
+                                                    {!! $instrument->indikator->indikator !!}
                                                 </div>
                                             </div>
 
@@ -195,12 +211,15 @@
                                                 <!--  Penanggung Jawab -->
                                                 <div class="form-group mt-4">
                                                     <label>Penanggung Jawab</label>
-                                                    <input type="text" name="penanggung_jawab" id="penanggung_jawab"
-                                                        class="form-control bg-white @error('penanggung_jawab')is-invalid
-                                                            @enderror"
-                                                        value="{{ old('penanggung_jawab', $instrument->penanggung_jawab) }}"
-                                                        placeholder="Masukan Penanggung Jawab "
-                                                        @role('manajemen') readonly @endrole>
+                                                    <select name="penanggung_jawab" id="penanggung_jawab"
+                                                        class="form-control bg-white" @role('manajemen') disabled @endrole>
+                                                        @foreach ($user as $usr)
+                                                            <option value="{{ $usr->id }}"
+                                                                {{ old('penanggung_jawab', $instrument->penanggung_jawab) == $usr->id ? 'selected' : '' }}>
+                                                                {{ $usr->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                     <!-- error message untuk penanggung_jawab -->
                                                     @error('penanggung_jawab')
                                                         <div class="d-block text-danger">{{ $message }}</div>
@@ -260,8 +279,7 @@
                                                 <!--  Jadwal Perbaikan -->
                                                 <div class="form-group mt-4">
                                                     <label>Jadwal Perbaikan</label>
-                                                    <input type="datetime-local" class="form-control"
-                                                        name="jadwal_penyelesaian"
+                                                    <input type="date" class="form-control" name="jadwal_penyelesaian"
                                                         value="{{ old('jadwal_penyelesaian', $instrument->jadwal_penyelesaian) }}">
 
                                                     <!-- error message untuk jadwal_penyelesaian -->

@@ -160,13 +160,16 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-header text-center font-weight-bold">
                                         Daftar Instrument
                                     </div>
                                     <div class="card-body">
                                         @foreach ($indikator_lists as $list)
-                                            <li class="mb-1" style="list-style: circle">
-                                                {{ $list->no }}
+                                            <li class="border-bottom mb-2 font-weight-bolder"
+                                                style="list-style: circle;font-size: 1.1rem">
+
+                                                {{ $list->no }} &nbsp;
+
                                                 @if (in_array($list->id, $instrumentIds))
                                                     <i class="bi bi-check-circle-fill text-success"></i>
                                                 @else

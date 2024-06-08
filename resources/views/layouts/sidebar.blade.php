@@ -43,19 +43,40 @@
                     <li class="border-top">
                         <a href="/instrument"><i class="bi bi-pencil-square"></i>Ketercapaian Standar
                             @if (Auth::user()->hasRole('admin|superadmin|auditee'))
-                                {{-- tidak ada span --}}
+                                {{-- Tidak ada span --}}
                             @else
-                                <span class="rounded bg-success badge text-white mb-3 ml-1">
+                                @php
+                                    $userId = Auth::id();
 
-                                    @if (Auth::user()->hasRole('auditor'))
-                                        {{ App\Models\InstrumenAudit::whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count() }}
-                                    @elseif (Auth::user()->hasRole('manajemen'))
-                                        {{ App\Models\InstrumenAudit::whereNull('id_status_akhir')->whereNotNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count() }}
-                                    @endif
-                                </span>
+                                    $instrumentCount = 0;
+                                    if (Auth::user()->hasRole('auditor')) {
+                                        $auditMutuIds = App\Models\AuditMutuInternal::where(
+                                            'id_user_auditor_ketua',
+                                            $userId,
+                                        )
+                                            ->orWhere('id_user_auditor_anggota1', $userId)
+                                            ->orWhere('id_user_auditor_anggota2', $userId)
+                                            ->pluck('id')
+                                            ->toArray();
+                                        $instrumentCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)
+                                            ->whereNull('id_status_temuan')
+                                            ->whereNotNull('id_status_tercapai')
+                                            ->count();
+                                    } elseif (Auth::user()->hasRole('manajemen')) {
+                                        $instrumentCount = App\Models\InstrumenAudit::whereNull('id_status_akhir')
+                                            ->whereNotNull('id_status_temuan')
+                                            ->whereNotNull('id_status_tercapai')
+                                            ->count();
+                                    }
+                                @endphp
+                                @if ($instrumentCount > 0)
+                                    <span
+                                        class="rounded bg-success badge text-white mb-3 ml-1">{{ $instrumentCount }}</span>
+                                @endif
                             @endif
                         </a>
                     </li>
+
                 </ul>
             </li>
 

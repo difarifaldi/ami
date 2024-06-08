@@ -8,6 +8,8 @@ use App\Models\Indikator;
 use App\Models\StatusAkhir;
 use App\Models\StatusTemuan;
 use App\Models\StatusTercapai;
+use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,55 +18,72 @@ class InstrumenAuditController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $userId = Auth::id();
-
-        $userIsAuthorized = AuditMutuInternal::where('id_user_auditee', $userId)
+        $data  = AuditMutuInternal::where('id_user_admin', $userId)
             ->orWhere('id_user_auditor_ketua', $userId)
             ->orWhere('id_user_auditor_anggota1', $userId)
             ->orWhere('id_user_auditor_anggota2', $userId)
             ->orWhere('id_user_manajemen', $userId)
-            ->orWhere('id_user_admin', $userId)
-            ->exists();
+            ->orWhere('id_user_auditee', $userId);
+
+        $userIsAuthorized = $data->exists();
 
         if (!$userIsAuthorized) {
             return redirect('/')->with('failed', 'Anda tidak memiliki akses ke halaman ini');
         }
 
+        $unitId = $request->input('unit_id');
+        $instrumentsQuery = InstrumenAudit::query();
 
-        $instruments = InstrumenAudit::query();
+        // Ambil semua unit yang terlibat dalam AMI dan terkait dengan pengguna yang login
+        $unitIds = $data->pluck('id_unit')->unique();
+
+        // Tentukan unit yang dipilih atau unit pertama sebagai default
+        if (!$unitId && $unitIds->isNotEmpty()) {
+            $unitId = $unitIds->first();
+        }
+
+        // Ambil semua instrumen yang terkait dengan unit-unit tersebut
+        $allInstruments = InstrumenAudit::whereIn('id_AMI', AuditMutuInternal::pluck('id'))->get();
+
+        // Filter instrumen berdasarkan unit yang dipilih
+        if ($unitId) {
+            $auditMutuIds = AuditMutuInternal::where('id_unit', $unitId)->pluck('id');
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds);
+        }
 
         // Tentukan kondisi berdasarkan peran pengguna
         if (auth()->user()->hasRole('auditee')) {
-            // Ambil semua audit mutu internal yang terkait dengan pengguna auditee
             $auditMutuIds = AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id');
-
-            // Filter ketercapaian instrument berdasarkan audit mutu internal yang terkait atau belum diisi oleh auditee
-            $instruments->whereIn('id_AMI', $auditMutuIds)->orWhereNull('id_AMI');
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds);
         }
         if (auth()->user()->hasRole('auditor')) {
-            // Ambil semua audit mutu internal yang terkait dengan pengguna auditor
             $auditMutuIds = AuditMutuInternal::where(function ($query) use ($userId) {
                 $query->where('id_user_auditor_ketua', $userId)
                     ->orWhere('id_user_auditor_anggota1', $userId)
                     ->orWhere('id_user_auditor_anggota2', $userId);
             })->pluck('id');
-            $instruments->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_tercapai');
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_tercapai');
         }
         if (auth()->user()->hasRole('manajemen')) {
             $auditMutuIds = AuditMutuInternal::where('id_user_manajemen', $userId)->pluck('id');
-            $instruments->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_temuan');
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_temuan');
         }
 
-
+        // Ambil unit yang terkait dengan user
+        $uniqueUnits = Unit::whereIn('id', $unitIds)->get();
 
         return view('instrument.index', [
-            'instruments' => $instruments->get(),
-            'indikators' => Indikator::all(),
-
+            'instruments' => $instrumentsQuery->get(),
+            'allInstruments' => $allInstruments,
+            'uniqueUnits' => $uniqueUnits,
+            'selectedUnitId' => $unitId,
         ]);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -129,8 +148,10 @@ class InstrumenAuditController extends Controller
         $status_tercapai = StatusTercapai::all();
         $status_temuan = StatusTemuan::all();
         $status_akhir = StatusAkhir::all();
+        $user = User::all();
 
-        return view('instrument.edit', compact('instrument', 'status_tercapai', 'status_akhir', 'status_temuan'));
+
+        return view('instrument.edit', compact('instrument', 'status_tercapai', 'status_akhir', 'status_temuan', 'user'));
     }
 
     /**
@@ -139,15 +160,6 @@ class InstrumenAuditController extends Controller
     public function update(Request $request, InstrumenAudit $instrument)
     {
         $validatedData = [];
-
-        if ($request->user()->hasRole('superadmin')) {
-            $validatedData = $request->validate([
-                'no_ps' => 'required',
-                'pernyataan_standar' => 'required',
-                'no' => 'required',
-                'indikator' => 'required',
-            ]);
-        }
 
         if ($request->user()->hasRole('auditee')) {
             $validatedData = $request->validate([
@@ -191,7 +203,8 @@ class InstrumenAuditController extends Controller
 
         $instrument->update($validatedData);
 
-        return redirect('/instrument')->with('success', 'Instrumen berhasil diubah');
+
+        return redirect('/instrument')->with('success', 'Instrumen berhasil diperbaharui');
     }
 
     /**

@@ -37,25 +37,25 @@
                                         <div class="form-group mt-4">
                                             <label>No Pernyataan Standar</label>
                                             <input type="text" class="form-control bg-white"
-                                                value="{{ $instrument->no_ps }}" readonly />
+                                                value="{{ $instrument->indikator->pernyataan->no_ps }}" readonly />
                                         </div>
 
                                         <div class="form-group mt-4">
                                             <label>pernyataan Standar</label>
                                             <div class="border p-2">
-                                                {!! $instrument->pernyataan_standar !!}
+                                                {!! $instrument->indikator->pernyataan->pernyataan_standar !!}
                                             </div>
                                         </div>
                                         <div class="form-group mt-4">
                                             <label>Nomor Indikator</label>
                                             <input type="text" class="form-control bg-white"
-                                                value="{{ $instrument->no }}" readonly />
+                                                value="{{ $instrument->indikator->no }}" readonly />
                                         </div>
 
                                         <div class="form-group mt-4 mb-5">
                                             <label>Indikator</label>
                                             <div class="border p-2">
-                                                {!! $instrument->indikator !!}
+                                                {!! $instrument->indikator->indikator !!}
                                             </div>
                                         </div>
 
