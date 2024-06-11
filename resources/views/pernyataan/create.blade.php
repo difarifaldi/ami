@@ -51,7 +51,7 @@
                                             </div>
 
                                             <div class="form-group mt-4">
-                                                <label>pernyataan Standar</label>
+                                                <label>Pernyataan Standar</label>
                                                 <input id="pernyataan_standar" type="hidden" name="pernyataan_standar"
                                                     value="{{ old('pernyataan_standar') }}">
                                                 <trix-editor
@@ -61,6 +61,21 @@
                                                     input="pernyataan_standar"></trix-editor>
                                                 <!-- error message untuk pernyataan_standar -->
                                                 @error('pernyataan_standar')
+                                                    <div class="d-block text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group mt-4">
+                                                <label>Unit</label>
+                                                <select name="id_unit" class="form-control" id="id_unit">
+                                                    <option value="">Silahkan Pilih Unit</option>
+                                                    @foreach ($units as $unit)
+                                                        <option value="{{ $unit->id }}"
+                                                            {{ old('id_unit') == $unit->id ? 'selected' : '' }}>
+                                                            {{ $unit->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_unit')
                                                     <div class="d-block text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>

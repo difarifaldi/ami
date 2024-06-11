@@ -48,13 +48,16 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/unit', UnitController::class);
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
+    Route::get('/pernyataan/by-unit/{unitId}', [IndikatorController::class, 'getPernyataanByUnit'])->name('pernyataan.byUnit');
+
 
     // Reset Password
     Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('user.reset-password');
     Route::get('/reset-password', [UserController::class, 'showResetPasswordForm'])->name('user.show-reset-password-form');
 
     // Profile
-    Route::get('/profile/edit-user/{id}', [UserController::class, 'editUser'])->name('profile.edit-user');;
+    Route::get('/profile/edit-profile/{id}', [UserController::class, 'editProfile'])->name('profile.edit-profile');
+    Route::post('/profile/update-profile', [UserController::class, 'updateProfile'])->name('profile.update-profile');
 
     // superadmin
     Route::group(['middleware' => ['role:superadmin']], function () {

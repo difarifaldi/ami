@@ -6,6 +6,7 @@ use App\Models\PernyataanStandar;
 use App\Http\Requests\StorePernyataanStandarRequest;
 use App\Http\Requests\UpdatePernyataanStandarRequest;
 use App\Models\Indikator;
+use App\Models\Unit;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,8 @@ class PernyataanStandarController extends Controller
      */
     public function create()
     {
-        return view('pernyataan.create');
+        $units = Unit::all();
+        return view('pernyataan.create', compact('units'));
     }
 
     /**
@@ -35,8 +37,9 @@ class PernyataanStandarController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'no_ps' => 'required|unique:pernyataan_standars|numeric',
+            'no_ps' => 'required|numeric',
             'pernyataan_standar' => 'required',
+            'id_unit' => 'required',
         ]);
 
         PernyataanStandar::create($validatedData);
@@ -56,7 +59,8 @@ class PernyataanStandarController extends Controller
      */
     public function edit(PernyataanStandar $pernyataan)
     {
-        return view('pernyataan.edit', compact('pernyataan'));
+        $units = Unit::all();
+        return view('pernyataan.edit', compact('pernyataan', 'units'));
     }
 
     /**
@@ -68,6 +72,7 @@ class PernyataanStandarController extends Controller
         $validatedData = $request->validate([
             'no_ps' => 'required',
             'pernyataan_standar' => 'required',
+            'id_unit' => 'required',
         ]);
 
         $pernyataan->update($validatedData);

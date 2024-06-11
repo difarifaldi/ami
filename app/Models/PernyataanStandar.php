@@ -14,4 +14,8 @@ class PernyataanStandar extends Model
     {
         return $this->hasMany(Indikator::class, 'id_pernyataan');
     }
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'id_unit');
+    }
 }

@@ -67,6 +67,27 @@
                                                 @enderror
                                             </div>
 
+                                            <div class="form-group mt-4">
+                                                <label>Unit</label>
+                                                <select class="form-control" name="id_unit" id="id_unit">
+                                                    <option value="">Silahkan pilih unit</option>
+                                                    @foreach ($units as $unit)
+                                                        @if ($pernyataan->id_unit === $unit->id)
+                                                            <option value="{{ $unit->id }}" selected>
+                                                                {{ $unit->nama }}
+                                                            </option>
+                                                        @else
+                                                            <option value="{{ $unit->id }}">
+                                                                {{ $unit->nama }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                @error('id_unit')
+                                                    <div class="d-block text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
 
 
                                             <div class="btn-group mt-3 w-100">

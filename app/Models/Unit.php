@@ -19,4 +19,8 @@ class Unit extends Model
     {
         return $this->hasMany(AuditMutuInternal::class, 'id_unit');
     }
+    public function pernyataan()
+    {
+        return $this->hasMany(AuditMutuInternal::class, 'id_unit');
+    }
 }

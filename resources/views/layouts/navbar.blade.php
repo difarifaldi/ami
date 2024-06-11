@@ -42,12 +42,19 @@
                                          {{ Auth::user() ? Auth::user()->status : 'Data Nama tidak ditemukan' }}</p>
                                  </div>
                                  <i class="fas fa-user-circle fa-fw"></i>
-                                 <img src="{{ asset('../assets/images/user.png') }}" class="user-img" alt="user avatar">
+
+                                 @if (Auth::user()->foto)
+                                     <img src="{{ asset('/storage/' . Auth::user()->foto) }}" class="user-img"
+                                         alt="user avatar">
+                                 @else
+                                     <img src="{{ asset('../assets/images/user.png') }}" class="user-img"
+                                         alt="user avatar">
+                                 @endif
                              </div>
                          </a>
                          <div class="dropdown-menu dropdown-menu-right">
                              <a class="dropdown-item"
-                                 href="{{ route('profile.edit-user', ['id' => Auth::user()->id]) }}"><i
+                                 href="{{ route('profile.edit-profile', ['id' => Auth::user()->id]) }}"><i
                                      class="bi bi-person fa-8x"></i><span>Profile</span></a>
 
                              <div class="dropdown-divider mb-0"></div>

@@ -29,6 +29,7 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
+                                                <th scope="col">Unit</th>
                                                 <th scope="col">No Pernyataan</th>
                                                 <th scope="col">Pernyataan Standar</th>
                                                 <th scope="col">Aksi</th>
@@ -38,6 +39,8 @@
                                         <tbody>
                                             @forelse ($pernyataans as $pernyataan)
                                                 <tr>
+                                                    <td>{{ $pernyataan->unit ? $pernyataan->unit->nama : 'tidak memiliki unit' }}
+                                                    </td>
                                                     <td>{{ $pernyataan->no_ps }}</td>
                                                     <td class="text-left">{!! $pernyataan->pernyataan_standar !!}</td>
 

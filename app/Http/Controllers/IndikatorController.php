@@ -6,6 +6,7 @@ use App\Models\Indikator;
 use App\Http\Requests\StoreIndikatorRequest;
 use App\Http\Requests\UpdateIndikatorRequest;
 use App\Models\PernyataanStandar;
+use App\Models\Unit;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,8 @@ class IndikatorController extends Controller
     public function create()
     {
         $pernyataans = PernyataanStandar::all();
-        return view('indikator.create', compact('pernyataans'));
+        $units = Unit::all(); // Pastikan untuk mendapatkan semua unit
+        return view('indikator.create', compact('pernyataans', 'units'));
     }
 
     /**
@@ -36,7 +38,7 @@ class IndikatorController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'no' => 'required|unique:indikators',
+                'no' => 'required',
                 'indikator' => 'required',
                 'id_pernyataan' => 'required',
             ]);
@@ -47,6 +49,14 @@ class IndikatorController extends Controller
             dd($e->getMessage());
         }
     }
+
+
+    public function getPernyataanByUnit($unitId)
+    {
+        $pernyataans = PernyataanStandar::where('id_unit', $unitId)->get();
+        return response()->json($pernyataans);
+    }
+
 
 
 
@@ -61,11 +71,14 @@ class IndikatorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Indikator $indikator)
+    public function edit($id)
     {
-        $pernyataans = PernyataanStandar::all();
-        return view('indikator.edit', compact('indikator', 'pernyataans'));
+        $indikator = Indikator::findOrFail($id);
+        $units = Unit::all();
+        $pernyataans = PernyataanStandar::where('id_unit', $indikator->pernyataan->id_unit)->get();
+        return view('indikator.edit', compact('indikator', 'pernyataans', 'units'));
     }
+
 
     /**
      * Update the specified resource in storage.

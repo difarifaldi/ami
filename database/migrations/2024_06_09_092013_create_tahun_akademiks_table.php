@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pernyataan_standars', function (Blueprint $table) {
+        Schema::create('tahun_akademiks', function (Blueprint $table) {
             $table->id();
-            $table->string('no_ps')->nullable();
-            $table->text('pernyataan_standar')->nullable();
-            $table->unsignedBigInteger('id_unit')->nullable();
-
-
-            $table->foreign('id_unit')->references('id')->on('units')->onDelete('cascade');
+            $table->string('nama');
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pernyataan_standars');
+        Schema::dropIfExists('tahun_akademiks');
     }
 };

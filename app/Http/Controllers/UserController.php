@@ -254,7 +254,61 @@ class UserController extends Controller
         }
     }
 
+    public function editProfile($id)
+    {
+        $currentUser = Auth::user();
 
+
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        $units = Unit::all();
+
+        return view('profile', compact('user', 'roles', 'units'));
+    }
+    public function updateProfile(Request $request)
+    {
+        try {
+            $user = User::findOrFail($request->user_id);
+
+            // Validasi data input
+            $validatedData = $request->validate([
+                'ttd' => 'nullable|image|file|max:1024',
+                'foto' => 'nullable|image|file|max:1024',
+            ]);
+
+            // Cek jika ada file 'ttd' yang diunggah
+            if ($request->file('ttd')) {
+                if ($user->ttd) {
+                    Storage::disk('public')->delete($user->ttd);
+                }
+                $validatedData['ttd'] = $request->file('ttd')->store('tanda-tangan', 'public');
+            }
+
+            // Cek jika ada file 'foto' yang diunggah
+            if ($request->file('foto')) {
+                if ($user->foto) {
+                    Storage::disk('public')->delete($user->foto);
+                }
+                $validatedData['foto'] = $request->file('foto')->store('foto-profile', 'public');
+            }
+
+
+            // Tambahkan 'ttd' dan 'foto' jika ada di $validatedData
+            if (isset($validatedData['ttd'])) {
+                $dataToUpdate['ttd'] = $validatedData['ttd'];
+            }
+            if (isset($validatedData['foto'])) {
+                $dataToUpdate['foto'] = $validatedData['foto'];
+            }
+
+            // Update user
+            $user->update($dataToUpdate);
+
+            return redirect('/')->with('success', 'Berhasil Update User.');
+        } catch (Exception $e) {
+            return redirect()->back()->with(['failed' => $e->getMessage()])->withInput();
+        }
+    }
 
 
     public function toggleUserStatus(Request $request)

@@ -117,6 +117,12 @@
                                                     readonly />
                                             </div>
                                             <div class="form-group mt-4">
+                                                <label>Tanggapan Auditee</label>
+                                                <input type="text" class="form-control bg-white"
+                                                    value="{{ $instrument->tanggapan_auditee ? $instrument->tanggapan_auditee : '-' }}"
+                                                    readonly />
+                                            </div>
+                                            <div class="form-group mt-4">
                                                 <label>Penanggung Jawab Perbaikan</label>
                                                 <input type="text" class="form-control bg-white"
                                                     value="{{ $instrument->penanggung_jawab ? $instrument->penanggung_jawab : '-' }}"

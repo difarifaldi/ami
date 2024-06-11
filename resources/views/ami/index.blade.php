@@ -30,7 +30,6 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">Unit</th>
-s
                                                 <th scope="col">Auditee</th>
                                                 <th scope="col">Auditor Ketua</th>
                                                 <th scope="col">Auditor Anggota 1</th>

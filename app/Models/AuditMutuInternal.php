@@ -42,4 +42,8 @@ class AuditMutuInternal extends Model
     {
         return $this->hasMany(InstrumenAudit::class, 'id_AMI');
     }
+    public function tahunAkademik()
+    {
+        return $this->belongsTo(tahunAkademik::class, 'id_TA');
+    }
 }

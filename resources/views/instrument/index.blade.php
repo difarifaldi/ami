@@ -38,7 +38,11 @@
                                                             $condition = $condition && is_null($instrument->id_status_temuan);
                                                         }
                                                         if (Auth::user()->hasRole('manajemen')) {
-                                                            $condition = $condition && is_null($instrument->id_status_akhir);
+                                                            $condition =
+                                                                $condition &&
+                                                                is_null($instrument->id_status_akhir) &&
+                                                                !is_null($instrument->id_status_tercapai) &&
+                                                                !is_null($instrument->id_status_temuan);
                                                         }
                                                         return $condition;
                                                     })->count() }}
@@ -59,7 +63,7 @@
                     @if ($instrument)
                         <div class="card">
                             @unlesshasanyrole('auditee')
-                                <div class="card-header">{{ __('Instrumen') }}</div>
+                                {{-- <div class="card-header">{{ __('Instrumen') }}</div> --}}
                             @endunlessrole
                             <div class="card-body">
                                 <div class="card-title">
@@ -225,7 +229,9 @@
                     @else
                         <div class="card">
                             <div class="card-body">
-                                belum ada data untuk diaudit
+                                <h3 class="text-center my-4 "><i class="bi bi-exclamation-diamond text-warning"></i> belum
+                                    ada data untuk
+                                    diaudit <i class="bi bi-exclamation-diamond text-warning"></i></h3>
                             </div>
                         </div>
                     @endif

@@ -38,7 +38,21 @@
                                             @method('PATCH')
 
                                             <div class="form-group mt-4">
-                                                <label>No Pernyataan Standar</label>
+                                                <label>Unit</label>
+                                                <select name="id_unit" id="id_unit" class="form-control bg-white"
+                                                    onchange="fetchPernyataanByUnit()">
+                                                    <option value="">Silahkan Pilih Unit</option>
+                                                    @foreach ($units as $unit)
+                                                        <option value="{{ $unit->id }}"
+                                                            {{ old('id_unit', $indikator->pernyataan->id_unit) == $unit->id ? 'selected' : '' }}>
+                                                            {{ $unit->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group mt-4">
+                                                <label id="pernyataan_standar_label">No Pernyataan Standar</label>
                                                 <select name="id_pernyataan" id="id_pernyataan"
                                                     class="form-control bg-white" onchange="updatePernyataanStandar()">
                                                     <option value="">Silahkan Pilih Pernyataan Standar</option>
@@ -57,7 +71,7 @@
                                             </div>
 
                                             <div class="form-group mt-4">
-                                                <label>Pernyataan Standar</label>
+                                                <label id="standar_label">Pernyataan Standar</label>
                                                 <div class="border p-2" id="pernyataan_standar">
                                                     {!! $pernyataan_standar ?? '' !!}
                                                 </div>
@@ -91,8 +105,6 @@
                                                     <div class="d-block text-danger">{{ $message }}</div>
                                                 @enderror
 
-
-
                                                 <div class="btn-group mt-3 w-100">
                                                     <button type="submit" class="btn btn-primary btn-block">Simpan</button>
                                                 </div>
@@ -107,14 +119,50 @@
             </div>
         </div>
     </div>
+
     <script>
+        function fetchPernyataanByUnit() {
+            var unitId = document.getElementById('id_unit').value;
+
+            // Hapus opsi sebelumnya
+            var pernyataanSelect = document.getElementById('id_pernyataan');
+            pernyataanSelect.innerHTML = '<option value="">Silahkan Pilih Pernyataan Standar</option>';
+
+            if (unitId) {
+                fetch(`/pernyataan/by-unit/${unitId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(pernyataan => {
+                            var option = document.createElement('option');
+                            option.value = pernyataan.id;
+                            option.textContent = pernyataan.no_ps;
+                            option.setAttribute('data-pernyataan', pernyataan.pernyataan_standar);
+                            pernyataanSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            updatePernyataanStandar();
+        }
+
         function updatePernyataanStandar() {
             var select = document.getElementById('id_pernyataan');
             var pernyataan = select.options[select.selectedIndex].getAttribute('data-pernyataan');
-            document.getElementById('pernyataan_standar').innerHTML = pernyataan ? pernyataan : '';
+            var selectedOption = select.options[select.selectedIndex].value;
+
+            if (selectedOption === '') {
+                document.getElementById('pernyataan_standar').style.display = 'none';
+                document.getElementById('standar_label').style.display = 'none';
+                document.getElementById('pernyataan_standar').innerHTML = '';
+            } else {
+                document.getElementById('pernyataan_standar').style.display = 'block';
+                document.getElementById('standar_label').style.display = 'block';
+                document.getElementById('pernyataan_standar').innerHTML = pernyataan ? pernyataan : '';
+            }
         }
 
-        // Optionally, call the function once to set the initial value if a selection is already made.
+        // Panggil fungsi ini sekali untuk mengatur nilai awal jika pilihan sudah dibuat sebelumnya.
         updatePernyataanStandar();
     </script>
 @endsection

@@ -36,17 +36,21 @@
                                             enctype="multipart/form-data">
                                             @csrf
                                             <div class="form-group mt-4">
+                                                <label>Unit</label>
+                                                <select name="id_unit" id="id_unit" class="form-control bg-white"
+                                                    onchange="fetchPernyataanByUnit()">
+                                                    <option value="">Silahkan Pilih Unit</option>
+                                                    @foreach ($units as $unit)
+                                                        <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group mt-4">
                                                 <label>No Pernyataan Standar</label>
                                                 <select name="id_pernyataan" id="id_pernyataan"
                                                     class="form-control bg-white" onchange="updatePernyataanStandar()">
                                                     <option value="">Silahkan Pilih Pernyataan Standar</option>
-                                                    @foreach ($pernyataans as $pernyataan)
-                                                        <option value="{{ $pernyataan->id }}"
-                                                            data-pernyataan="{!! htmlspecialchars($pernyataan->pernyataan_standar) !!}"
-                                                            {{ old('id_pernyataan') == $pernyataan->id ? 'selected' : '' }}>
-                                                            {{ $pernyataan->no_ps }}
-                                                        </option>
-                                                    @endforeach
+                                                    <!-- Options akan diisi oleh JavaScript -->
                                                 </select>
 
                                                 @error('id_pernyataan')
@@ -61,16 +65,10 @@
                                                 </div>
                                             </div>
 
-
-
-
-
                                             <div class="form-group mt-4">
                                                 <label>No Indikator</label>
                                                 <input type="text" name="no" id="no"
-                                                    class="form-control @error('no')
-                                                    is-invalid
-                                                @enderror"
+                                                    class="form-control @error('no') is-invalid @enderror"
                                                     value="{{ old('no') }}"
                                                     placeholder="Masukan Nomor Peryataan Standar" />
                                                 <!-- error message untuk no -->
@@ -83,17 +81,13 @@
                                                 <label>Indikator</label>
                                                 <input id="indikator" type="hidden" name="indikator"
                                                     value="{{ old('indikator') }}">
-                                                <trix-editor
-                                                    class="@error('indikator')
-                                                    border-danger
-                                                @enderror"
+                                                <trix-editor class="@error('indikator') border-danger @enderror"
                                                     input="indikator"></trix-editor>
                                                 <!-- error message untuk indikator -->
                                                 @error('indikator')
                                                     <div class="d-block text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
-
 
                                             <div class="btn-group mt-3 w-100">
                                                 <button type="submit" class="btn btn-primary btn-block">Simpan</button>
@@ -111,19 +105,41 @@
     </div>
 
     <script>
+        function fetchPernyataanByUnit() {
+            var unitId = document.getElementById('id_unit').value;
+
+            // Hapus opsi sebelumnya
+            var pernyataanSelect = document.getElementById('id_pernyataan');
+            pernyataanSelect.innerHTML = '<option value="">Silahkan Pilih Pernyataan Standar</option>';
+
+            if (unitId) {
+                fetch(`/pernyataan/by-unit/${unitId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(pernyataan => {
+                            var option = document.createElement('option');
+                            option.value = pernyataan.id;
+                            option.textContent = pernyataan.no_ps;
+                            option.setAttribute('data-pernyataan', pernyataan.pernyataan_standar);
+                            pernyataanSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            updatePernyataanStandar();
+        }
+
         function updatePernyataanStandar() {
             var select = document.getElementById('id_pernyataan');
             var pernyataan = select.options[select.selectedIndex].getAttribute('data-pernyataan');
             var selectedOption = select.options[select.selectedIndex].value;
 
-
             if (selectedOption === '') {
                 document.getElementById('pernyataan_standar').style.display = 'none';
-                document.getElementById('pernyataan_standar_label').style.display = 'none'; // 
-                ; // 
+                document.getElementById('pernyataan_standar_label').style.display = 'none';
             } else {
-                document.getElementById('pernyataan_standar').style.display =
-                    'block';
+                document.getElementById('pernyataan_standar').style.display = 'block';
                 document.getElementById('pernyataan_standar_label').style.display = 'block';
             }
             document.getElementById('pernyataan_standar').innerHTML = pernyataan ? pernyataan : '';
