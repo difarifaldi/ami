@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\InstrumenAudit;
 use App\Models\AuditMutuInternal;
 use App\Models\Indikator;
+use App\Models\PernyataanStandar;
 use App\Models\StatusAkhir;
 use App\Models\StatusTemuan;
 use App\Models\StatusTercapai;
 use App\Models\Unit;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -91,13 +93,31 @@ class InstrumenAuditController extends Controller
     public function create()
     {
         $userId = Auth::id();
+        $userUnitId = Auth::user()->id_unit; // Ambil unit dari pengguna yang sedang login
+
+        // Ambil id Audit Mutu Internal yang terkait dengan user auditee
         $auditMutuIds = AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id');
+
+        // Ambil id indikator dari Instrumen Audit yang terkait dengan id Audit Mutu Internal di atas
         $instrumentIds = InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->pluck('id_indikator')->toArray();
-        $indikators = Indikator::whereNotIn('id', $instrumentIds)->get();
+
+        // Ambil pernyataan standar yang unitnya sama dengan unit pengguna yang sedang login
+        $pernyataanIds = PernyataanStandar::where('id_unit', $userUnitId)->pluck('id');
+
+        // Filter indikator berdasarkan pernyataan yang ditemukan dan yang belum ada di Instrumen Audit
+        $indikators = Indikator::whereIn('id_pernyataan', $pernyataanIds)
+            ->whereNotIn('id', $instrumentIds)
+            ->get();
+
+        // Ambil semua status tercapai
         $status_tercapai = StatusTercapai::all();
-        $indikator_lists = Indikator::all();
+
+        // Ambil semua indikator (opsional, tergantung kebutuhan view)
+        $indikator_lists = Indikator::whereIn('id_pernyataan', $pernyataanIds)->get();
+
         return view('instrument.create', compact('indikators', 'status_tercapai', 'indikator_lists', 'instrumentIds'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -159,52 +179,56 @@ class InstrumenAuditController extends Controller
      */
     public function update(Request $request, InstrumenAudit $instrument)
     {
-        $validatedData = [];
+        try {
+            $validatedData = [];
 
-        if ($request->user()->hasRole('auditee')) {
-            $validatedData = $request->validate([
-                'deskripsi_temuan' => 'required',
-                'bukti' => 'required|url',
-                'id_status_tercapai' => 'required',
-                'akar_penyebab' => 'required',
-                'akibat' => 'required',
-            ]);
-            $user = Auth::user();
+            if ($request->user()->hasRole('auditee')) {
+                $validatedData = $request->validate([
+                    'deskripsi_temuan' => 'required',
+                    'bukti' => 'required|url',
+                    'id_status_tercapai' => 'nullable',
+                    'akar_penyebab' => 'required',
+                    'akibat' => 'required',
+                    'tanggapan_auditee' => 'nullable',
+                ]);
+                $user = Auth::user();
 
-            // Mengambil ID audit mutu internal dari user auditee yang sedang login
-            $auditMutuInternal = $user->auditAsAuditee()->latest()->first();
+                // Mengambil ID audit mutu internal dari user auditee yang sedang login
+                $auditMutuInternal = $user->auditAsAuditee()->latest()->first();
 
-            if (!$auditMutuInternal) {
-                return redirect()->back()->with('failed', 'Anda tidak memiliki Audit Mutu Internal yang terkait');
+                if (!$auditMutuInternal) {
+                    return redirect()->back()->with('failed', 'Anda tidak memiliki Audit Mutu Internal yang terkait');
+                }
+
+                // Menyimpan ID audit mutu internal ke dalam data yang akan disimpan
+                $validatedData['id_AMI'] = $auditMutuInternal->id;
             }
 
-            // Menyimpan ID audit mutu internal ke dalam data yang akan disimpan
-            $validatedData['id_AMI'] = $auditMutuInternal->id;
+            if ($request->user()->hasRole('auditor')) {
+                $validatedData = $request->validate([
+                    'temuan_audit' => 'required',
+                    'rekomendasi_auditor' => 'required',
+                    'penanggung_jawab' => 'required',
+                    'link' => 'required|url',
+                    'id_status_temuan' => 'required',
+                ]);
+            }
+
+            if ($request->user()->hasRole('manajemen')) {
+                $validatedData = $request->validate([
+                    'jadwal_penyelesaian' => 'required',
+                    'rencana_perbaikan' => 'required',
+                    'id_status_akhir' => 'required',
+                ]);
+            }
+
+            $instrument->update($validatedData);
+
+
+            return redirect('/instrument')->with('success', 'Instrumen berhasil diperbaharui');
+        } catch (Exception $e) {
+            dd($e->getMessage());
         }
-
-        if ($request->user()->hasRole('auditor')) {
-            $validatedData = $request->validate([
-                'temuan_audit' => 'required',
-                'rekomendasi_auditor' => 'required',
-                'penanggung_jawab' => 'required',
-                'link' => 'required|url',
-                'tanggapan_auditee' => 'required',
-                'id_status_temuan' => 'required',
-            ]);
-        }
-
-        if ($request->user()->hasRole('manajemen')) {
-            $validatedData = $request->validate([
-                'jadwal_penyelesaian' => 'required',
-                'rencana_perbaikan' => 'required',
-                'id_status_akhir' => 'required',
-            ]);
-        }
-
-        $instrument->update($validatedData);
-
-
-        return redirect('/instrument')->with('success', 'Instrumen berhasil diperbaharui');
     }
 
     /**

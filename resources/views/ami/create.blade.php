@@ -39,7 +39,8 @@
                                                 <div class="col-6">
                                                     <div class="form-group mt-4">
                                                         <label>Unit</label>
-                                                        <select name="id_unit" id="id_unit" class="form-control bg-white">
+                                                        <select name="id_unit" id="id_unit" class="form-control bg-white"
+                                                            onchange="fetchAuditeeByUnit()">
                                                             <option value="">Silahkan Pilih Unit</option>
                                                             @foreach ($units as $unit)
                                                                 <option value="{{ $unit->id }}"
@@ -48,9 +49,6 @@
                                                                 </option>
                                                             @endforeach
                                                         </select>
-                                                        @error('id_unit')
-                                                            <div class="d-block text-danger">{{ $message }}</div>
-                                                        @enderror
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
@@ -197,4 +195,38 @@
             </div>
         </div>
     </div>
+    <script>
+        function fetchAuditeeByUnit() {
+            var unitId = document.getElementById('id_unit').value;
+
+            // Hapus opsi sebelumnya
+            var auditeeSelect = document.getElementById('id_user_auditee');
+            auditeeSelect.innerHTML = '<option value="">Silahkan Pilih Auditee</option>';
+
+            if (unitId) {
+                fetch(`/auditee/by-unit/${unitId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(user => {
+                            var option = document.createElement('option');
+                            option.value = user.id;
+                            option.textContent = user.name;
+                            auditeeSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+
+    @if ($message = Session::get('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: '{{ $message }}',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>
+    @endif
 @endsection

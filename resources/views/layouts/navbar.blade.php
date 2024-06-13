@@ -17,16 +17,29 @@
                              </div>
                          </a>
                          <div class="dropdown-menu dropdown-menu-right">
-                             <a class="dropdown-item">
-                                 <i class="bi bi-info-circle"> Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                     In magni
-                                     velit sunt incidunt aliquam <span>
-                                     </span></i>
-                                 .</a>
 
-                             <div class="dropdown-divider mb-0"></div>
-                             <a class="dropdown-item">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In magni
-                                 velit sunt incidunt aliquam.</a>
+                             <?php
+                             $userId = Auth::id();
+                             $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id')->toArray();
+                             $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->get();
+                             
+                             ?>
+
+                             @forelse ($instruments as $instrument)
+                                 <a class="dropdown-item ">
+                                     <i class="bi bi-info-circle"> </i>Berikan tanggapan untuk indikator
+                                     <strong>{{ $instrument->indikator->no }}</strong>
+                                     <div class="dropdown-divider mb-0"></div>
+
+                                 </a>
+                             @empty
+                                 <a class="dropdown-item">
+                                     <i class="bi bi-info-circle"><span> Tidak ada notifikasi </span></i>
+                                 </a>
+                             @endforelse
+
+
+
                          </div>
                      </li>
                      <li class="nav-item dropdown dropdown-user-profile">

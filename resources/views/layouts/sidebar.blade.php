@@ -63,6 +63,12 @@
                                             ->whereNotNull('id_status_tercapai')
                                             ->count();
                                     } elseif (Auth::user()->hasRole('manajemen')) {
+                                        $auditMutuIds = App\Models\AuditMutuInternal::where(
+                                            'id_user_manajemen',
+                                            $userId,
+                                        )
+                                            ->pluck('id')
+                                            ->toArray();
                                         $instrumentCount = App\Models\InstrumenAudit::whereNull('id_status_akhir')
                                             ->whereNotNull('id_status_temuan')
                                             ->whereNotNull('id_status_tercapai')

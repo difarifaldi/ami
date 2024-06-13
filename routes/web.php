@@ -49,6 +49,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
     Route::get('/pernyataan/by-unit/{unitId}', [IndikatorController::class, 'getPernyataanByUnit'])->name('pernyataan.byUnit');
+    // routes/web.php
+    Route::get('/auditee/by-unit/{unitId}', [AuditMutuInternalController::class, 'getAuditeeByUnit']);
+
 
 
     // Reset Password

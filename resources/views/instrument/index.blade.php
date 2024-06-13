@@ -60,181 +60,175 @@
                     @php
                         $instrument = $instruments->first();
                     @endphp
-                    @if ($instrument)
-                        <div class="card">
-                            @unlesshasanyrole('auditee')
-                                {{-- <div class="card-header">{{ __('Instrumen') }}</div> --}}
-                            @endunlessrole
-                            <div class="card-body">
-                                <div class="card-title">
+
+                    <div class="card">
+                        @unlesshasanyrole('auditee')
+                            {{-- <div class="card-header">{{ __('Instrumen') }}</div> --}}
+                        @endunlessrole
+                        <div class="card-body">
+                            <div class="card-title">
 
 
-                                    <h4 class="text-center my-4">Instrumen Audit
-                                        {{ $instrument ? $instrument->ami->unit->nama : '' }}</h4>
-                                </div>
-                                @role('auditee')
-                                    <hr />
-                                    <a href="instrument/create" class="btn btn-primary mb-3">Audit Instrumen</a>
-                                @endrole
+                                <h4 class="text-center my-4">Instrumen Audit
+                                    {{ $instrument ? $instrument->ami->unit->nama : '' }}</h4>
 
+                            </div>
+                            @role('auditee')
+                                <hr />
+                                <a href="instrument/create" class="btn btn-primary mb-3">Audit Instrumen</a>
+                            @endrole
 
-                                <div class="table-responsive">
-                                    <div class="card-body">
-                                        <table id="example" class="table table-bordered text-center " style="width:100%">
-                                            <thead>
-                                                <th scope="col">No PS</th>
-                                                <th scope="col">No Indikator</th>
-                                                <th scope="col">unit</th>
+                            <div class="table-responsive">
+                                <div class="card-body">
+                                    <table id="example" class="table table-bordered text-center " style="width:100%">
+                                        <thead>
+                                            <th scope="col">No PS</th>
+                                            <th scope="col">No Indikator</th>
+                                            <th scope="col">unit</th>
 
-                                                @hasanyrole('auditee|auditor|manajemen')
-                                                    <th scope="col">Bukti</th>
-                                                    <th scope="col">Status Ketercapaian</th>
-                                                    @hasanyrole('auditor|manajemen')
-                                                        <th scope="col">Temuan</th>
-                                                        <th scope="col">Link tindak Lanjut</th>
-                                                        <th scope="col">Status Temuan</th>
-                                                    @endhasanyrole
+                                            @hasanyrole('auditee|auditor|manajemen')
+                                                <th scope="col">Bukti</th>
+                                                <th scope="col">Status Ketercapaian</th>
+                                                @hasanyrole('auditor|manajemen')
+                                                    <th scope="col">Temuan</th>
+                                                    <th scope="col">Link tindak Lanjut</th>
+                                                    <th scope="col">Status Temuan</th>
                                                 @endhasanyrole
-                                                @role('manajemen')
-                                                    {{-- <th scope="col">Keadaan</th> --}}
-                                                    <th scope="col">Jadwal</th>
-                                                    <th scope="col">Status Akhir</th>
-                                                @endrole
-                                                <th scope="col">Aksi</th>
+                                            @endhasanyrole
+                                            @role('manajemen')
+                                                {{-- <th scope="col">Keadaan</th> --}}
+                                                <th scope="col">Jadwal</th>
+                                                <th scope="col">Status Akhir</th>
+                                            @endrole
+                                            <th scope="col">Aksi</th>
 
-                                            </thead>
+                                        </thead>
 
-                                            <tbody>
-                                                @foreach ($instruments as $instrument)
-                                                    <?php
-                                                    // logic icons
-                                                    $class = 'bi-check-lg';
-                                                    $bg = '';
-                                                    
-                                                    if (auth()->user()->hasRole('auditee') && isset($instrument->statusTercapai)) {
-                                                        $class = 'bi-brush';
-                                                    } elseif (auth()->user()->hasRole('auditor') && isset($instrument->statusTemuan)) {
-                                                        $class = 'bi-brush';
-                                                        $bg = 'bg-light-success';
-                                                    } elseif (auth()->user()->hasRole('manajemen') && isset($instrument->statusAkhir)) {
-                                                        $class = 'bi-brush';
-                                                        $bg = 'bg-light-success';
-                                                    } elseif (auth()->user()->hasRole('admin')) {
-                                                        $class = 'bi-brush';
-                                                    }
-                                                    
-                                                    $colorTemuan = '';
-                                                    $colorTercapai = '';
-                                                    
-                                                    // Array of status names
-                                                    $statusNames = ['statusTemuan' => 'colorTemuan', 'statusTercapai' => 'colorTercapai', 'statusAkhir' => 'colorAkhir'];
-                                                    
-                                                    foreach ($statusNames as $statusName => $colorVar) {
-                                                        if (isset($instrument->$statusName->nama)) {
-                                                            switch ($instrument->$statusName->nama) {
-                                                                case 'belum mencapai':
-                                                                    $$colorVar = 'text-danger';
-                                                                    break;
-                                                                case 'tercapai':
-                                                                    $$colorVar = 'text-success';
-                                                                    break;
-                                                                case 'melampaui':
-                                                                    $$colorVar = 'text-info';
-                                                                    break;
-                                                                case 'belum selesai':
-                                                                    $$colorVar = 'text-danger';
-                                                                    break;
-                                                                case 'selesai':
-                                                                    $$colorVar = 'text-success';
-                                                                    break;
-                                                            }
+                                        <tbody>
+                                            @foreach ($instruments as $instrument)
+                                                <?php
+                                                // logic icons
+                                                $class = 'bi-check-lg';
+                                                $bg = '';
+                                                
+                                                if (auth()->user()->hasRole('auditee') && isset($instrument->statusTercapai)) {
+                                                    $class = 'bi-brush';
+                                                } elseif (auth()->user()->hasRole('auditor') && isset($instrument->statusTemuan)) {
+                                                    $class = 'bi-brush';
+                                                    $bg = 'bg-light-success';
+                                                } elseif (auth()->user()->hasRole('manajemen') && isset($instrument->statusAkhir)) {
+                                                    $class = 'bi-brush';
+                                                    $bg = 'bg-light-success';
+                                                } elseif (auth()->user()->hasRole('admin')) {
+                                                    $class = 'bi-brush';
+                                                }
+                                                
+                                                $colorTemuan = '';
+                                                $colorTercapai = '';
+                                                $colorAkhir = '';
+                                                
+                                                // Array of status names
+                                                $statusNames = ['statusTemuan' => 'colorTemuan', 'statusTercapai' => 'colorTercapai', 'statusAkhir' => 'colorAkhir'];
+                                                
+                                                foreach ($statusNames as $statusName => $colorVar) {
+                                                    if (isset($instrument->$statusName->nama)) {
+                                                        switch ($instrument->$statusName->nama) {
+                                                            case 'belum mencapai':
+                                                                $$colorVar = 'text-danger';
+                                                                break;
+                                                            case 'tercapai':
+                                                                $$colorVar = 'text-success';
+                                                                break;
+                                                            case 'melampaui':
+                                                                $$colorVar = 'text-info';
+                                                                break;
+                                                            case 'belum selesai':
+                                                                $$colorVar = 'text-danger';
+                                                                break;
+                                                            case 'selesai':
+                                                                $$colorVar = 'text-success';
+                                                                break;
                                                         }
                                                     }
-                                                    ?>
+                                                }
+                                                ?>
 
-                                                    <tr>
+                                                <tr>
+                                                    <td class="{{ $bg }}">
+                                                        {{ $instrument->indikator->pernyataan->no_ps }}</td>
+
+                                                    <td class="{{ $bg }}">{{ $instrument->indikator->no }}
+                                                    </td>
+
+                                                    <td class="{{ $bg }}">{{ $instrument->ami->unit->nama }}
+                                                    </td>
+
+
+
+
+
+                                                    @hasanyrole('auditee|auditor|manajemen')
                                                         <td class="{{ $bg }}">
-                                                            {{ $instrument->indikator->pernyataan->no_ps }}</td>
-
-                                                        <td class="{{ $bg }}">{{ $instrument->indikator->no }}
+                                                            <a target="_blank"
+                                                                href="{{ $instrument->bukti ? $instrument->bukti : '' }}">{{ $instrument->bukti ? $instrument->bukti : '-' }}</a>
+                                                        </td>
+                                                        <td class="{{ $bg }} {{ $colorTercapai }}">
+                                                            {{ $instrument->statusTercapai ? $instrument->statusTercapai->nama : '-' }}
                                                         </td>
 
-                                                        <td class="{{ $bg }}">{{ $instrument->ami->unit->nama }}
-                                                        </td>
 
-
-
-
-
-                                                        @hasanyrole('auditee|auditor|manajemen')
+                                                        @hasanyrole('auditor|manajemen')
                                                             <td class="{{ $bg }}">
-                                                                <a target="_blank"
-                                                                    href="{{ $instrument->bukti ? $instrument->bukti : '' }}">{{ $instrument->bukti ? $instrument->bukti : '-' }}</a>
+                                                                {{ $instrument->temuan_audit ? $instrument->temuan_audit : '-' }}
                                                             </td>
-                                                            <td class="{{ $bg }} {{ $colorTercapai }}">
-                                                                {{ $instrument->statusTercapai ? $instrument->statusTercapai->nama : '-' }}
+                                                            <td class="{{ $bg }}">
+                                                                <a href="{{ $instrument->link }}" target="_blank">
+                                                                    {{ $instrument->link ? $instrument->link : '-' }}</a>
+
                                                             </td>
-
-
-                                                            @hasanyrole('auditor|manajemen')
-                                                                <td class="{{ $bg }}">
-                                                                    {{ $instrument->temuan_audit ? $instrument->temuan_audit : '-' }}
-                                                                </td>
-                                                                <td class="{{ $bg }}">
-                                                                    <a href="{{ $instrument->link }}" target="_blank">
-                                                                        {{ $instrument->link ? $instrument->link : '-' }}</a>
-
-                                                                </td>
-                                                                <td class="{{ $bg }} {{ $colorTemuan }}">
-                                                                    {{ $instrument->statusTemuan ? $instrument->statusTemuan->nama : '-' }}
-                                                                </td>
-                                                            @endhasanyrole
+                                                            <td class="{{ $bg }} {{ $colorTemuan }}">
+                                                                {{ $instrument->statusTemuan ? $instrument->statusTemuan->nama : '-' }}
+                                                            </td>
                                                         @endhasanyrole
-                                                        @role('manajemen')
-                                                            <td class="{{ $bg }} ">
-                                                                {{ $instrument->jadwal_penyelesaian ? \Carbon\Carbon::parse($instrument->jadwal_penyelesaian)->format('d, M Y') : '-' }}
-                                                            </td>
-                                                            <td class="{{ $bg }} {{ $colorAkhir }}">
-                                                                {{ $instrument->statusAkhir ? $instrument->statusAkhir->nama : '-' }}
-                                                            </td>
-                                                        @endrole
-                                                        <td class="{{ $bg }}">
-
-                                                            <a href="/instrument/{{ $instrument->id }}"
-                                                                class="btn btn-warning btn-sm"><i class="bi bi-eye"></i></a>
-                                                            <a href="/instrument/{{ $instrument->id }}/edit"
-                                                                class="btn btn-success btn-sm">
-                                                                <i class="{{ $class }}"></i>
-                                                            </a>
-
-                                                            @role('admin')
-                                                                <form action="/instrument/{{ $instrument->id }}" method="post"
-                                                                    class="d-inline">
-                                                                    @method('delete')
-                                                                    @csrf
-                                                                    <button class="btn btn-danger btn-sm h-full  border-0"
-                                                                        onclick="return confirm('Apakah yakin ingin menghapus instrument?')"><i
-                                                                            class="bi bi-trash"></i></button>
-                                                                </form>
-                                                            @endrole
+                                                    @endhasanyrole
+                                                    @role('manajemen')
+                                                        <td class="{{ $bg }} ">
+                                                            {{ $instrument->jadwal_penyelesaian ? \Carbon\Carbon::parse($instrument->jadwal_penyelesaian)->format('d, M Y') : '-' }}
                                                         </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                        <td class="{{ $bg }} {{ $colorAkhir }}">
+                                                            {{ $instrument->statusAkhir ? $instrument->statusAkhir->nama : '-' }}
+                                                        </td>
+                                                    @endrole
+                                                    <td class="{{ $bg }}">
+
+                                                        <a href="/instrument/{{ $instrument->id }}"
+                                                            class="btn btn-warning btn-sm"><i class="bi bi-eye"></i></a>
+                                                        <a href="/instrument/{{ $instrument->id }}/edit"
+                                                            class="btn btn-success btn-sm">
+                                                            <i class="{{ $class }}"></i>
+                                                        </a>
+
+                                                        @role('admin')
+                                                            <form action="/instrument/{{ $instrument->id }}" method="post"
+                                                                class="d-inline">
+                                                                @method('delete')
+                                                                @csrf
+                                                                <button class="btn btn-danger btn-sm h-full  border-0"
+                                                                    onclick="return confirm('Apakah yakin ingin menghapus instrument?')"><i
+                                                                        class="bi bi-trash"></i></button>
+                                                            </form>
+                                                        @endrole
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
+
                         </div>
-                    @else
-                        <div class="card">
-                            <div class="card-body">
-                                <h3 class="text-center my-4 "><i class="bi bi-exclamation-diamond text-warning"></i> belum
-                                    ada data untuk
-                                    diaudit <i class="bi bi-exclamation-diamond text-warning"></i></h3>
-                            </div>
-                        </div>
-                    @endif
+                    </div>
+
                 </div>
             </div>
         </div>

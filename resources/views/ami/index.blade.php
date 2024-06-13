@@ -35,7 +35,8 @@
                                                 <th scope="col">Auditor Anggota 1</th>
                                                 <th scope="col">Auditor Anggota 2</th>
                                                 <th scope="col">Manajamen</th>
-                                                <th scope="col">tanggal</th>
+                                                <th scope="col">Tanggal Audit</th>
+                                                <th scope="col">Tahun Ajaran</th>
                                                 <th scope="col">Aksi</th>
 
                                             </tr>
@@ -48,25 +49,16 @@
                                                     <td>{{ $audit->auditee->name }}</td>
                                                     <td>{{ $audit->auditorKetua->name }}</td>
                                                     <td>{{ $audit->auditorAnggota1->name }}</td>
-                                                    <td>{{ $audit->auditorAnggota2->name }}</td>
+                                                    <td>{{ $audit->auditorAnggota2 ? $audit->auditorAnggota2->name : '-' }}
+                                                    </td>
                                                     <td>{{ $audit->manajemen->name }}</td>
                                                     <td> {{ \Carbon\Carbon::parse($audit->tanggal)->format('d, M Y') }}
                                                     </td>
+                                                    <td>{{ $audit->tahunAkademik->nama }}</td>
 
                                                     <td>
                                                         <a href="/audit/{{ $audit->id }}/edit"
                                                             class="btn btn-warning btn-sm"><i class="bi bi-brush"></i></a>
-
-
-                                                        <form action="/audit/{{ $audit->id }}" method="post"
-                                                            class="d-inline">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <button class="btn btn-danger btn-sm h-full  border-0"
-                                                                onclick="return confirm('Apakah yakin ingin menghapus audit?')"><i
-                                                                    class="bi bi-trash"></i></button>
-                                                        </form>
-
                                                     </td>
                                                 </tr>
                                             @empty

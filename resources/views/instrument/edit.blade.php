@@ -72,6 +72,14 @@
                                                 </div>
                                             </div>
 
+
+                                            @php
+                                                $isAuditee = auth()->user()->hasRole('auditee');
+                                                $hasStatusTemuan = !is_null($instrument->id_status_temuan);
+                                                $isAuditorOrManajemen = auth()
+                                                    ->user()
+                                                    ->hasAnyRole(['auditor', 'manajemen']);
+                                            @endphp
                                             @hasanyrole('auditee|auditor|manajemen')
                                                 <h3 class="mt-4">Diisi Auditee</h3>
                                                 <!--  Deskripsi Temuan -->
@@ -83,7 +91,7 @@
                                                     @enderror"
                                                         value="{{ old('deskripsi_temuan', $instrument->deskripsi_temuan) }}"
                                                         placeholder="Masukan Keadaan"
-                                                        @hasanyrole('auditor|manajemen') readonly @endhasanyrole>
+                                                        @if (($isAuditee && $hasStatusTemuan) || $isAuditorOrManajemen) readonly @endif>
                                                     <!-- error message untuk deskripsi_temuan -->
                                                     @error('deskripsi_temuan')
                                                         <div class="d-block text-danger">{{ $message }}</div>
@@ -99,7 +107,7 @@
                                                     @enderror"
                                                         value="{{ old('akar_penyebab', $instrument->akar_penyebab) }}"
                                                         placeholder="Masukan Akar Penyebab"
-                                                        @hasanyrole('auditor|manajemen') readonly @endhasanyrole>
+                                                        @if (($isAuditee && $hasStatusTemuan) || $isAuditorOrManajemen) readonly @endif>
                                                     <!-- error message untuk akar_penyebab -->
                                                     @error('akar_penyebab')
                                                         <div class="d-block text-danger">{{ $message }}</div>
@@ -115,7 +123,7 @@
                                                     @enderror"
                                                         value="{{ old('akibat', $instrument->akibat) }}"
                                                         placeholder="Masukan Akibat"
-                                                        @hasanyrole('auditor|manajemen') readonly @endhasanyrole>
+                                                        @if (($isAuditee && $hasStatusTemuan) || $isAuditorOrManajemen) readonly @endif>
                                                     <!-- error message untuk akibat -->
                                                     @error('akibat')
                                                         <div class="d-block text-danger">{{ $message }}</div>
@@ -133,7 +141,7 @@
                                                     @enderror"
                                                         value="{{ old('bukti', $instrument->bukti) }}"
                                                         placeholder="Masukan Bukti Berupa Link"
-                                                        @hasanyrole('auditor|manajemen') readonly @endhasanyrole>
+                                                        @if (($isAuditee && $hasStatusTemuan) || $isAuditorOrManajemen) readonly @endif>
                                                     <!-- error message untuk bukti -->
                                                     @error('bukti')
                                                         <div class="d-block text-danger">{{ $message }}</div>
@@ -149,7 +157,7 @@
                                                     <label>Status Tercapai</label>
                                                     <select name="id_status_tercapai" id="id_status_tercapai"
                                                         class="form-control bg-white"
-                                                        @hasanyrole('auditor|manajemen') disabled @endhasanyrole>
+                                                        @if (($isAuditee && $hasStatusTemuan) || $isAuditorOrManajemen) disabled @endif>
                                                         @foreach ($status_tercapai as $trcapai)
                                                             <option value="{{ $trcapai->id }}"
                                                                 {{ old('id_status_tercapai', $instrument->id_status_tercapai) == $trcapai->id ? 'selected' : '' }}>
@@ -160,104 +168,112 @@
                                                 </div>
                                             @endhasanyrole
 
-                                            @hasanyrole('auditor|manajemen')
-                                                <h3 class="mt-4">Diisi Auditor</h3>
-                                                <!--  Temuan -->
-                                                <div class="form-group mt-4">
-                                                    <label>Temuan Audit</label>
-                                                    <input type="text" name="temuan_audit" id="temuan_audit"
-                                                        class="form-control bg-white @error('temuan_audit')
-                                                            is-invalid
-                                                            @enderror"
-                                                        value="{{ old('temuan_audit', $instrument->temuan_audit) }}"
-                                                        placeholder="Masukan Temuan " @role('manajemen') readonly @endrole>
-                                                    <!-- error message untuk temuan_audit -->
-                                                    @error('temuan_audit')
-                                                        <div class="d-block text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+                                            @php
+                                                $isAuditee = auth()->user()->hasRole('auditee');
+                                                $hasStatusTemuan = !is_null($instrument->id_status_temuan);
+                                            @endphp
 
-                                                <!--  Rekomendasi -->
-                                                <div class="form-group mt-4">
-                                                    <label>Rekomendasi Auditor</label>
-                                                    <input type="text" name="rekomendasi_auditor" id="rekomendasi_auditor"
-                                                        class="form-control bg-white @error('rekomendasi_auditor')
-                                                    is-invalid
-                                                @enderror"
-                                                        value="{{ old('rekomendasi_auditor', $instrument->rekomendasi_auditor) }}"
-                                                        placeholder="Masukan Rekomendasi "
-                                                        @role('manajemen') readonly @endrole>
-                                                    <!-- error message untuk rekomendasi_auditor -->
-                                                    @error('rekomendasi_auditor')
-                                                        <div class="d-block text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+                                            <div
+                                                class="{{ $isAuditee && !$hasStatusTemuan ? 'd-none' : '' }} auditee-form-section">
+                                                @hasanyrole('auditor|manajemen|auditee')
+                                                    <h3 class="mt-4">Diisi Auditor</h3>
 
-                                                <!--  Tanggapan Auditee -->
-                                                <div class="form-group mt-4">
-                                                    <label>Tanggapan Auditee</label>
-                                                    <input type="text" name="tanggapan_auditee" id="tanggapan_auditee"
-                                                        class="form-control bg-white @error('tanggapan_auditee')is-invalid
-                                                                        @enderror"
-                                                        value="{{ old('tanggapan_auditee', $instrument->tanggapan_auditee) }}"
-                                                        placeholder="Masukan Tanggapan Auditee "
-                                                        @role('manajemen') readonly @endrole>
-                                                    <!-- error message untuk tanggapan_auditee -->
-                                                    @error('tanggapan_auditee')
-                                                        <div class="d-block text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+                                                    <!-- Temuan Audit -->
+                                                    <div class="form-group mt-4">
+                                                        <label>Temuan Audit</label>
+                                                        <input type="text" name="temuan_audit" id="temuan_audit"
+                                                            class="form-control bg-white @error('temuan_audit') is-invalid @enderror"
+                                                            value="{{ old('temuan_audit', $instrument->temuan_audit) }}"
+                                                            placeholder="Masukan Temuan"
+                                                            @hasanyrole('auditee|manajemen') readonly @endhasanyrole>
+                                                        @error('temuan_audit')
+                                                            <div class="d-block text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
 
-                                                <!--  Penanggung Jawab -->
-                                                <div class="form-group mt-4">
-                                                    <label>Penanggung Jawab</label>
-                                                    <select name="penanggung_jawab" id="penanggung_jawab"
-                                                        class="form-control bg-white" @role('manajemen') disabled @endrole>
-                                                        @foreach ($user as $usr)
-                                                            <option value="{{ $usr->id }}"
-                                                                {{ old('penanggung_jawab', $instrument->penanggung_jawab) == $usr->id ? 'selected' : '' }}>
-                                                                {{ $usr->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    <!-- error message untuk penanggung_jawab -->
-                                                    @error('penanggung_jawab')
-                                                        <div class="d-block text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+                                                    <!-- Rekomendasi Auditor -->
+                                                    <div class="form-group mt-4">
+                                                        <label>Rekomendasi Auditor</label>
+                                                        <input type="text" name="rekomendasi_auditor"
+                                                            id="rekomendasi_auditor"
+                                                            class="form-control bg-white @error('rekomendasi_auditor') is-invalid @enderror"
+                                                            value="{{ old('rekomendasi_auditor', $instrument->rekomendasi_auditor) }}"
+                                                            placeholder="Masukan Rekomendasi"
+                                                            @hasanyrole('auditee|manajemen') readonly @endhasanyrole>
+                                                        @error('rekomendasi_auditor')
+                                                            <div class="d-block text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
 
-                                                <!--  Link -->
-                                                <div class="form-group mt-4">
-                                                    <label>Link</label>
-                                                    <input type="text" name="link" id="link"
-                                                        class="form-control bg-white @error('link')is-invalid
-                                                            @enderror"
-                                                        value="{{ old('link', $instrument->link) }}"
-                                                        placeholder="Masukan Link " @role('manajemen') readonly @endrole>
-                                                    <!-- error message untuk link -->
-                                                    @error('link')
-                                                        <div class="d-block text-danger">{{ $message }}</div>
-                                                    @enderror
+                                                    <!-- Penanggung Jawab -->
+                                                    <div class="form-group mt-4">
+                                                        <label>Penanggung Jawab</label>
+                                                        <select name="penanggung_jawab" id="penanggung_jawab"
+                                                            class="form-control bg-white"
+                                                            @hasanyrole('auditee|manajemen') disabled @endhasanyrole>
+                                                            @foreach ($user as $usr)
+                                                                <option value="{{ $usr->id }}"
+                                                                    {{ old('penanggung_jawab', $instrument->penanggung_jawab) == $usr->id ? 'selected' : '' }}>
+                                                                    {{ $usr->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('penanggung_jawab')
+                                                            <div class="d-block text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
 
-                                                    <a href="{{ $instrument->link }}" target="_blank"
-                                                        class="btn btn-sm btn-primary mt-2 {{ !$instrument->link ? 'd-none' : '' }}">Buka
-                                                        Tautan</a>
-                                                </div>
+                                                    <!-- Link -->
+                                                    <div class="form-group mt-4">
+                                                        <label>Link</label>
+                                                        <input type="text" name="link" id="link"
+                                                            class="form-control bg-white @error('link') is-invalid @enderror"
+                                                            value="{{ old('link', $instrument->link) }}"
+                                                            placeholder="Masukan Link"
+                                                            @hasanyrole('auditee|manajemen') readonly @endhasanyrole>
+                                                        @error('link')
+                                                            <div class="d-block text-danger">{{ $message }}</div>
+                                                        @enderror
 
-                                                <!--  Status Temuan -->
-                                                <div class="form-group mt-4">
-                                                    <label>Status Temuan</label>
-                                                    <select name="id_status_temuan" id="id_status_temuan"
-                                                        class="form-control bg-white" @role('manajemen') disabled @endrole>
-                                                        @foreach ($status_temuan as $temuan_audit)
-                                                            <option value="{{ $temuan_audit->id }}"
-                                                                {{ old('id_status_temuan', $instrument->id_status_temuan) == $temuan_audit->id ? 'selected' : '' }}>
-                                                                {{ $temuan_audit->nama }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            @endhasanyrole
+                                                        <a href="{{ $instrument->link }}" target="_blank"
+                                                            class="btn btn-sm btn-primary mt-2 {{ !$instrument->link ? 'd-none' : '' }}">Buka
+                                                            Tautan</a>
+                                                    </div>
+
+                                                    <!-- Status Temuan -->
+                                                    <div class="form-group mt-4">
+                                                        <label>Status Temuan</label>
+                                                        <select name="id_status_temuan" id="id_status_temuan"
+                                                            class="form-control bg-white"
+                                                            @hasanyrole('auditee|manajemen') disabled @endhasanyrole>
+                                                            @foreach ($status_temuan as $temuan_audit)
+                                                                <option value="{{ $temuan_audit->id }}"
+                                                                    {{ old('id_status_temuan', $instrument->id_status_temuan) == $temuan_audit->id ? 'selected' : '' }}>
+                                                                    {{ $temuan_audit->nama }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Tanggapan Auditee -->
+                                                    <div class="{{ !$instrument->tanggapan_auditee ? 'd-none' : '' }}">
+                                                        <h3 class="mt-4">Tanggapan Auditee</h3>
+                                                        <div class="form-group mt-4">
+                                                            <input type="text" name="tanggapan_auditee"
+                                                                id="tanggapan_auditee"
+                                                                class="form-control bg-white @error('tanggapan_auditee') is-invalid @enderror"
+                                                                value="{{ old('tanggapan_auditee', $instrument->tanggapan_auditee) }}"
+                                                                placeholder="Masukan Tanggapan Auditee"
+                                                                @hasanyrole('auditor|manajemen') readonly @endhasanyrole>
+                                                            @error('tanggapan_auditee')
+                                                                <div class="d-block text-danger">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                @endhasanyrole
+                                            </div>
+
+
                                             @role('manajemen')
                                                 <h3 class="mt-4">Diisi Manajemen</h3>
 

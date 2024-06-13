@@ -35,6 +35,13 @@ class AuditMutuInternalController extends Controller
         return view('ami.create', compact('units', 'auditees', 'auditors', 'admins', 'manajemens', 'tahuns'));
     }
 
+    public function getAuditeeByUnit($unitId)
+    {
+        $auditees = User::role('auditee')->where('id_unit', $unitId)->get();
+
+        return response()->json($auditees);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -47,12 +54,21 @@ class AuditMutuInternalController extends Controller
             'id_user_auditor_anggota1' => 'required',
             'id_user_auditor_anggota2' => 'nullable',
             'id_user_manajemen' => 'required',
+            'id_TA' => 'required',
             'tanggal' => 'required',
         ]);
+
+        $existingAMI = AuditMutuInternal::where('id_unit', $validatedData['id_unit'])->where('id_TA', $validatedData['id_TA']);
+
+        if ($existingAMI->count() > 0) {
+            return redirect()->back()->withInput()->with('error', 'Sudah terdapat Audit Mutu Internal pada Tahun Ajaran Ini');
+        }
 
         AuditMutuInternal::create($validatedData);
         return redirect('/audit')->with('success', 'Data Audit Berhasil Ditambahkan');
     }
+
+
 
     /**
      * Display the specified resource.
