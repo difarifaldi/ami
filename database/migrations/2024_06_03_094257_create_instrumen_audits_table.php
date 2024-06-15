@@ -29,6 +29,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_status_akhir')->nullable();
             $table->unsignedBigInteger('id_AMI')->nullable();
             $table->unsignedBigInteger('id_indikator')->nullable();
+            $table->string('status_audit')->nullable();
             $table->timestamps();
 
             $table->foreign('id_status_tercapai')->references('id')->on('status_tercapais')->onDelete('cascade');

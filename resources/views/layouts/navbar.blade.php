@@ -9,32 +9,42 @@
              </div>
              <div class="right-topbar ml-auto">
                  <ul class="navbar-nav">
+                     <?php
+                     $userId = Auth::id();
+                     $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id')->toArray();
+                     $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->get();
+                     $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->count();
+                     
+                     ?>
                      <li class="nav-item dropdown dropdown-user-profile">
                          <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
                              data-toggle="dropdown">
                              <div class="media user-box align-items-center">
-                                 <i class="bi bi-bell text-primary"></i>
+                                 <i class="bi bi-bell text-primary">
+                                 </i>
+                                 <span class="position-absolute ml-3 rounded bg-red-light badge text-white mb-4 fs-4"
+                                     style="font-size: 0.8rem">
+                                     {{ $instrumentsCount }}
+                                 </span>
+
                              </div>
                          </a>
                          <div class="dropdown-menu dropdown-menu-right">
 
-                             <?php
-                             $userId = Auth::id();
-                             $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id')->toArray();
-                             $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->get();
-                             
-                             ?>
+
 
                              @forelse ($instruments as $instrument)
-                                 <a class="dropdown-item ">
-                                     <i class="bi bi-info-circle"> </i>Berikan tanggapan untuk indikator
+                                 <a class="dropdown-item mt-2" href="/instrument/{{ $instrument->id }}/edit">
+                                     <i class="bi bi-envelope-check text-info" style="font-size: 1.2rem"></i>Berikan
+                                     tanggapan untuk indikator
                                      <strong>{{ $instrument->indikator->no }}</strong>
                                      <div class="dropdown-divider mb-0"></div>
-
                                  </a>
                              @empty
                                  <a class="dropdown-item">
-                                     <i class="bi bi-info-circle"><span> Tidak ada notifikasi </span></i>
+                                     <i class="bi bi-info-circle" style="font-size: 1.2rem"></i>
+                                     <span> Tidak ada notifikasi
+                                     </span>
                                  </a>
                              @endforelse
 

@@ -170,7 +170,14 @@
 
                                             @php
                                                 $isAuditee = auth()->user()->hasRole('auditee');
+                                                $isAuditor = auth()->user()->hasRole('auditor');
+                                                $tanggapan = $instrument->tanggapan_auditee;
                                                 $hasStatusTemuan = !is_null($instrument->id_status_temuan);
+                                                if (($isAuditee && !$hasStatusTemuan) || ($isAuditor && !$tanggapan)) {
+                                                    $display = 'd-none';
+                                                } else {
+                                                    $display = '';
+                                                }
                                             @endphp
 
                                             <div
@@ -256,7 +263,7 @@
                                                     </div>
 
                                                     <!-- Tanggapan Auditee -->
-                                                    <div class="{{ !$instrument->tanggapan_auditee ? 'd-none' : '' }}">
+                                                    <div class="{{ $display }}">
                                                         <h3 class="mt-4">Tanggapan Auditee</h3>
                                                         <div class="form-group mt-4">
                                                             <input type="text" name="tanggapan_auditee"

@@ -124,32 +124,29 @@ class InstrumenAuditController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $validateData = $request->validate([
-                'deskripsi_temuan' => 'required',
-                'bukti' => 'required|url',
-                'id_status_tercapai' => 'required',
-                'akar_penyebab' => 'required',
-                'akibat' => 'required',
-                'id_indikator' => 'required',
-            ]);
-            $user = Auth::user();
-            $auditMutuInternal = $user->auditAsAuditee()->latest()->first();
 
-            if (!$auditMutuInternal) {
-                return redirect()->back()->with('failed', 'Anda tidak memiliki Audit Mutu Internal yang terkait');
-            }
+        $validateData = $request->validate([
+            'deskripsi_temuan' => 'required',
+            'bukti' => 'required|url',
+            'id_status_tercapai' => 'required',
+            'akar_penyebab' => 'required',
+            'akibat' => 'required',
+            'id_indikator' => 'required',
+        ]);
+        $user = Auth::user();
+        $auditMutuInternal = $user->auditAsAuditee()->latest()->first();
 
-            // Menyimpan ID audit mutu internal ke dalam data yang akan disimpan
-            $validateData['id_AMI'] = $auditMutuInternal->id;
-
-
-            InstrumenAudit::create($validateData);
-
-            return redirect('/instrument')->with('success', 'Instrumen baru berhasil ditambahkan');
-        } catch (\Exception $e) {
-            dd($e->getMessage());
+        if (!$auditMutuInternal) {
+            return redirect()->back()->with('failed', 'Anda tidak memiliki Audit Mutu Internal yang terkait');
         }
+
+        // Menyimpan ID audit mutu internal ke dalam data yang akan disimpan
+        $validateData['id_AMI'] = $auditMutuInternal->id;
+
+
+        InstrumenAudit::create($validateData);
+
+        return redirect('/instrument/create')->with('success', 'Instrumen baru berhasil ditambahkan');
     }
 
     /**

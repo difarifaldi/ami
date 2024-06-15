@@ -187,6 +187,24 @@
             </div>
         </div>
     </div>
+    <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+        <div style="position: absolute; top: 0; right: 0;">
+            <!-- Toast akan ditampilkan di sini -->
+            <div class="toast" id="toast-message" role="alert" aria-live="assertive" aria-atomic="true"
+                data-delay="3000">
+                <div class="toast-header">
+                    <strong class="mr-auto">Notifikasi</strong>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    <!-- Pesan notifikasi akan di sini -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function updateIndikator() {
             var select = document.getElementById('id_indikator');
@@ -220,4 +238,24 @@
 
         updateIndikator();
     </script>
+
+    @if ($message = Session::get('success'))
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 1400,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: '{{ $message }}'
+            });
+        </script>
+    @endif
 @endsection

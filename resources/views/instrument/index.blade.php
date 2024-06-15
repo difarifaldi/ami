@@ -67,10 +67,9 @@
                         @endunlessrole
                         <div class="card-body">
                             <div class="card-title">
-
-
                                 <h4 class="text-center my-4">Instrumen Audit
                                     {{ $instrument ? $instrument->ami->unit->nama : '' }}</h4>
+
 
                             </div>
                             @role('auditee')
@@ -84,7 +83,7 @@
                                         <thead>
                                             <th scope="col">No PS</th>
                                             <th scope="col">No Indikator</th>
-                                            <th scope="col">unit</th>
+                                            {{-- <th scope="col">unit</th> --}}
 
                                             @hasanyrole('auditee|auditor|manajemen')
                                                 <th scope="col">Bukti</th>
@@ -107,7 +106,7 @@
                                         <tbody>
                                             @foreach ($instruments as $instrument)
                                                 <?php
-                                                // logic icons
+                                                // logic icons & bg
                                                 $class = 'bi-check-lg';
                                                 $bg = '';
                                                 
@@ -127,7 +126,7 @@
                                                 $colorTercapai = '';
                                                 $colorAkhir = '';
                                                 
-                                                // Array of status names
+                                                // Array status nama
                                                 $statusNames = ['statusTemuan' => 'colorTemuan', 'statusTercapai' => 'colorTercapai', 'statusAkhir' => 'colorAkhir'];
                                                 
                                                 foreach ($statusNames as $statusName => $colorVar) {
@@ -151,17 +150,36 @@
                                                         }
                                                     }
                                                 }
+                                                
+                                                // logic badge auditee
+                                                $bgBadge = '';
+                                                $text = '';
+                                                if (auth()->user()->hasRole('auditee') && is_null($instrument->statusTemuan)) {
+                                                    $bgBadge = 'bg-danger ';
+                                                    $text = 'Menunggu';
+                                                } elseif (auth()->user()->hasRole('auditee') && is_null($instrument->tanggapan_auditee) && isset($instrument->statusTemuan)) {
+                                                    $bgBadge = 'bg-info ';
+                                                    $text = 'Tanggapi';
+                                                } elseif (auth()->user()->hasRole('auditee') && isset($instrument->tanggapan_auditee) && isset($instrument->statusTemuan)) {
+                                                    $bgBadge = 'bg-success ';
+                                                    $text = 'Selesai';
+                                                }
+                                                
                                                 ?>
 
                                                 <tr>
                                                     <td class="{{ $bg }}">
-                                                        {{ $instrument->indikator->pernyataan->no_ps }}</td>
+                                                        {{ $instrument->indikator->pernyataan->no_ps }}
+
+                                                    </td>
 
                                                     <td class="{{ $bg }}">{{ $instrument->indikator->no }}
+                                                        <span
+                                                            class="badge text-white {{ $bgBadge }} ">{{ $text }}</span>
                                                     </td>
 
-                                                    <td class="{{ $bg }}">{{ $instrument->ami->unit->nama }}
-                                                    </td>
+                                                    {{-- <td class="{{ $bg }}">{{ $instrument->ami->unit->nama }}
+                                                    </td> --}}
 
 
 
@@ -254,4 +272,5 @@
             });
         </script>
     @endif
+
 @endsection
