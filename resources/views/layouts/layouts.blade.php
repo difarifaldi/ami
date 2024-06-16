@@ -136,8 +136,19 @@
     <!-- App JS -->
     <script src="{{ asset('../assets/js/app.js') }}"></script>
     <script>
-        new PerfectScrollbar('.dashboard-social-list');
-        new PerfectScrollbar('.dashboard-top-countries');
+        $(document).ready(function() {
+            // Initialize PerfectScrollbar after elements are loaded
+            if (document.querySelector('.dashboard-social-list')) {
+                new PerfectScrollbar('.dashboard-social-list');
+            }
+            if (document.querySelector('.dashboard-top-countries')) {
+                new PerfectScrollbar('.dashboard-top-countries');
+            }
+            if (document.querySelector('.header-notifications-list')) {
+                new PerfectScrollbar('.header-notifications-list');
+            }
+        });
+    </script>
     </script>
 </body>
 

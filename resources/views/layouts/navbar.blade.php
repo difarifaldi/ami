@@ -16,42 +16,56 @@
                      $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->count();
                      
                      ?>
-                     <li class="nav-item dropdown dropdown-user-profile">
-                         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
-                             data-toggle="dropdown">
-                             <div class="media user-box align-items-center">
-                                 <i class="bi bi-bell text-primary">
-                                 </i>
-                                 <span class="position-absolute ml-3 rounded bg-red-light badge text-white mb-4 fs-4"
-                                     style="font-size: 0.8rem">
-                                     {{ $instrumentsCount }}
-                                 </span>
 
-                             </div>
+
+                     <li class="nav-item dropdown dropdown-lg">
+                         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative"
+                             href="javascript:;" data-toggle="dropdown"> <i
+                                 class="bx bx-bell vertical-align-middle"></i>
+                             <span class="msg-count"> {{ $instrumentsCount }}</span>
                          </a>
                          <div class="dropdown-menu dropdown-menu-right">
-
-
-
-                             @forelse ($instruments as $instrument)
-                                 <a class="dropdown-item mt-2" href="/instrument/{{ $instrument->id }}/edit">
-                                     <i class="bi bi-envelope-check text-info" style="font-size: 1.2rem"></i>Berikan
-                                     tanggapan untuk indikator
-                                     <strong>{{ $instrument->indikator->no }}</strong>
-                                     <div class="dropdown-divider mb-0"></div>
-                                 </a>
-                             @empty
-                                 <a class="dropdown-item">
-                                     <i class="bi bi-info-circle" style="font-size: 1.2rem"></i>
-                                     <span> Tidak ada notifikasi
-                                     </span>
-                                 </a>
-                             @endforelse
-
-
+                             <a href="javascript:;">
+                                 <div class="msg-header">
+                                     <h6 class="msg-header-title"> {{ $instrumentsCount }} Pesan</h6>
+                                     <p class="msg-header-subtitle">Notifikasi Aplikasi</p>
+                                 </div>
+                             </a>
+                             <div class="header-notifications-list">
+                                 @forelse ($instruments as $instrument)
+                                     <a class="dropdown-item" href="/instrument/{{ $instrument->id }}/edit">
+                                         <div class="media align-items-center">
+                                             <div class="notify bg-light-success text-success"><i
+                                                     class='bx bx-check-square'></i>
+                                             </div>
+                                             <div class="media-body">
+                                                 <h6 class="msg-name font-weight-bold mb-1">Pesan Baru <span
+                                                         class="msg-time float-right">{{ $instrument->updated_at->diffForHumans() }}</span>
+                                                 </h6>
+                                                 <p class="msg-info">Tanggapan Untuk Indikator
+                                                     {{ $instrument->indikator->no }}</p>
+                                             </div>
+                                         </div>
+                                     </a>
+                                 @empty
+                                     <a class="dropdown-item" href="javascript:;">
+                                         <div class="media align-items-center">
+                                             <div class="notify bg-light-danger text-danger"><i
+                                                     class="bx bx-task-x"></i></div>
+                                             <div class="media-body">
+                                                 <h6 class="msg-name font-weight-bold mb-1">Pesan Kosong</h6>
+                                                 <p class="msg-info">Auditor Belum Mengisi Data</p>
+                                             </div>
+                                         </div>
+                                     </a>
+                                 @endforelse
+                             </div>
 
                          </div>
                      </li>
+
+
+
                      <li class="nav-item dropdown dropdown-user-profile">
                          <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
                              data-toggle="dropdown">

@@ -69,9 +69,11 @@
                                         )
                                             ->pluck('id')
                                             ->toArray();
-                                        $instrumentCount = App\Models\InstrumenAudit::whereNull('id_status_akhir')
+                                        $instrumentCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)
                                             ->whereNotNull('id_status_temuan')
                                             ->whereNotNull('id_status_tercapai')
+                                            ->whereNotNull('tanggapan_auditee')
+                                            ->whereNull('id_status_akhir')
                                             ->count();
                                     }
                                 @endphp
@@ -95,9 +97,24 @@
                 </a>
             </li>
 
-            {{-- unit --}}
+            <li>
+                <a class="has-arrow" href="javascript:;">
+                    <div class="parent-icon icon-color-1"> <i class="bx bx-shape-circle"></i>
+                    </div>
+                    <div class="menu-title ">Status Audit</div>
+                </a>
+                <ul>
+                    <li> <a href="/statusAudit"><i class="bx bx-filter"></i>Daftar Status</a>
+                    </li>
+
+
+                </ul>
+            </li>
+
+
             @role('superadmin')
                 <li class="menu-label">Admin Section</li>
+
                 <li>
                     <a class="has-arrow" href="javascript:;">
                         <div class="parent-icon icon-color-1"> <i class="bi bi-backpack4"></i>

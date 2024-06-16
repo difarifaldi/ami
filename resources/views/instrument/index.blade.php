@@ -42,7 +42,8 @@
                                                                 $condition &&
                                                                 is_null($instrument->id_status_akhir) &&
                                                                 !is_null($instrument->id_status_tercapai) &&
-                                                                !is_null($instrument->id_status_temuan);
+                                                                !is_null($instrument->id_status_temuan) &&
+                                                                !is_null($instrument->tanggapan_auditee);
                                                         }
                                                         return $condition;
                                                     })->count() }}
@@ -241,6 +242,11 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    @role('manajemen')
+                                        <div class="mt-4 text-right">
+                                            <button class="btn btn-success p-2">Selesaikan Audit</button>
+                                        </div>
+                                    @endrole
                                 </div>
                             </div>
 

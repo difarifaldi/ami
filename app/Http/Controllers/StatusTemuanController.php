@@ -13,7 +13,14 @@ class StatusTemuanController extends Controller
      */
     public function index()
     {
-        //
+        $status = StatusTemuan::with('instrument')->get();
+
+        // Hitung total jumlah instrumen untuk semua status
+        $totalInstruments = $status->sum(function ($status) {
+            return $status->instrument->count();
+        });
+
+        return view('status.index', compact('status', 'totalInstruments'));
     }
 
     /**

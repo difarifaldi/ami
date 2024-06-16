@@ -219,8 +219,8 @@
                                                             class="form-control bg-white"
                                                             @hasanyrole('auditee|manajemen') disabled @endhasanyrole>
                                                             @foreach ($user as $usr)
-                                                                <option value="{{ $usr->id }}"
-                                                                    {{ old('penanggung_jawab', $instrument->penanggung_jawab) == $usr->id ? 'selected' : '' }}>
+                                                                <option value="{{ $usr->name }}"
+                                                                    {{ old('penanggung_jawab', $instrument->penanggung_jawab) == $usr->name ? 'selected' : '' }}>
                                                                     {{ $usr->name }}
                                                                 </option>
                                                             @endforeach

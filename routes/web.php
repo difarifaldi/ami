@@ -10,6 +10,7 @@ use App\Http\Controllers\KetercapaianStandarController;
 use App\Http\Controllers\KuiController;
 use App\Http\Controllers\PernyataanStandarController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StatusTemuanController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/unit', UnitController::class);
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
+    Route::resource('/statusAudit', StatusTemuanController::class);
     Route::get('/pernyataan/by-unit/{unitId}', [IndikatorController::class, 'getPernyataanByUnit'])->name('pernyataan.byUnit');
     // routes/web.php
     Route::get('/auditee/by-unit/{unitId}', [AuditMutuInternalController::class, 'getAuditeeByUnit']);

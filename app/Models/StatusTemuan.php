@@ -12,6 +12,6 @@ class StatusTemuan extends Model
 
     public function instrument()
     {
-        $this->hasOne(InstrumenAudit::class, 'id_status_temuan');
+        return $this->hasMany(InstrumenAudit::class, 'id_status_temuan');
     }
 }
