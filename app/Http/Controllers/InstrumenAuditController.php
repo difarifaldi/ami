@@ -14,6 +14,8 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InstrumenAuditController extends Controller
 {
@@ -23,8 +25,7 @@ class InstrumenAuditController extends Controller
     public function index(Request $request)
     {
         $userId = Auth::id();
-        $data  = AuditMutuInternal::where('id_user_admin', $userId)
-            ->orWhere('id_user_auditor_ketua', $userId)
+        $data  = AuditMutuInternal::where('id_user_auditor_ketua', $userId)
             ->orWhere('id_user_auditor_anggota1', $userId)
             ->orWhere('id_user_auditor_anggota2', $userId)
             ->orWhere('id_user_manajemen', $userId)
@@ -59,7 +60,7 @@ class InstrumenAuditController extends Controller
         // Tentukan kondisi berdasarkan peran pengguna
         if (auth()->user()->hasRole('auditee')) {
             $auditMutuIds = AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id');
-            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds);
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->where('status_audit', '=', 'belum selesai');
         }
         if (auth()->user()->hasRole('auditor')) {
             $auditMutuIds = AuditMutuInternal::where(function ($query) use ($userId) {
@@ -67,11 +68,11 @@ class InstrumenAuditController extends Controller
                     ->orWhere('id_user_auditor_anggota1', $userId)
                     ->orWhere('id_user_auditor_anggota2', $userId);
             })->pluck('id');
-            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_tercapai');
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_tercapai')->where('status_audit', '=', 'belum selesai');
         }
         if (auth()->user()->hasRole('manajemen')) {
             $auditMutuIds = AuditMutuInternal::where('id_user_manajemen', $userId)->pluck('id');
-            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('tanggapan_auditee');
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('tanggapan_auditee')->where('status_audit', '=', 'belum selesai');
         }
 
         // Ambil unit yang terkait dengan user
@@ -87,9 +88,42 @@ class InstrumenAuditController extends Controller
 
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function selesaikanAudit(Request $request)
+    {
+        try {
+            $userId = Auth::id();
+            $data  = AuditMutuInternal::where('id_user_manajemen', $userId);
+
+            // Validasi unitId untuk menghindari akses yang tidak sah
+            $unitIds = $data->pluck('id_unit')->unique();
+            $unitId = $request->input('unit_id');
+            // Tentukan unit yang dipilih atau unit pertama sebagai default
+            if (!$unitId && $unitIds->isNotEmpty()) {
+                $unitId = $unitIds->first();
+            }
+
+            $auditMutuIds = $data->where('id_unit', $unitId)->pluck('id');
+
+            // Ambil instrumen yang terkait dengan audit mutu internal yang sedang berlangsung
+            $instruments = InstrumenAudit::whereIn('id_AMI', $auditMutuIds)
+                ->where('status_audit', '=', 'belum selesai')->get();
+
+            // Update status_audit menjadi "selesai" untuk instrumen yang terpilih
+            foreach ($instruments as $instrument) {
+                $instrument->status_audit = 'selesai';
+                $instrument->save();
+            }
+
+            // Berikan pesan sukses jika diperlukan
+            return redirect()->back()->with('success', 'Audit berhasil diselesaikan.');
+        } catch (\Exception $e) {
+            // Tangani jika ada kesalahan
+            dd($e->getMessage());
+        }
+    }
+
+
+
     public function create()
     {
         $userId = Auth::id();
@@ -118,10 +152,6 @@ class InstrumenAuditController extends Controller
         return view('instrument.create', compact('indikators', 'status_tercapai', 'indikator_lists', 'instrumentIds'));
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
 

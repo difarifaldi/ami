@@ -10,14 +10,13 @@ class InstrumenAudit extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function statusTemuan()
-    {
-        return $this->belongsTo(StatusTemuan::class, 'id_status_temuan');
-    }
-
     public function ami()
     {
         return $this->belongsTo(AuditMutuInternal::class, 'id_AMI');
+    }
+    public function statusTemuan()
+    {
+        return $this->belongsTo(StatusTemuan::class, 'id_status_temuan');
     }
     public function indikator()
     {

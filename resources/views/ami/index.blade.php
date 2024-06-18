@@ -30,15 +30,13 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">Unit</th>
+                                                <th scope="col">Tahun Akademik</th>
                                                 <th scope="col">Auditee</th>
                                                 <th scope="col">Auditor Ketua</th>
                                                 <th scope="col">Auditor Anggota 1</th>
                                                 <th scope="col">Auditor Anggota 2</th>
                                                 <th scope="col">Manajamen</th>
                                                 <th scope="col">Tanggal Audit</th>
-                                                <th scope="col">Tahun Ajaran</th>
-                                                <th scope="col">Aksi</th>
-
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -46,6 +44,7 @@
                                                 <tr>
 
                                                     <td>{{ $audit->unit->nama }}</td>
+                                                    <td>{{ $audit->tahunAkademik->nama }}</td>
                                                     <td>{{ $audit->auditee->name }}</td>
                                                     <td>{{ $audit->auditorKetua->name }}</td>
                                                     <td>{{ $audit->auditorAnggota1->name }}</td>
@@ -53,12 +52,6 @@
                                                     </td>
                                                     <td>{{ $audit->manajemen->name }}</td>
                                                     <td> {{ \Carbon\Carbon::parse($audit->tanggal)->format('d, M Y') }}
-                                                    </td>
-                                                    <td>{{ $audit->tahunAkademik->nama }}</td>
-
-                                                    <td>
-                                                        <a href="/audit/{{ $audit->id }}/edit"
-                                                            class="btn btn-warning btn-sm"><i class="bi bi-brush"></i></a>
                                                     </td>
                                                 </tr>
                                             @empty

@@ -179,12 +179,6 @@
                                                             class="badge text-white {{ $bgBadge }} ">{{ $text }}</span>
                                                     </td>
 
-                                                    {{-- <td class="{{ $bg }}">{{ $instrument->ami->unit->nama }}
-                                                    </td> --}}
-
-
-
-
 
                                                     @hasanyrole('auditee|auditor|manajemen')
                                                         <td class="{{ $bg }}">
@@ -244,7 +238,11 @@
                                     </table>
                                     @role('manajemen')
                                         <div class="mt-4 text-right">
-                                            <button class="btn btn-success p-2">Selesaikan Audit</button>
+                                            <form action="{{ route('instrument.selesaikan-audit') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="unit_id" value="{{ $selectedUnitId }}">
+                                                <button type="submit" class="btn btn-success p-2">Selesaikan Audit</button>
+                                            </form>
                                         </div>
                                     @endrole
                                 </div>

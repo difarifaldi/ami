@@ -45,6 +45,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
     // standar
     Route::resource('/instrument', InstrumenAuditController::class);
+    Route::post('/instrument/selesaikan-audit', [InstrumenAuditController::class, 'selesaikanAudit'])->name('instrument.selesaikan-audit');
+
     Route::resource('/audit', AuditMutuInternalController::class);
     Route::resource('/unit', UnitController::class);
     Route::resource('/pernyataan', PernyataanStandarController::class);
