@@ -14,6 +14,14 @@ class AuditMutuInternal extends Model
     {
         return $this->belongsTo(Unit::class, 'id_unit');
     }
+    public function instrument()
+    {
+        return $this->hasMany(InstrumenAudit::class, 'id_AMI');
+    }
+    public function tahunAkademik()
+    {
+        return $this->belongsTo(tahunAkademik::class, 'id_TA');
+    }
     public function auditee()
     {
         return $this->belongsTo(User::class, 'id_user_auditee');
@@ -37,13 +45,5 @@ class AuditMutuInternal extends Model
     public function admin()
     {
         return $this->belongsTo(User::class, 'id_user_admin');
-    }
-    public function instrument()
-    {
-        return $this->hasMany(InstrumenAudit::class, 'id_AMI');
-    }
-    public function tahunAkademik()
-    {
-        return $this->belongsTo(tahunAkademik::class, 'id_TA');
     }
 }

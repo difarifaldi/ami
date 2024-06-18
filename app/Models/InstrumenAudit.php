@@ -14,14 +14,7 @@ class InstrumenAudit extends Model
     {
         return $this->belongsTo(StatusTemuan::class, 'id_status_temuan');
     }
-    public function statusTercapai()
-    {
-        return $this->belongsTo(StatusTercapai::class, 'id_status_tercapai');
-    }
-    public function statusAkhir()
-    {
-        return $this->belongsTo(StatusAkhir::class, 'id_status_akhir');
-    }
+
     public function ami()
     {
         return $this->belongsTo(AuditMutuInternal::class, 'id_AMI');
@@ -29,5 +22,13 @@ class InstrumenAudit extends Model
     public function indikator()
     {
         return $this->belongsTo(Indikator::class, 'id_indikator');
+    }
+    public function statusTercapai()
+    {
+        return $this->belongsTo(StatusTercapai::class, 'id_status_tercapai');
+    }
+    public function statusAkhir()
+    {
+        return $this->belongsTo(StatusAkhir::class, 'id_status_akhir');
     }
 }

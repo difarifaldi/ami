@@ -49,7 +49,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/unit', UnitController::class);
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
-    Route::resource('/statusAudit', StatusTemuanController::class);
+
+
+    Route::get('/statusAudit', [StatusTemuanController::class, 'index'])->name('statusAudit.index');
+    Route::get('/statusAudit/filter', [StatusTemuanController::class, 'filter'])->name('statusAudit.filter');
+
+
     Route::get('/pernyataan/by-unit/{unitId}', [IndikatorController::class, 'getPernyataanByUnit'])->name('pernyataan.byUnit');
     // routes/web.php
     Route::get('/auditee/by-unit/{unitId}', [AuditMutuInternalController::class, 'getAuditeeByUnit']);
