@@ -2,18 +2,20 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <title>LHA PDF</title>
     <style>
-        /* CSS untuk halaman baru */
         .page-break {
-            page-break-after: always;
+            page-break-before: always;
+            margin-top: 0;
         }
 
         /* Gaya untuk halaman cover */
         .cover-page {
-            margin: 2.5cm auto;
+            margin-top: 2.5cm auto;
             text-align: center;
         }
 
@@ -33,7 +35,6 @@
             font-size: 14pt;
         }
 
-
         .cover-page h2 {
             font-size: 18pt;
             line-height: 1.5;
@@ -49,7 +50,7 @@
         /* Gaya untuk halaman pengantar */
         .pengantar-page {
             padding: 20px;
-            margin: 2.5cm auto;
+            margin: 2.5 auto;
         }
 
         .pengantar-page h2 {
@@ -66,6 +67,59 @@
             line-height: 1.5;
         }
 
+        /* Gaya untuk halaman pendahuluan */
+        .pendahuluan-page {
+            padding: 20px;
+            margin-top: 0;
+        }
+
+        .pendahuluan-page h2 {
+            text-align: center;
+            margin: 20px 0;
+            /* Kurangi margin bottom */
+        }
+
+        .pendahuluan-page h3 {
+            margin-top: 0.5cm;
+            font-size: 14px
+                /* Kurangi margin top */
+        }
+
+        .pendahuluan-page ul li {
+            line-height: 1.5rem;
+            list-style-type: decimal;
+        }
+
+        .pendahuluan-page .list-alpha li {
+            line-height: 1.5rem;
+            list-style-type: lower-alpha;
+
+        }
+
+        .pendahuluan-page table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            page-break-inside: auto;
+        }
+
+        .pendahuluan-page th,
+        .pendahuluan-page td {
+
+            padding: 20px;
+            text-align: left;
+            border-collapse: collapse;
+            border: 1px solid blue;
+        }
+
+        .pendahuluan-page .table-temuan th,
+        .pendahuluan-page .table-temuan td {
+
+            padding: 8px;
+            text-align: left;
+            border-collapse: collapse;
+            border: 1px solid blue;
+        }
 
         /* Gaya untuk halaman konten */
         .content-page {
@@ -95,7 +149,8 @@
         <table>
             <tr>
                 <th colspan="2" style="font-weight: 500">LAPORAN HASIL AUDIT <br> TAHUN 2024</th>
-                <th colspan="2">AUDIT MUTU INTERNAL <br> UNIT/BAGIAN <br> {{ $instruments->first()->ami->unit->nama }}
+                <th colspan="2">AUDIT MUTU INTERNAL <br> UNIT/BAGIAN <br>
+                    {{ $instruments->first()->ami->unit->nama }}
                 </th>
             </tr>
         </table>
@@ -123,9 +178,8 @@
         </p>
     </div>
 
-
-
     <!-- Halaman Pengantar -->
+    <div class="page-break"></div>
     <div class="pengantar-page">
         <h2>Kata Pengantar</h2>
         <div class="isi">
@@ -169,42 +223,185 @@
     <!-- Pisahkan halaman -->
     <div class="page-break"></div>
 
-    <!-- Halaman Konten -->
-    <div class="content-page">
-        <h2>Daftar Laporan Hasil Akhir</h2>
-        <table border="1" width="100%" style="border-collapse: collapse;">
+    <!-- Halaman Pendahuluan -->
+    <div class="pendahuluan-page">
+        <h2>LAPORAN AUDIT MUTU INTERNAL UNIT KERJA</h2>
+        <h3>I. PENDAHULUAN</h3>
+        <table>
+            <tr>
+                <td style="background-color: #d9d9d9">Bagian</td>
+                <td colspan="2">{{ $instruments->first()->ami->unit->nama }}</td>
+            </tr>
+            <tr>
+                <td style="background-color: #d9d9d9">Unit Kerja</td>
+                <td colspan="2">{{ $instruments->first()->ami->unit->nama }}</td>
+            </tr>
+            <tr>
+                <td style="background-color: #d9d9d9">Alamat</td>
+                <td colspan="2">
+                    Jl. Prof. DR. G.A. Siwabessy, Kampus Universitas
+                    Indonesia Depok 16425
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: #d9d9d9">Tanggal Audit</td>
+                <td colspan="2"> {{ \Carbon\Carbon::parse($instruments->first()->ami->tanggal)->format('d, M Y') }}
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: #d9d9d9">Ka Unit Kerja</td>
+                <td>{{ $instruments->first()->ami->auditee->name }}</td>
+                <td>Telp:</td>
+            </tr>
+            <tr>
+                <td style="background-color: #d9d9d9">Ketua Auditor</td>
+                <td>{{ $instruments->first()->ami->auditorKetua->name }}</td>
+                <td>Tanda tangan <br>
+                    <?php
+                    $pathttd1 = public_path('storage/' . $instruments->first()->ami->auditorKetua->ttd);
+                    $typettd1 = pathinfo($pathttd1, PATHINFO_EXTENSION);
+                    $datattd1 = file_get_contents($pathttd1);
+                    $base64ttd1 = 'data:image/' . $typettd1 . ';base64,' . base64_encode($datattd1);
+                    ?>
+                    <img src="{{ $base64ttd1 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: #d9d9d9">Anggota Auditor</td>
+                <td>{{ $instruments->first()->ami->auditorAnggota1->name }}</td>
+                <td>Tanda tangan <br>
+                    <?php
+                    $pathttd2 = public_path('storage/' . $instruments->first()->ami->auditorAnggota1->ttd);
+                    $typettd2 = pathinfo($pathttd2, PATHINFO_EXTENSION);
+                    $datattd2 = file_get_contents($pathttd2);
+                    $base64ttd2 = 'data:image/' . $typettd2 . ';base64,' . base64_encode($datattd2);
+                    ?>
+                    <img src="{{ $base64ttd2 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                </td>
+            </tr>
+
+
+
+        </table>
+        <h3>II. TUJUAN DAN RUANG LINGKUP AUDIT</h3>
+        <ul>
+            <li>
+                Ketercapaian sasaran mutu dan indikator kinerja yang
+                terdapat dalam standar UPT KUI.
+            </li>
+            <li>Ketersediaan prosedur dan konsistensi pelaksanaannya</li>
+            <li>
+                Efektivitas sistem pengawasan pelaksanaan kegiatan di
+                unitnya
+            </li>
+        </ul>
+        <h3>
+            III. TEMUAN POSITIF
+            <span style="font-style: italic; font-weight: lighter">
+                (tuliskan temuan audit yang masuk dalam klasifikasi TP,
+                kesesuaian atau prestasi yang ditemukan pada unit)</span>
+        </h3>
+        <table>
+            <tr style="text-align: center">
+                <th>No</th>
+                <th>Deskripsi / Uraian Temuan</th>
+            </tr>
+            @foreach ($instruments as $instrument)
+                <tr>
+                    <td>{{ $instrument->indikator->no }}</td>
+                    <td> {!! $instrument->indikator->indikator !!}</td>
+                </tr>
+            @endforeach
+        </table>
+
+        <h3>
+            IV. RINGKASAN TEMUAN AUDIT
+            <span style="font-style: italic; font-weight: lighter">
+                (tuliskan temuan audit yang masuk dalam klasifikasi TP,
+                kesesuaian atau prestasi yang ditemukan pada unit)</span>
+        </h3>
+        <table class="table-temuan">
             <thead>
                 <tr>
-                    <th>Unit</th>
-                    <th>No PS</th>
-                    <th>No Indikator</th>
-                    <th>Bukti</th>
-                    <th>Status Ketercapaian</th>
-                    <th>Temuan</th>
-                    <th>Link tindak Lanjut</th>
-                    <th>Status Temuan</th>
-                    <th>Jadwal</th>
-                    <th>Status Akhir</th>
+                    <th rowspan="2">No</th>
+                    <th rowspan="2">Deskripsi/ Uraian Temuan</th>
+                    <th colspan="4" style="text-align: center">
+                        Kategori Temuan <br />
+                        (beri tanda <span style="font-family: ZapfDingbats, sans-serif;">4</span> yang sesuai)
+                    </th>
+                </tr>
+                <tr>
+                    <th>Melampaui</th>
+                    <th>Mencapai</th>
+                    <th>Belum Mencapai</th>
+                    <th>Menyimpang</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($instruments as $instrument)
                     <tr>
-                        <td>{{ $instrument->ami->unit->nama }}</td>
-                        <td>{{ $instrument->indikator->pernyataan->no_ps }}</td>
                         <td>{{ $instrument->indikator->no }}</td>
-                        <td>{{ $instrument->bukti }}</td>
-                        <td>{{ $instrument->statusTercapai->nama }}</td>
-                        <td>{{ $instrument->temuan_audit }}</td>
-                        <td>{{ $instrument->link }}</td>
-                        <td>{{ $instrument->statusTemuan->nama }}</td>
-                        <td>{{ $instrument->jadwal }}</td>
-                        <td>{{ $instrument->statusAkhir->nama }}</td>
+                        <td style="text-align: justify; padding: 12px">{!! $instrument->indikator->indikator !!}</td>
+                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">{!! $instrument->statusTemuan->nama == 'melampaui' ? '4' : '' !!}
+                        </td>
+                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">{!! $instrument->statusTemuan->nama == 'tercapai' ? '4' : '' !!}
+                        </td>
+                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">{!! $instrument->statusTemuan->nama == 'belum mencapai' ? '4' : '' !!}
+                        </td>
+                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">{!! $instrument->statusTemuan->nama == 'menyimpang' ? '4' : '' !!}
+                        </td>
+
                     </tr>
                 @endforeach
             </tbody>
         </table>
+
+
+
+        <h3>V. KESIMPULAN AUDIT</h3>
+        <p style="margin-left: 20px;">Dari hasil temuan di atas:</p>
+        <ul>
+            <li>Faktor Penyebab Keberhasilan Ketercapaian</li>
+            <ul class="list-alpha">
+                @foreach ($instruments as $instrument)
+                    @if ($instrument->statusTemuan->id == 2)
+                        <li>{{ $instrument->akar_penyebab ? $instrument->akar_penyebab : '' }}</li>
+                    @endif
+                @endforeach
+            </ul>
+            <li>Akar Masalah Ketidak Tercapaian Standar</li>
+            <ul class="list-alpha">
+                @foreach ($instruments as $instrument)
+                    @if ($instrument->statusTemuan->id == 1)
+                        <li>{{ $instrument->akar_penyebab ? $instrument->akar_penyebab : '' }}</li>
+                    @endif
+                @endforeach
+            </ul>
+        </ul>
+        <h3>
+            VI. REKOMENDASI TERKAIT KETERCAPAIAN DAN BELUM/KETIDAKTERCAPAIAN
+        </h3>
+        <ul>
+            <li>Rekomendasi Ketercapaian</li>
+            <ul class="list-alpha">
+                @foreach ($instruments as $instrument)
+                    @if ($instrument->statusTemuan->id == 2)
+                        <li>{{ $instrument->rekomendasi_auditor ? $instrument->rekomendasi_auditor : '' }}</li>
+                    @endif
+                @endforeach
+            </ul>
+            <li>Rekomendasi Ketidaktercapaian</li>
+            <ul class="list-alpha">
+                @foreach ($instruments as $instrument)
+                    @if ($instrument->statusTemuan->id == 1)
+                        <li>{{ $instrument->rekomendasi_auditor ? $instrument->rekomendasi_auditor : '' }}</li>
+                    @endif
+                @endforeach
+            </ul>
+        </ul>
     </div>
+
+
 </body>
 
 </html>

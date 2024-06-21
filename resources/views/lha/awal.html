@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>LHA PDF</title>
+        <style>
+            /* CSS untuk halaman baru */
+            .page-break {
+                page-break-after: always;
+            }
+
+            /* Gaya untuk halaman cover */
+            .cover-page {
+                margin: 2.5cm auto; /* Auto untuk menengahkan halaman */
+                text-align: center;
+            }
+
+            .cover-page table {
+                margin: 0 auto; /* Menengahkan tabel */
+                width: 50%; /* Atur lebar tabel */
+                border-collapse: collapse; /* Menggabungkan batas sel */
+                border: 2px solid black; /* Menambahkan border pada tabel */
+            }
+
+            .cover-page th,
+            .cover-page td {
+                padding: 10px; /* Padding untuk sel */
+                border: 2px solid black;
+            }
+
+            .cover-page h2 {
+                font-size: 18pt;
+                line-height: 1.5; /* Mengatur line height */
+                margin-bottom: 10px; /* Margin bawah untuk jarak antara elemen */
+            }
+
+            .cover-page p {
+                font-size: 14pt;
+                line-height: 1.5; /* Mengatur line height */
+                margin-bottom: 10px; /* Margin bawah untuk jarak antara elemen */
+            }
+
+            /* Gaya untuk halaman konten */
+            .pendahuluan-page {
+                padding: 20px;
+                margin: 2.5cm auto;
+            }
+            .pendahuluan-page h2 {
+                text-align: center;
+                margin-bottom: 2cm;
+            }
+            .pendahuluan-page ul li {
+                line-height: 1.5rem;
+                list-style-type: decimal;
+            }
+   
+            .pendahuluan-page .list-alpha li {
+                line-height: 1.5rem;
+                list-style-type: lower-alpha;
+             
+            }
+
+            .pendahuluan-page table {
+                width: fit-content;
+                border-collapse: collapse;
+                border: 1px solid blue;
+            }
+
+            .pendahuluan-page th,
+            .pendahuluan-page td {
+  
+                padding: 20px;
+                text-align: left;
+                border-collapse: collapse;
+                border: 1px solid blue;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Halaman Cover -->
+        <div class="pendahuluan-page">
+            <h2>LAPORAN AUDIT MUTU INTERNAL UNIT KERJA</h2>
+            <h3>I. PENDAHULUAN</h3>
+            <table>
+                <tr>
+                    <td style="background-color: #d9d9d9">Bagian</td>
+                    <td colspan="2">UPT</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #d9d9d9">Unit Kerja</td>
+                    <td colspan="2">UPT</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #d9d9d9">Alamat</td>
+                    <td colspan="2">
+                        Jl. Prof. DR. G.A. Siwabessy, Kampus Universitas
+                        Indonesia Depok 16425
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color: #d9d9d9">Tanggal Audit</td>
+                    <td colspan="2">Ini tanggal</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #d9d9d9">Ka Unit Kerja</td>
+                    <td>auditee</td>
+                    <td>Telp:</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #d9d9d9">Ketua Auditor</td>
+                    <td>auditor Ketua</td>
+                    <td>TTD gambar</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #d9d9d9">Anggota Auditor</td>
+                    <td>auditor abggita</td>
+                    <td>TTD gambar</td>
+                </tr>
+            </table>
+            <h3>II. TUJUAN DAN RUANG LINGKUP AUDIT</h3>
+            <ul>
+                <li>
+                    Ketercapaian sasaran mutu dan indikator kinerja yang
+                    terdapat dalam standar UPT KUI.
+                </li>
+                <li>Ketersediaan prosedur dan konsistensi pelaksanaannya</li>
+                <li>
+                    Efektivitas sistem pengawasan pelaksanaan kegiatan di
+                    unitnya
+                </li>
+            </ul>
+            <h3>
+                III. TEMUAN POSITIF
+                <span style="font-style: italic; font-weight: lighter">
+                    (tuliskan temuan audit yang masuk dalam klasifikasi TP,
+                    kesesuaian atau prestasi yang ditemukan pada unit)</span
+                >
+            </h3>
+            <table>
+                <tr style="text-align: center">
+                    <th>No</th>
+                    <th>Deskripsi / Uraian Temuan</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Tersedia .......</td>
+                </tr>
+            </table>
+
+            <h3>
+                IV. RINGKASAN TEMUAN AUDIT
+                <span style="font-style: italic; font-weight: lighter">
+                    (tuliskan temuan audit yang masuk dalam klasifikasi TP,
+                    kesesuaian atau prestasi yang ditemukan pada unit)</span
+                >
+            </h3>
+            <table style="text-align: center;">
+                <tr >
+                    <th rowspan="2">No</th>
+                    <th rowspan="2">Deskripsi/ Uraian Temuan</th>
+                    <th colspan="4" style="text-align: center;">
+                        Kategori Temuan <br />
+                        (beri tanda √ yang sesuai)
+                    </th>
+                    <th rowspan="2">Nomor PTK (Permintaan Tindakan Koreksi-Form 5)</th>
+                    <tr>
+                        <th>Melampaui</th>
+                        <th>Mencapai</th>
+                        <th>Belum Mencapai</th>
+                        <th>Menyimpang</th>
+                    </tr>
+                    
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="text-align: justify">apa aja</td>
+                    <td>√</td>
+                    <td>√</td>
+                    <td>√</td>
+                    <td>√</td>
+                    <td>-</td>
+                </tr>
+            </table>
+            <h3>V. KESIMPULAN AUDIT</h3>
+            <p style="margin-left: 20px;">Dari hasil temuan di atas:</p>
+            <ul>
+                <li>Faktor Penyebab Keberhasilan Ketercapaian</li>
+               <ul class="list-alpha">
+                   <li>Lorem, ipsum dolor.</li>
+                   <li>Lorem, ipsum dolor.</li>
+                   <li>Lorem, ipsum dolor.</li>
+                </ul>
+                <li>Akar Masalah Ketidak Tercapaian Standar</li>
+                <ul class="list-alpha">
+                    <li>Lorem, ipsum dolor.</li>
+                    <li>Lorem, ipsum dolor.</li>
+                    <li>Lorem, ipsum dolor.</li>
+                 </ul>
+            </ul>
+            <h3>
+                VI. REKOMENDASI TERKAIT KETERCAPAIAN DAN BELUM/KETIDAKTERCAPAIAN
+            </h3>
+            <ul>
+                <li>Rekomendasi Ketercapaian</li>
+                <ul class="list-alpha">
+                    <li>Lorem, ipsum dolor.</li>
+                    <li>Lorem, ipsum dolor.</li>
+                    <li>Lorem, ipsum dolor.</li>
+                 </ul>
+                <li>Rekomendasi Ketidaktercapaian</li>
+                <ul class="list-alpha">
+                    <li>Lorem, ipsum dolor.</li>
+                    <li>Lorem, ipsum dolor.</li>
+                    <li>Lorem, ipsum dolor.</li>
+                 </ul>
+            </ul>
+        </div>
+    </body>
+</html>
