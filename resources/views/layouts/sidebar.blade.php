@@ -120,7 +120,7 @@
                 </ul>
             </li>
 
-            @role('superadmin')
+            @role('admin')
                 <li class="menu-label">Admin Section</li>
 
                 <li>

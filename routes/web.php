@@ -54,6 +54,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/indikator', IndikatorController::class);
     Route::resource('/lha', LhaController::class);
 
+    // export pdf
+    Route::get('/export-pdf', [LhaController::class, 'exportPDF'])->name('lha.export-pdf');
+
+
 
     Route::get('/statusAudit', [StatusTemuanController::class, 'index'])->name('statusAudit.index');
     Route::get('/statusAudit/filter', [StatusTemuanController::class, 'filter'])->name('statusAudit.filter');
@@ -73,18 +77,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit-profile/{id}', [UserController::class, 'editProfile'])->name('profile.edit-profile');
     Route::post('/profile/update-profile', [UserController::class, 'updateProfile'])->name('profile.update-profile');
 
-    // superadmin
-    Route::group(['middleware' => ['role:superadmin']], function () {
+    // admin
+    Route::group(['middleware' => ['role:admin']], function () {
         // User Management
         Route::get('/admin', [UserController::class, 'umanagement'])->name('umanagement.index');
         Route::post('/admin/toggle-user-status', [UserController::class, 'toggleUserStatus'])->name('admin.toggle-user-status');
         Route::delete('/admin/delete-user/{id}', [UserController::class, 'deleteUser'])->name('admin.delete-user');
         Route::get('/admin/edit-user/{id}', [UserController::class, 'editUser'])->name('admin.edit-user');
         Route::post('/admin/update-user', [UserController::class, 'updateUser'])->name('admin.update-user');
-
-        // Level
-        Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
-        Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
-        Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
     });
 });

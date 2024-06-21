@@ -24,6 +24,7 @@
                             <div class="d-flex mx-3">
                                 <form id="filterForm" action="{{ route('lha.index') }}" method="GET" class="d-flex">
                                     <select name="select_unit" id="select_unit" class="form-control  mr-3">
+                                        <option value="">Pilih Unit</option>
                                         @foreach ($units as $unit)
                                             <option value="{{ $unit->id }}"
                                                 {{ $selectedUnit == $unit->id ? 'selected' : '' }}>{{ $unit->nama }}
@@ -31,6 +32,7 @@
                                         @endforeach
                                     </select>
                                     <select name="select_TA" id="select_TA" class="form-control ">
+                                        <option value="">Pilih Tahun Akademik</option>
                                         @foreach ($tahuns as $tahun)
                                             <option value="{{ $tahun->id }}"
                                                 {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
@@ -76,10 +78,10 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="text-right mr-4 mt-4">
-                                    <button class="btn btn-outline-primary"><i class="bi bi-file-earmark-pdf"></i>
-                                        <span>Export LHA
-                                        </span> </button>
+                                <div class="text-right mr-4 mt-2">
+                                    <a href="{{ route('lha.export-pdf', ['select_unit' => $selectedUnit, 'select_TA' => $selectedTA]) }}"
+                                        class="btn btn-outline-primary"><i class="bi bi-file-earmark-pdf"></i> <span>Export
+                                            LHA</span> </a>
                                 </div>
                             </div>
 

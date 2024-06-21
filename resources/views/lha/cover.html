@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>LHA PDF</title>
+        <style>
+            /* CSS untuk halaman baru */
+            .page-break {
+                page-break-after: always;
+            }
+
+            /* Gaya untuk halaman cover */
+            .cover-page {
+                margin: 2.5cm auto; /* Auto untuk menengahkan halaman */
+                text-align: center;
+            }
+
+            .cover-page table {
+                margin: 0 auto; /* Menengahkan tabel */
+                width: 50%; /* Atur lebar tabel */
+                border-collapse: collapse; /* Menggabungkan batas sel */
+                border: 2px solid black; /* Menambahkan border pada tabel */
+            }
+
+            .cover-page th,
+            .cover-page td {
+                padding: 10px; /* Padding untuk sel */
+                border: 2px solid black;
+            }
+
+            .cover-page h2 {
+                font-size: 18pt;
+                line-height: 1.5; /* Mengatur line height */
+                margin-bottom: 10px; /* Margin bawah untuk jarak antara elemen */
+            }
+
+            .cover-page p {
+                font-size: 14pt;
+                line-height: 1.5; /* Mengatur line height */
+                margin-bottom: 10px; /* Margin bawah untuk jarak antara elemen */
+            }
+
+            /* Gaya untuk halaman konten */
+            .content-page {
+                padding: 20px;
+                border: 1px solid #ccc; /* Menambahkan border pada .content-page */
+                margin-top: 20px; /* Margin atas untuk jarak dari halaman cover */
+            }
+
+            .content-page table {
+                width: fit-content;
+                border-collapse: collapse;
+            }
+
+            .content-page th,
+            .content-page td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Halaman Cover -->
+        <div class="cover-page">
+            <table>
+                <tr>
+                    <th colspan="2">LAPORAN HASIL AUDIT Tahun 2024</th>
+                    <th colspan="2">
+                        AUDIT MUTU INTERNAL UNIT/BAGIAN UPT Urusan Internasional
+                        (KUI)
+                    </th>
+                </tr>
+            </table>
+            <h2>
+                Auditor: <br />
+                Johan <br />
+            </h2>
+
+            <img
+                src="../assets/images/PNJ.png"
+                class="logo-icon-2"
+                alt="Logo PNJ"
+            />
+            <h2>
+                SATUAN PENJAMINAN MUTU <br />
+                POLITEKNIK NEGERI JAKARTA
+            </h2>
+            <p>
+                Jln. Prof. Dr. G. A. Siwabessy, Kampus UI Depok <br />
+                Telepon : 021-7270036, ext. 289, e-mail :
+                <a href="spmi@pnj.ac.id">spmi@pnj.ac.id</a>
+            </p>
+        </div>
+
+        <!-- Pisahkan halaman -->
+        <!-- <div class="page-break"></div> -->
+    </body>
+</html>
