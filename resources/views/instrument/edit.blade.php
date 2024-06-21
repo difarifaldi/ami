@@ -216,7 +216,7 @@
                                                     <div class="form-group mt-4">
                                                         <label>Penanggung Jawab</label>
                                                         <select name="penanggung_jawab" id="penanggung_jawab"
-                                                            class="form-control bg-white"
+                                                            class="single-select"
                                                             @hasanyrole('auditee|manajemen') disabled @endhasanyrole>
                                                             @foreach ($user as $usr)
                                                                 <option value="{{ $usr->name }}"

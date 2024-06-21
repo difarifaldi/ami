@@ -22,38 +22,52 @@
                     </div>
                     <!--end breadcrumb-->
 
-                    @unlesshasanyrole('auditee')
+                    @unlessrole('auditee')
                         @if ($uniqueUnits->count() > 1)
                             <ul class="nav nav-tabs">
                                 @foreach ($uniqueUnits as $unit)
-                                    <li class="nav-item">
-                                        <a class="nav-link {{ $selectedUnitId == $unit->id ? 'active bg-primary text-white' : 'bg-white' }}"
-                                            href="{{ route('instrument.index', ['unit_id' => $unit->id]) }}">
-                                            {{ $unit->nama }}
-                                            <!-- Filter berdasarkan id_unit dan kondisi peran pengguna -->
-                                            <span class="rounded bg-success badge text-white ml-1">
-                                                {{ $allInstruments->filter(function ($instrument) use ($unit) {
-                                                        $condition = $instrument->ami && $instrument->ami->id_unit == $unit->id;
-                                                        if (Auth::user()->hasRole('auditor')) {
-                                                            $condition = $condition && is_null($instrument->id_status_temuan);
-                                                        }
-                                                        if (Auth::user()->hasRole('manajemen')) {
-                                                            $condition =
-                                                                $condition &&
-                                                                is_null($instrument->id_status_akhir) &&
-                                                                !is_null($instrument->id_status_tercapai) &&
-                                                                !is_null($instrument->id_status_temuan) &&
-                                                                !is_null($instrument->tanggapan_auditee);
-                                                        }
-                                                        return $condition;
-                                                    })->count() }}
-                                            </span>
-                                        </a>
-                                    </li>
+                                    @php
+                                        $hasPendingAudit = $allInstruments
+                                            ->filter(function ($instrument) use ($unit) {
+                                                $condition =
+                                                    $instrument->ami &&
+                                                    $instrument->ami->id_unit == $unit->id &&
+                                                    $instrument->ami->status_audit == 'belum selesai';
+                                                if (Auth::user()->hasRole('auditor')) {
+                                                    $condition =
+                                                        $condition &&
+                                                        is_null($instrument->id_status_temuan) &&
+                                                        $instrument->status_audit == 'belum selesai';
+                                                }
+                                                if (Auth::user()->hasRole('manajemen')) {
+                                                    $condition =
+                                                        $condition &&
+                                                        is_null($instrument->id_status_akhir) &&
+                                                        !is_null($instrument->id_status_tercapai) &&
+                                                        !is_null($instrument->id_status_temuan) &&
+                                                        !is_null($instrument->tanggapan_auditee) &&
+                                                        $instrument->status_audit == 'belum selesai';
+                                                }
+                                                return $condition;
+                                            })
+                                            ->count();
+                                    @endphp
+                                    @if ($hasPendingAudit)
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ $selectedUnitId == $unit->id ? 'active bg-primary text-white' : 'bg-white' }}"
+                                                href="{{ route('instrument.index', ['unit_id' => $unit->id]) }}">
+                                                {{ $unit->nama }}
+                                                <span class="rounded bg-success badge text-white ml-1">
+                                                    {{ $hasPendingAudit }}
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endif
                                 @endforeach
                             </ul>
                         @endif
                     @endunlessrole
+
 
 
 
@@ -238,13 +252,53 @@
                                     </table>
                                     @role('manajemen')
                                         <div class="mt-4 text-right">
-                                            <form action="{{ route('instrument.selesaikan-audit') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="unit_id" value="{{ $selectedUnitId }}">
-                                                <button type="submit" class="btn btn-success p-2">Selesaikan Audit</button>
-                                            </form>
+                                            <button type="button" class="btn btn-success p-2" data-toggle="modal"
+                                                data-target="#confirmationModal">
+                                                Selesaikan Audit
+                                            </button>
                                         </div>
                                     @endrole
+                                    <!-- Modal HTML -->
+                                    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                                        aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confirmationModalLabel">Konfirmasi
+                                                        Selesaikan Audit</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Apakah Anda yakin ingin menyelesaikan audit ini?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Batal</button>
+                                                    <button type="button" class="btn btn-success" id="confirmButton">Ya,
+                                                        Selesaikan</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Form HTML (hidden) -->
+                                    <form action="{{ route('instrument.selesaikan-audit') }}" method="POST"
+                                        id="auditForm">
+                                        @csrf
+                                        <input type="hidden" name="unit_id" value="{{ $selectedUnitId }}">
+                                    </form>
+
+                                    <!-- JavaScript -->
+                                    <script>
+                                        document.getElementById('confirmButton').addEventListener('click', function() {
+                                            document.getElementById('auditForm').submit();
+                                        });
+                                    </script>
+
+
                                 </div>
                             </div>
 

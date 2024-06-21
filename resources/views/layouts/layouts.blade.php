@@ -15,6 +15,10 @@
         type="text/css">
     <link href="{{ asset('assets/plugins/datatable/css/buttons.bootstrap4.min.css') }}" rel="stylesheet"
         type="text/css">
+
+    <!--select2-->
+    <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/plugins/select2/css/select2-bootstrap4.css') }}" rel="stylesheet">
     <!--plugins-->
     <link href="{{ asset('assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet">
@@ -115,6 +119,24 @@
     <script src="{{ asset('../assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('../assets/js/popper.min.js') }}"></script>
     <script src="{{ asset('../assets/js/bootstrap.min.js') }}"></script>
+
+    <!--Select2-->
+    <script src="{{ asset('../assets/plugins/select2/js/select2.min.js') }}"></script>
+    <script>
+        $('.single-select').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+        });
+        $('.multiple-select').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+        });
+    </script>
+
     <!--plugins-->
     <script src="{{ asset('../assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('../assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
@@ -149,7 +171,7 @@
             }
         });
     </script>
-    </script>
+
 </body>
 
 </html>

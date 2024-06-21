@@ -105,9 +105,8 @@
                                                     </div>
 
                                                     <div class="form-group mt-4">
-                                                        <label for="ttd" class="form-label d-block">Tanda
-                                                            Tangan</label>
-
+                                                        <label for="ttd"
+                                                            class="form-label d-block font-weight-bold">Tanda Tangan</label>
                                                         @if ($user->ttd)
                                                             <img src="{{ asset('/storage/' . $user->ttd) }}"
                                                                 class="img-preview-ttd img-fluid mb-3 col-sm-3">
@@ -115,13 +114,18 @@
                                                             <img src="{{ asset('../assets/images/user.png') }}"
                                                                 class="img-preview-ttd img-fluid mb-3 col-sm-3">
                                                         @endif
-                                                        <input class="form-control  @error('ttd')is-invalid @enderror"
-                                                            type="file" id="ttd" name="ttd"
-                                                            onchange="previewImage('ttd', 'img-preview-ttd')">
+
+                                                        <div class="custom-file">
+                                                            <input type="file"
+                                                                class="custom-file-input @error('ttd')is-invalid @enderror"
+                                                                name="ttd" id="ttd"
+                                                                aria-describedby="inputGroupFileAddon01"
+                                                                onchange="previewImage('ttd', 'img-preview-ttd')">
+                                                            <label class="custom-file-label" for="ttd">Choose
+                                                                File</label>
+                                                        </div>
                                                         @error('ttd')
-                                                            <div class="d-block text-danger">
-                                                                {{ $message }}
-                                                            </div>
+                                                            <div class="d-block text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
 
@@ -131,24 +135,36 @@
                                                         <a href="/admin" class="btn btn-primary btn-sm">Kembali</a>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 ">
-                                                    <div class="form-group  px-4 ">
-
+                                                <div class="col-md-4 border-left d-flex justify-content-center"
+                                                    style="border-width: 2px !important;">
+                                                    <div class="form-group d-flex flex-column align-items-center"
+                                                        style="text-align: center;">
                                                         @if ($user->foto)
                                                             <img src="{{ asset('/storage/' . $user->foto) }}"
-                                                                class="img-preview-foto img-fluid mb-3 col-sm-7 ">
+                                                                width="140" height="140"
+                                                                class="img-preview-foto rounded" alt="" />
                                                         @else
                                                             <img src="{{ asset('../assets/images/user.png') }}"
-                                                                class="img-preview-foto img-fluid mb-3 col-sm-7">
+                                                                width="140" height="140"
+                                                                class="img-preview-foto rounded" alt="" />
                                                         @endif
-                                                        <input class=" @error('foto')is-invalid @enderror" type="file"
-                                                            id="foto" name="foto"
+
+                                                        <input type="file"
+                                                            class="custom-file-input @error('foto')is-invalid @enderror"
+                                                            name="foto" id="foto"
+                                                            style="opacity: 0; position: absolute; top: 0; left: 0; cursor: pointer;"
+                                                            aria-describedby="inputGroupFileAddon01"
                                                             onchange="previewImage('foto', 'img-preview-foto')">
+
                                                         @error('foto')
-                                                            <div class="d-block text-danger">
-                                                                {{ $message }}
-                                                            </div>
+                                                            <div class="d-block text-danger">{{ $message }}</div>
                                                         @enderror
+
+                                                        <!-- Button to Upload Photo -->
+                                                        <button type="button" class="btn btn-primary mt-3"
+                                                            onclick="document.getElementById('foto').click();">
+                                                            {{ $user->foto ? 'Ubah Foto Profil' : 'Upload Foto Profil' }}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -166,14 +182,18 @@
         </div>
     </div>
     <script>
-        function previewImage(inputId, imgPreviewClass) {
-            const image = document.querySelector(`#${inputId}`);
-            const imgPreview = document.querySelector(`.${imgPreviewClass}`);
+        function previewImage(inputId, imgClass) {
+            const input = document.getElementById(inputId);
+            const file = input.files[0];
+            const reader = new FileReader();
 
-            imgPreview.style.display = 'block';
+            reader.onload = function(e) {
+                document.querySelector('.' + imgClass).src = e.target.result;
+            }
 
-            const lihatgambar = URL.createObjectURL(image.files[0]);
-            imgPreview.src = lihatgambar;
+            if (file) {
+                reader.readAsDataURL(file);
+            }
         }
     </script>
 @endsection

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_user_admin')->nullable();
             $table->dateTime('tanggal')->nullable();
             $table->unsignedBigInteger('id_TA')->nullable();
+            $table->string('status_audit')->default('belum selesai')->nullable();
             $table->timestamps();
 
             $table->foreign('id_unit')->references('id')->on('units')->onDelete('cascade');

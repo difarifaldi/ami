@@ -61,6 +61,7 @@
                                         $instrumentCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)
                                             ->whereNull('id_status_temuan')
                                             ->whereNotNull('id_status_tercapai')
+                                            ->where('status_audit', '=', 'belum selesai')
                                             ->count();
                                     } elseif (Auth::user()->hasRole('manajemen')) {
                                         $auditMutuIds = App\Models\AuditMutuInternal::where(
@@ -74,6 +75,7 @@
                                             ->whereNotNull('id_status_tercapai')
                                             ->whereNotNull('tanggapan_auditee')
                                             ->whereNull('id_status_akhir')
+                                            ->where('status_audit', '=', 'belum selesai')
                                             ->count();
                                     }
                                 @endphp
@@ -88,15 +90,7 @@
                 </ul>
             </li>
 
-
-            <li>
-                <a class="has-arrow" href="javascript:;">
-                    <div class="parent-icon icon-color-2"><i class="bx bx-grid-alt"></i>
-                    </div>
-                    <div class="menu-title">Test</div>
-                </a>
-            </li>
-
+            {{-- Status Audit --}}
             <li>
                 <a class="has-arrow" href="javascript:;">
                     <div class="parent-icon icon-color-1"> <i class="bx bx-shape-circle"></i>
@@ -111,6 +105,20 @@
                 </ul>
             </li>
 
+            {{-- History --}}
+            <li>
+                <a class="has-arrow" href="javascript:;">
+                    <div class="parent-icon icon-color-1"> <i class="bi bi-file-earmark-text"></i>
+                    </div>
+                    <div class="menu-title ">LHA Audit</div>
+                </a>
+                <ul>
+                    <li> <a href="/lha"><i class="bi bi-file-post"></i>Daftar LHA Audit</a>
+                    </li>
+
+
+                </ul>
+            </li>
 
             @role('superadmin')
                 <li class="menu-label">Admin Section</li>

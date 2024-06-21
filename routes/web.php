@@ -8,6 +8,7 @@ use App\Http\Controllers\IndikatorController;
 use App\Http\Controllers\InstrumenAuditController;
 use App\Http\Controllers\KetercapaianStandarController;
 use App\Http\Controllers\KuiController;
+use App\Http\Controllers\LhaController;
 use App\Http\Controllers\PernyataanStandarController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusTemuanController;
@@ -51,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/unit', UnitController::class);
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
+    Route::resource('/lha', LhaController::class);
 
 
     Route::get('/statusAudit', [StatusTemuanController::class, 'index'])->name('statusAudit.index');

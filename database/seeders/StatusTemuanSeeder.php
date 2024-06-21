@@ -17,6 +17,7 @@ class StatusTemuanSeeder extends Seeder
             'belum mencapai',
             'tercapai',
             'melampaui',
+            'menyimpang'
         ];
 
         foreach ($statuses as $status) {

@@ -25,11 +25,14 @@ class InstrumenAuditController extends Controller
     public function index(Request $request)
     {
         $userId = Auth::id();
-        $data  = AuditMutuInternal::where('id_user_auditor_ketua', $userId)
-            ->orWhere('id_user_auditor_anggota1', $userId)
-            ->orWhere('id_user_auditor_anggota2', $userId)
-            ->orWhere('id_user_manajemen', $userId)
-            ->orWhere('id_user_auditee', $userId);
+
+        $data = AuditMutuInternal::where(function ($query) use ($userId) {
+            $query->where('id_user_auditor_ketua', $userId)
+                ->orWhere('id_user_auditor_anggota1', $userId)
+                ->orWhere('id_user_auditor_anggota2', $userId)
+                ->orWhere('id_user_manajemen', $userId)
+                ->orWhere('id_user_auditee', $userId);
+        })->where('status_audit', 'belum selesai');
 
         $userIsAuthorized = $data->exists();
 
@@ -49,30 +52,30 @@ class InstrumenAuditController extends Controller
         }
 
         // Ambil semua instrumen yang terkait dengan unit-unit tersebut
-        $allInstruments = InstrumenAudit::whereIn('id_AMI', AuditMutuInternal::pluck('id'))->get();
+        $allInstruments = InstrumenAudit::whereIn('id_AMI', $data->pluck('id'))->get();
 
         // Filter instrumen berdasarkan unit yang dipilih
         if ($unitId) {
-            $auditMutuIds = AuditMutuInternal::where('id_unit', $unitId)->pluck('id');
+            $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where('id_unit', $unitId)->pluck('id');
             $instrumentsQuery->whereIn('id_AMI', $auditMutuIds);
         }
 
         // Tentukan kondisi berdasarkan peran pengguna
         if (auth()->user()->hasRole('auditee')) {
-            $auditMutuIds = AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id');
-            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->where('status_audit', '=', 'belum selesai');
+            $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where('id_user_auditee', $userId)->pluck('id');
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds);
         }
         if (auth()->user()->hasRole('auditor')) {
-            $auditMutuIds = AuditMutuInternal::where(function ($query) use ($userId) {
+            $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where(function ($query) use ($userId) {
                 $query->where('id_user_auditor_ketua', $userId)
                     ->orWhere('id_user_auditor_anggota1', $userId)
                     ->orWhere('id_user_auditor_anggota2', $userId);
             })->pluck('id');
-            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_tercapai')->where('status_audit', '=', 'belum selesai');
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_tercapai');
         }
         if (auth()->user()->hasRole('manajemen')) {
-            $auditMutuIds = AuditMutuInternal::where('id_user_manajemen', $userId)->pluck('id');
-            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('tanggapan_auditee')->where('status_audit', '=', 'belum selesai');
+            $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where('id_user_manajemen', $userId)->pluck('id');
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('tanggapan_auditee');
         }
 
         // Ambil unit yang terkait dengan user
@@ -88,11 +91,12 @@ class InstrumenAuditController extends Controller
 
 
 
+
     public function selesaikanAudit(Request $request)
     {
         try {
             $userId = Auth::id();
-            $data  = AuditMutuInternal::where('id_user_manajemen', $userId);
+            $data = AuditMutuInternal::where('id_user_manajemen', $userId);
 
             // Validasi unitId untuk menghindari akses yang tidak sah
             $unitIds = $data->pluck('id_unit')->unique();
@@ -106,21 +110,46 @@ class InstrumenAuditController extends Controller
 
             // Ambil instrumen yang terkait dengan audit mutu internal yang sedang berlangsung
             $instruments = InstrumenAudit::whereIn('id_AMI', $auditMutuIds)
-                ->where('status_audit', '=', 'belum selesai')->get();
+                ->where('status_audit', 'belum selesai')
+                ->get();
+
+            // Hitung jumlah instrumen dan indikator
+            $sumInstruments = $instruments->count();
+            $sumIndikator = Indikator::whereIn('id_pernyataan', function ($query) use ($unitId) {
+                $query->select('id')
+                    ->from('pernyataan_standars')
+                    ->where('id_unit', $unitId);
+            })->count();
+
+            if ($sumInstruments != $sumIndikator) {
+                return redirect()->back()->with('failed', 'Auditee belum mengisi semua indikator');
+            }
+
+            // Cek instrumen yang belum lengkap
+            $incompleteInstruments = $instruments->filter(function ($instrument) {
+                return is_null($instrument->id_status_akhir) || is_null($instrument->id_status_temuan);
+            });
+
+            if ($incompleteInstruments->isNotEmpty()) {
+                return redirect()->back()->with('failed', 'Terdapat Indikator yang belum diaudit.');
+            }
 
             // Update status_audit menjadi "selesai" untuk instrumen yang terpilih
-            foreach ($instruments as $instrument) {
+            $instruments->each(function ($instrument) {
                 $instrument->status_audit = 'selesai';
                 $instrument->save();
-            }
+            });
+            AuditMutuInternal::whereIn('id', $auditMutuIds)->update(['status_audit' => 'selesai']);
 
             // Berikan pesan sukses jika diperlukan
             return redirect()->back()->with('success', 'Audit berhasil diselesaikan.');
         } catch (\Exception $e) {
             // Tangani jika ada kesalahan
-            dd($e->getMessage());
+            Log::error('Error completing audit: ' . $e->getMessage());
+            return redirect()->back()->with('failed', 'Terjadi kesalahan saat menyelesaikan audit.');
         }
     }
+
 
 
 

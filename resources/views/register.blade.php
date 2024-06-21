@@ -117,8 +117,12 @@
                                             <div class="form-group mt-4">
                                                 <label class="d-block">Tanda Tangan</label>
                                                 <img class="img-preview img-fluid col-md-3 mb-3">
-                                                <input type="file" name="ttd" id="ttd" class=" form-control"
-                                                    onchange="previewImage()">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" name="ttd"
+                                                        id="ttd" aria-describedby="inputGroupFileAddon01"
+                                                        onchange="previewImage()">
+                                                    <label class="custom-file-label" for="ttd">Masukan TTD</label>
+                                                </div>
                                             </div>
                                             <div class="btn-group mt-3 w-100">
                                                 <button type="submit" class="btn btn-primary btn-block">Register</button>

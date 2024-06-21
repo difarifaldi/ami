@@ -39,7 +39,7 @@
                                                 <div class="col-6">
                                                     <div class="form-group mt-4">
                                                         <label>Unit</label>
-                                                        <select name="id_unit" id="id_unit" class="form-control bg-white"
+                                                        <select name="id_unit" id="id_unit" class="single-select"
                                                             onchange="fetchAuditeeByUnit()">
                                                             <option value="">Silahkan Pilih Unit</option>
                                                             @foreach ($units as $unit)
@@ -69,7 +69,7 @@
                                                     <div class="form-group mt-4">
                                                         <label>Auditee</label>
                                                         <select name="id_user_auditee" id="id_user_auditee"
-                                                            class="form-control bg-white">
+                                                            class="single-select">
                                                             <option value="">Silahkan Pilih Auditee</option>
                                                             @foreach ($auditees as $auditee)
                                                                 <option value="{{ $auditee->id }}"
@@ -87,7 +87,7 @@
                                                     <div class="form-group mt-4">
                                                         <label>Auditor Ketua</label>
                                                         <select name="id_user_auditor_ketua" id="id_user_auditor_ketua"
-                                                            class="form-control bg-white">
+                                                            class="single-select">
                                                             <option value="">Silahkan Pilih Auditor Ketua</option>
                                                             @foreach ($auditors as $auditor)
                                                                 <option value="{{ $auditor->id }}"
@@ -108,7 +108,7 @@
                                                     <div class="form-group mt-4">
                                                         <label>Auditor Anggota 1</label>
                                                         <select name="id_user_auditor_anggota1"
-                                                            id="id_user_auditor_anggota1" class="form-control bg-white">
+                                                            id="id_user_auditor_anggota1" class="single-select">
                                                             <option value="">Silahkan Pilih Auditor Anggota 1</option>
                                                             @foreach ($auditors as $auditor)
                                                                 <option
@@ -126,7 +126,7 @@
                                                     <div class="form-group mt-4">
                                                         <label>Auditor Anggota 2</label>
                                                         <select name="id_user_auditor_anggota2"
-                                                            id="id_user_auditor_anggota2" class="form-control bg-white">
+                                                            id="id_user_auditor_anggota2" class="single-select">
                                                             <option value="">Silahkan Pilih Auditor Anggota 2</option>
                                                             @foreach ($auditors as $auditor)
                                                                 <option
@@ -147,7 +147,7 @@
                                                     <div class="form-group mt-4">
                                                         <label>Manajemen</label>
                                                         <select name="id_user_manajemen" id="id_user_manajemen"
-                                                            class="form-control bg-white">
+                                                            class="single-select">
                                                             <option value="">Silahkan Pilih Manajemen</option>
                                                             @foreach ($manajemens as $manajemen)
                                                                 <option
@@ -164,7 +164,7 @@
                                                 <div class="col-6">
                                                     <div class="form-group mt-4">
                                                         <label>Tahun Akademik</label>
-                                                        <select name="id_TA" id="id_TA" class="form-control bg-white">
+                                                        <select name="id_TA" id="id_TA" class="single-select">
                                                             <option value="">Silahkan Pilih Tahun Akademik</option>
                                                             @foreach ($tahuns as $tahun)
                                                                 <option

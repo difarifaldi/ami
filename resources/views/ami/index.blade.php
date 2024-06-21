@@ -29,8 +29,8 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Unit</th>
                                                 <th scope="col">Tahun Akademik</th>
+                                                <th scope="col">Unit</th>
                                                 <th scope="col">Auditee</th>
                                                 <th scope="col">Auditor Ketua</th>
                                                 <th scope="col">Auditor Anggota 1</th>
@@ -42,9 +42,12 @@
                                         <tbody>
                                             @forelse ($audits as $audit)
                                                 <tr>
-
-                                                    <td>{{ $audit->unit->nama }}</td>
                                                     <td>{{ $audit->tahunAkademik->nama }}</td>
+                                                    <td>{{ $audit->unit->nama }}
+                                                        @if ($audit->status_audit == 'selesai')
+                                                            <span class="badge text-white bg-success ">Selesai</span>
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $audit->auditee->name }}</td>
                                                     <td>{{ $audit->auditorKetua->name }}</td>
                                                     <td>{{ $audit->auditorAnggota1->name }}</td>

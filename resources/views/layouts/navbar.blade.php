@@ -12,8 +12,8 @@
                      <?php
                      $userId = Auth::id();
                      $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id')->toArray();
-                     $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->get();
-                     $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->count();
+                     $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->where('status_audit', '=', 'belum selesai')->get();
+                     $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->where('status_audit', '=', 'belum selesai')->count();
                      
                      ?>
 

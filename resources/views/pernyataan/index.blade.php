@@ -25,8 +25,7 @@
 
                             <div class="table-responsive">
                                 <div class="card-body">
-                                    <table id="example" class="table table-striped table-bordered text-center"
-                                        style="width:100%">
+                                    <table id="example" class="table  table-bordered text-center" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Unit</th>
@@ -36,26 +35,42 @@
 
                                             </tr>
                                         </thead>
+                                        @php
+                                            $colors = [
+                                                'btn-primary',
+                                                'btn-danger',
+                                                'btn-success',
+                                                'btn-warning',
+                                                'btn-info',
+                                                'btn-dark',
+                                            ];
+                                            $currentUnit = null;
+                                            $colorIndex = 0;
+                                            $unitColors = [];
+                                        @endphp
+
                                         <tbody>
                                             @forelse ($pernyataans as $pernyataan)
-                                                <tr>
-                                                    <td>{{ $pernyataan->unit ? $pernyataan->unit->nama : 'tidak memiliki unit' }}
-                                                    </td>
-                                                    <td>{{ $pernyataan->no_ps }}</td>
-                                                    <td class="text-left">{!! $pernyataan->pernyataan_standar !!}</td>
-
-
-                                                    <td>
-
-                                                        <a href="/pernyataan/{{ $pernyataan->id }}/edit"
-                                                            class="btn btn-warning btn-sm"><i class="bi bi-brush"></i></a>
-
-                                                        <button class="btn btn-danger btn-sm h-full  border-0"
-                                                            onclick="deletePernyataan({{ $pernyataan->id }})"><i
-                                                                class="bi bi-trash"></i></button>
-                                                        </form>
-
-                                                    </td>
+                                                @php
+                                                    $unitId = $pernyataan->unit->id ?? 'no-unit';
+                                                    if (!array_key_exists($unitId, $unitColors)) {
+                                                        $unitColors[$unitId] = $colors[$colorIndex % count($colors)];
+                                                        $colorIndex++;
+                                                    }
+                                                    $bgClass = $unitColors[$unitId];
+                                                @endphp
+                                                <td> <button class="btn btn-sm {{ $bgClass }} text-white ">
+                                                        {{ $pernyataan->unit ? $pernyataan->unit->nama : 'tidak memiliki unit' }}</button>
+                                                </td>
+                                                <td>{{ $pernyataan->no_ps }}</td>
+                                                <td class="text-left">{!! $pernyataan->pernyataan_standar !!}</td>
+                                                <td>
+                                                    <a href="/pernyataan/{{ $pernyataan->id }}/edit"
+                                                        class="btn btn-warning btn-sm"><i class="bi bi-brush"></i></a>
+                                                    <button class="btn btn-danger btn-sm h-full border-0"
+                                                        onclick="deletePernyataan({{ $pernyataan->id }})"><i
+                                                            class="bi bi-trash"></i></button>
+                                                </td>
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -66,6 +81,7 @@
                                                 </tr>
                                             @endforelse
                                         </tbody>
+
                                     </table>
 
                                 </div>

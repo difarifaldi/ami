@@ -58,11 +58,22 @@ class AuditMutuInternalController extends Controller
             'tanggal' => 'required',
         ]);
 
-        $existingAMI = AuditMutuInternal::where('id_unit', $validatedData['id_unit'])->where('id_TA', $validatedData['id_TA']);
+        $existingAMI = AuditMutuInternal::where('id_unit', $validatedData['id_unit'])
+            ->where('id_TA', $validatedData['id_TA'])
+            ->get();
+
+        $onGoingAMI = AuditMutuInternal::where('id_unit', $validatedData['id_unit'])
+            ->where('status_audit', 'belum selesai')
+            ->get();
 
         if ($existingAMI->count() > 0) {
-            return redirect()->back()->withInput()->with('error', 'Sudah terdapat Audit Mutu Internal pada Tahun Ajaran Ini');
+            return redirect()->back()->withInput()->with('error', 'Sudah terdapat Audit Mutu Internal pada Tahun Akademik Ini.');
         }
+
+        if ($onGoingAMI->count() > 0) {
+            return redirect()->back()->withInput()->with('error', 'Audit Mutu Internal pada Unit ini sedang berjalan.');
+        }
+
 
         AuditMutuInternal::create($validatedData);
         return redirect('/audit')->with('success', 'Data Audit Berhasil Ditambahkan');
