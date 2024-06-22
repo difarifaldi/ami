@@ -159,7 +159,7 @@ class InstrumenAuditController extends Controller
         $userUnitId = Auth::user()->id_unit; // Ambil unit dari pengguna yang sedang login
 
         // Ambil id Audit Mutu Internal yang terkait dengan user auditee
-        $auditMutuIds = AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id');
+        $auditMutuIds = AuditMutuInternal::where('id_user_auditee', $userId)->where('status_audit', 'belum selesai')->pluck('id');
 
         // Ambil id indikator dari Instrumen Audit yang terkait dengan id Audit Mutu Internal di atas
         $instrumentIds = InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->pluck('id_indikator')->toArray();

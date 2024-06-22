@@ -59,7 +59,8 @@ Route::middleware(['auth'])->group(function () {
 
     // chart
     Route::get('/fetch-status-temuan-data', [DashboardController::class, 'fetchStatusTemuanData']);
-    Route::get('dashboard/getData', [DashboardController::class, 'getDataByMonth']);
+    Route::get('/fetch-line-chart-data', [DashboardController::class, 'fetchLineChartData'])->name('fetch-line-chart-data');
+
 
 
 
