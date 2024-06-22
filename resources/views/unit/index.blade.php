@@ -13,7 +13,7 @@
                         <!-- Isi breadcrumb -->
                     </div>
                     <!--end breadcrumb-->
-                    <div class="card">
+                    <div class="card  radius-15">
                         <div class="card-body">
                             <div class="card-title">
                                 <!-- Isi judul card -->
@@ -25,8 +25,7 @@
 
                             <div class="table-responsive">
                                 <div class="card-body">
-                                    <table id="example" class="table table-striped table-bordered text-center"
-                                        style="width:100%">
+                                    <table id="example" class="table  text-center" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th scope="col">No</th>
@@ -66,6 +65,7 @@
                                             @endforelse
                                         </tbody>
                                     </table>
+
 
                                 </div>
                             </div>
@@ -149,6 +149,7 @@
             }
         });
     </script>
+
 
 
 

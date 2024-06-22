@@ -57,6 +57,13 @@ Route::middleware(['auth'])->group(function () {
     // export pdf
     Route::get('/export-pdf', [LhaController::class, 'exportPDF'])->name('lha.export-pdf');
 
+    // chart
+    Route::get('/fetch-status-temuan-data', [DashboardController::class, 'fetchStatusTemuanData']);
+    Route::get('dashboard/getData', [DashboardController::class, 'getDataByMonth']);
+
+
+
+
 
 
     Route::get('/statusAudit', [StatusTemuanController::class, 'index'])->name('statusAudit.index');

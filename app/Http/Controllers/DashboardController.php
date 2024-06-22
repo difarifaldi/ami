@@ -2,32 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
+use App\Models\InstrumenAudit;
+use App\Models\StatusTemuan;
+use App\Models\TahunAkademik;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use App\Models\RequestFood;
-use App\Models\RequestFood1;
-use App\Models\RequestFood2;
-use App\Models\RequestFood3;
-use App\Models\RequestFood4;
-use App\Models\RequestFood5;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $currentTime = Carbon::now();
-        
-        // Dapatkan total overtime dan undertime berdasarkan waktu saat ini
-        $totalOvertime =  0;        
-        $totalOvertime1 = 0;
-        $totalOvertime2 = 0;
-        $totalOvertime3 = 0;
-        $totalOvertime4 = 0;
-        $totalOvertime5 = 0;
-
-        // Kirim waktu saat ini, total overtime, dan total undertime ke view dashboard
-        return view('dashboard', compact('currentTime', 'totalOvertime', 'totalOvertime1', 'totalOvertime2', 'totalOvertime3', 'totalOvertime4', 'totalOvertime5'));
+        $selectedTA = $request->input('select_TA');
+        $tahuns = TahunAkademik::all();
+        return view('dashboard', compact('tahuns', 'selectedTA'));
     }
 
+    public function fetchStatusTemuanData(Request $request)
+    {
+        $selectedTA = $request->input('select_TA');
+        Log::info('Selected TA: ' . $selectedTA); // Log untuk debugging
+
+        // Ambil instrumen audit berdasarkan tahun akademik yang dipilih
+        $instrumenAudits = InstrumenAudit::whereHas('ami', function ($query) use ($selectedTA) {
+            $query->where('id_TA', $selectedTA);
+        })->get();
+
+        // Hitung jumlah status temuan berdasarkan nama status
+        $statusTemuans = [];
+        foreach ($instrumenAudits as $instrumen) {
+            $status = $instrumen->statusTemuan;
+            if ($status) {
+                $key = $status->nama; // Menggunakan kolom nama dari tabel status_temuan
+                if (!isset($statusTemuans[$key])) {
+                    $statusTemuans[$key] = 0;
+                }
+                $statusTemuans[$key]++;
+            }
+        }
+
+        // Siapkan data untuk grafik
+        $labels = array_keys($statusTemuans);
+        $values = array_values($statusTemuans);
+
+        $response = [
+            'labels' => $labels,
+            'values' => $values,
+        ];
+
+        Log::info('Response: ' . json_encode($response)); // Log untuk debugging
+
+        return response()->json($response);
+    }
 }

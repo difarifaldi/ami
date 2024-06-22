@@ -32,7 +32,7 @@ class LhaController extends Controller
 
         $pdf = PDF::loadView('lha.pdf', compact('instruments'))->setPaper('a4', 'portrait');
 
-        return $pdf->download('lha.pdf');
+        return $pdf->download('Form LHA AMI Manajemen ' . $selectedUnit . '.pdf');
     }
 
     public function index(Request $request)
