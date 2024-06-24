@@ -18,15 +18,15 @@
                      ?>
 
 
-                     <li class="nav-item dropdown dropdown-lg">
-                         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative"
+                     <li class="nav-item dropdown dropdown-lg ">
+                         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative "
                              href="javascript:;" data-toggle="dropdown"> <i
-                                 class="bx bx-bell vertical-align-middle"></i>
-                             <span class="msg-count"> {{ $instrumentsCount }}</span>
+                                 class="bx bx-bell vertical-align-middle "></i>
+                             <span class="msg-count bg-danger"> {{ $instrumentsCount }}</span>
                          </a>
-                         <div class="dropdown-menu dropdown-menu-right">
+                         <div class="dropdown-menu dropdown-menu-right ">
                              <a href="javascript:;">
-                                 <div class="msg-header">
+                                 <div class="msg-header bg-wall">
                                      <h6 class="msg-header-title"> {{ $instrumentsCount }} Pesan</h6>
                                      <p class="msg-header-subtitle">Notifikasi Aplikasi</p>
                                  </div>

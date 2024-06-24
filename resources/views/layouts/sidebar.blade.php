@@ -17,7 +17,7 @@
         <ul class="metismenu" id="menu">
             <li>
                 <a href="javascript:;" class="has-arrow">
-                    <div class="parent-icon icon-color-1"><i class="bx bx-home-alt"></i>
+                    <div class="parent-icon text-success"><i class="bx bx-home-alt"></i>
                     </div>
                     <div class="menu-title">Dashboard</div>
                 </a>
@@ -33,7 +33,7 @@
             <li class="menu-label">Audit Mutu</li>
             <li>
                 <a class="has-arrow" href="javascript:;">
-                    <div class="parent-icon icon-color-1"> <i class="bi bi-mortarboard"></i>
+                    <div class="parent-icon text-success"> <i class="bi bi-mortarboard"></i>
                     </div>
                     <div class="menu-title">Audit Mutu</div>
                 </a>
@@ -93,7 +93,7 @@
             {{-- Status Audit --}}
             <li>
                 <a class="has-arrow" href="javascript:;">
-                    <div class="parent-icon icon-color-1"> <i class="bx bx-shape-circle"></i>
+                    <div class="parent-icon text-success"> <i class="bx bx-shape-circle"></i>
                     </div>
                     <div class="menu-title ">Status Audit</div>
                 </a>
@@ -108,12 +108,14 @@
             {{-- History --}}
             <li>
                 <a class="has-arrow" href="javascript:;">
-                    <div class="parent-icon icon-color-1"> <i class="bi bi-file-earmark-text"></i>
+                    <div class="parent-icon text-success"> <i class="bi bi-file-earmark-text"></i>
                     </div>
                     <div class="menu-title ">LHA Audit</div>
                 </a>
                 <ul>
                     <li> <a href="/lha"><i class="bi bi-file-post"></i>Daftar LHA Audit</a>
+                    </li>
+                    <li> <a href="/history"><i class="bi bi-calendar4-week"></i>Riwayat Audit</a>
                     </li>
 
 
@@ -125,7 +127,7 @@
 
                 <li>
                     <a class="has-arrow" href="javascript:;">
-                        <div class="parent-icon icon-color-1"> <i class="bi bi-backpack4"></i>
+                        <div class="parent-icon text-success"> <i class="bi bi-backpack4"></i>
                         </div>
                         <div class="menu-title ">Indikator</div>
                     </a>
@@ -141,7 +143,7 @@
                 </li>
                 <li>
                     <a class="has-arrow" href="javascript:;">
-                        <div class="parent-icon icon-color-1"> <i class="bi bi-building-gear"></i>
+                        <div class="parent-icon text-success"> <i class="bi bi-building-gear"></i>
                         </div>
                         <div class="menu-title ">Unit</div>
                     </a>
@@ -154,7 +156,7 @@
                 </li>
                 <li>
                     <a class="has-arrow" href="javascript:;">
-                        <div class="parent-icon icon-color-1"> <i class="bi bi-person-gear"></i>
+                        <div class="parent-icon text-success"> <i class="bi bi-person-gear"></i>
                         </div>
                         <div class="menu-title ">User Management</div>
                     </a>

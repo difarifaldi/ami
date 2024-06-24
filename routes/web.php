@@ -53,6 +53,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
     Route::resource('/lha', LhaController::class);
+    Route::get('/history', [LhaController::class, 'history'])->name('history');
+
 
     // export pdf
     Route::get('/export-pdf', [LhaController::class, 'exportPDF'])->name('lha.export-pdf');

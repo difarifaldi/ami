@@ -93,7 +93,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <h5 class="mb-0">Grafik Data</h5>
+                                    <h5 class="mb-0 font-weight-bold">Grafik Data</h5>
                                 </div>
                             </div>
                             <div class="row mt-3 m-0">
@@ -117,7 +117,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <h5 class="mb-0">UPT Urusan Internasional (KUI)</h5>
+                                        <h5 class="mb-0 font-weight-bold">UPT Urusan Internasional (KUI)</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-3 m-0">
@@ -139,7 +139,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <h5 class="mb-0">UPA Perpustakaan</h5>
+                                        <h5 class="mb-0 font-weight-bold">UPA Perpustakaan</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-3 m-0">
@@ -164,7 +164,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <h5 class="mb-0">UPA Rekaya Teknologi dan Produk Unggulan</h5>
+                                        <h5 class="mb-0 font-weight-bold">UPA Rekaya Teknologi dan Produk Unggulan</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-3 m-0">
@@ -186,7 +186,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <h5 class="mb-0">UPA Layanan Uji Kompetensi</h5>
+                                        <h5 class="mb-0 font-weight-bold">UPA Layanan Uji Kompetensi</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-3 m-0">
@@ -211,7 +211,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <h5 class="mb-0">UPA Perawatan dan Perbaikan</h5>
+                                        <h5 class="mb-0 font-weight-bold">UPA Perawatan dan Perbaikan</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-3 m-0">
@@ -234,7 +234,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <h5 class="mb-0">UPA Teknologi Informasi dan Komunikasi</h5>
+                                        <h5 class="mb-0 font-weight-bold">UPA Teknologi Informasi dan Komunikasi</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-3 m-0">
@@ -257,6 +257,39 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    @if ($message = Session::get('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: '{{ $message }}',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>
+    @endif
+
+    @if ($message = Session::get('warning'))
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: '{{ $message }}',
+                showConfirmButton: false,
+                timer: 2500
+            });
+        </script>
+    @endif
+
+    @if ($message = Session::get('failed'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: '{{ $message }}',
+                showConfirmButton: true,
+                timer: null
+            });
+        </script>
+    @endif
 @endsection
 
 @section('scripts')
