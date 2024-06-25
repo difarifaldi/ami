@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditMutuInternal;
 use App\Models\InstrumenAudit;
 use App\Models\StatusTemuan;
 use App\Models\TahunAkademik;
 use App\Models\Unit;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -59,53 +61,71 @@ class DashboardController extends Controller
 
         return response()->json($response);
     }
+
     public function fetchLineChartData(Request $request)
     {
-        $unitId = $request->input('unit_id');
-        Log::info('Selected Unit ID: ' . $unitId); // Log untuk debugging
+        try {
+            $unitId = $request->input('unit_id');
+            Log::info('Selected Unit ID: ' . $unitId); // Log untuk debugging
 
-        $years = TahunAkademik::all();
-        $statuses = StatusTemuan::all();
+            $statuses = StatusTemuan::all();
 
-        $data = [];
-        foreach ($years as $year) {
-            $yearData = [
-                'year' => $year->nama,
-                'data' => []
-            ];
+            // Mengambil semua tanggal unik dari tabel audit_mutu_internals yang sesuai dengan unit_id
+            $dates = AuditMutuInternal::where('id_unit', $unitId)
+                ->selectRaw('DATE(tanggal) as tanggal')
+                ->groupBy('tanggal')
+                ->orderBy('tanggal')
+                ->get();
+
+            Log::info('Dates retrieved: ' . $dates->toJson()); // Log untuk debugging
+
+            $data = [];
+            foreach ($dates as $date) {
+                $dateData = [
+                    'date' => $date->tanggal,
+                    'data' => []
+                ];
+                foreach ($statuses as $status) {
+                    $count = InstrumenAudit::whereHas('ami', function ($query) use ($date, $unitId) {
+                        $query->whereDate('tanggal', $date->tanggal)->where('id_unit', $unitId);
+                    })->where('id_status_temuan', $status->id)->count();
+                    $dateData['data'][$status->nama] = $count;
+                }
+                $data[] = $dateData;
+            }
+
+            Log::info('Data processed: ' . json_encode($data)); // Log untuk debugging
+
+            // Siapkan data untuk grafik
+            $labels = $dates->pluck('tanggal')->map(function ($date) {
+                return \Carbon\Carbon::parse($date)->format('Y-m-d');
+            });
+            $datasets = [];
             foreach ($statuses as $status) {
-                $count = InstrumenAudit::whereHas('ami', function ($query) use ($year, $unitId) {
-                    $query->where('id_TA', $year->id)->where('id_unit', $unitId);
-                })->where('id_status_temuan', $status->id)->count();
-                $yearData['data'][$status->nama] = $count;
+                $dataset = [
+                    'label' => $status->nama,
+                    'data' => [],
+                    'borderColor' => $this->getRandomColor(),
+                    'fill' => false
+                ];
+                foreach ($data as $dateData) {
+                    $dataset['data'][] = $dateData['data'][$status->nama] ?? 0;
+                }
+                $datasets[] = $dataset;
             }
-            $data[] = $yearData;
-        }
 
-        // Siapkan data untuk grafik
-        $labels = $years->pluck('nama');
-        $datasets = [];
-        foreach ($statuses as $status) {
-            $dataset = [
-                'label' => $status->nama,
-                'data' => [],
-                'borderColor' => $this->getRandomColor(),
-                'fill' => false
+            $response = [
+                'labels' => $labels,
+                'datasets' => $datasets,
             ];
-            foreach ($data as $yearData) {
-                $dataset['data'][] = $yearData['data'][$status->nama] ?? 0;
-            }
-            $datasets[] = $dataset;
+
+            Log::info('Response: ' . json_encode($response)); // Log untuk debugging
+
+            return response()->json($response);
+        } catch (Exception $e) {
+            Log::error('Error fetching line chart data: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
         }
-
-        $response = [
-            'labels' => $labels,
-            'datasets' => $datasets,
-        ];
-
-        Log::info('Response: ' . json_encode($response)); // Log untuk debugging
-
-        return response()->json($response);
     }
 
     private function getRandomColor()
@@ -117,4 +137,54 @@ class DashboardController extends Controller
         }
         return $color;
     }
+
+
+    // public function fetchLineChartData1(Request $request)
+    // {
+    //     $unitId = $request->input('unit_id');
+    //     Log::info('Selected Unit ID: ' . $unitId); // Log untuk debugging
+
+    //     $years = TahunAkademik::all();
+    //     $statuses = StatusTemuan::all();
+
+    //     $data = [];
+    //     foreach ($years as $year) {
+    //         $yearData = [
+    //             'year' => $year->nama,
+    //             'data' => []
+    //         ];
+    //         foreach ($statuses as $status) {
+    //             $count = InstrumenAudit::whereHas('ami', function ($query) use ($year, $unitId) {
+    //                 $query->where('id_TA', $year->id)->where('id_unit', $unitId);
+    //             })->where('id_status_temuan', $status->id)->count();
+    //             $yearData['data'][$status->nama] = $count;
+    //         }
+    //         $data[] = $yearData;
+    //     }
+
+    //     // Siapkan data untuk grafik
+    //     $labels = $years->pluck('nama');
+    //     $datasets = [];
+    //     foreach ($statuses as $status) {
+    //         $dataset = [
+    //             'label' => $status->nama,
+    //             'data' => [],
+    //             'borderColor' => $this->getRandomColor(),
+    //             'fill' => false
+    //         ];
+    //         foreach ($data as $yearData) {
+    //             $dataset['data'][] = $yearData['data'][$status->nama] ?? 0;
+    //         }
+    //         $datasets[] = $dataset;
+    //     }
+
+    //     $response = [
+    //         'labels' => $labels,
+    //         'datasets' => $datasets,
+    //     ];
+
+    //     Log::info('Response: ' . json_encode($response)); // Log untuk debugging
+
+    //     return response()->json($response);
+    // }
 }

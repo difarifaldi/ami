@@ -86,6 +86,10 @@ Route::middleware(['auth'])->group(function () {
     // Profile
     Route::get('/profile/edit-profile/{id}', [UserController::class, 'editProfile'])->name('profile.edit-profile');
     Route::post('/profile/update-profile', [UserController::class, 'updateProfile'])->name('profile.update-profile');
+    Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('profile.change-password');
+    Route::post('/forgot-password', [UserController::class, 'forgotPassword'])->name('forgot-password');
+
+
 
     // admin
     Route::group(['middleware' => ['role:admin']], function () {

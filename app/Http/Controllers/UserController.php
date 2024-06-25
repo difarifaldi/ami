@@ -10,6 +10,8 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -32,7 +34,6 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
@@ -41,14 +42,12 @@ class UserController extends Controller
                 'status' => 'required',
                 'id_unit' => 'required|integer',
                 'nip' => 'numeric|nullable',
-                'ttd' => 'nullable|image|file|max:1024', // Menambahkan ukuran maksimal file
+                'ttd' => 'nullable|image|file|max:1024',
             ]);
-
 
             if ($request->file('ttd')) {
                 $validatedData['ttd'] = $request->file('ttd')->store('tanda-tangan', 'public');
             }
-
 
             $user = User::create([
                 'name' => $validatedData['name'],
@@ -60,9 +59,10 @@ class UserController extends Controller
                 'ttd' => $validatedData['ttd'] ?? null,
             ]);
 
-
             $user->assignRole($validatedData['roles']);
 
+            // Mengirim email ke user baru
+            $this->sendAccountDetails($validatedData['email'], $validatedData['name'], $validatedData['password']);
 
             return redirect()->route('umanagement.index')->with('success', 'Berhasil menambahkan akun baru');
         } catch (Exception $e) {
@@ -72,6 +72,19 @@ class UserController extends Controller
                 'Line' => $e->getLine(),
             ]);
         }
+    }
+
+    protected function sendAccountDetails($email, $name, $password)
+    {
+        $details = [
+            'title' => 'Account Details',
+            'body' => "Halo $name,\n\nAkun anda berhasil dibuat. Berikut merupakan detail akun anda:\n\nEmail: $email\nPassword: $password\n\nSilahkan ubah password anda ketika anda sudah melakukan login.",
+        ];
+
+        Mail::raw($details['body'], function ($message) use ($email, $details) {
+            $message->to($email)
+                ->subject($details['title']);
+        });
     }
 
 
@@ -308,6 +321,51 @@ class UserController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with(['failed' => $e->getMessage()])->withInput();
         }
+    }
+    public function changePassword(Request $request)
+    {
+
+        Log::info('Fungsi changePassword dipanggil');
+        $request->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+
+        // Validasi password lama
+        if (!Hash::check($request->old_password, $user->password)) {
+            return response()->json(['message' => 'Password lama salah'], 422);
+        }
+
+        // Jika password lama cocok, update password baru
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json(['message' => 'Berhasil ubah password'], 200);
+    }
+
+
+    public function forgotPassword(Request $request)
+    {
+        Log::info('Masuk ke fungsi forgotPassword', ['request' => $request->all()]);
+
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->with('failed', 'Email tidak terdaftar');
+        }
+
+        // Update the forgot_password column to 'ya'
+        $user->forgot_password = 'ya';
+        $user->save();
+
+        return back()->with('success', 'Instruksi untuk mengatur ulang password telah dikirim ke email Anda');
     }
 
 

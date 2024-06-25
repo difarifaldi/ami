@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="assets/css/icons.css" />
     <!-- App CSS -->
     <link rel="stylesheet" href="assets/css/app.css" />
+
 </head>
 
 <body class="bg-login">
@@ -42,8 +43,7 @@
                                             <input type="text" class="form-control" name="email" id="email"
                                                 placeholder="Masukan Email" />
                                         </div>
-
-                                        <div class="form-group ">
+                                        <div class="form-group">
                                             <label>Password</label>
                                             <div class="input-group" id="show_hide_password">
                                                 <input
@@ -63,18 +63,17 @@
                                                 <div class="d-block text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
-
                                         <div class="form-row">
                                             <div class="form-group col text-right">
-                                                <a href="#" onclick="showContactAdminPopup()"><i
-                                                        class='bx bxs-key mr-2'></i>Forget Password?</a>
+                                                <a href="#" data-toggle="modal"
+                                                    data-target="#forgotPasswordModal"><i
+                                                        class='bx bxs-key mr-2'></i>Lupa Password?</a>
                                             </div>
                                         </div>
                                         <div class="btn-group mt-3 w-100">
                                             <button type="submit" class="btn btn-primary btn-block">Log In</button>
                                             <button type="submit" class="btn btn-primary"><i
-                                                    class="lni lni-arrow-right"></i>
-                                            </button>
+                                                    class="lni lni-arrow-right"></i></button>
                                         </div>
                                     </form>
                                     <hr>
@@ -93,50 +92,57 @@
     </div>
     <footer class="text-center">
         <p class="mb-0">&copy;2024 | Developed By : <a href="#" target="_blank" style="color: blue;">POLITEKNIK
-                NEGERI JAKARTA</a>
-        </p>
+                NEGERI JAKARTA</a></p>
     </footer>
     <!-- end wrapper -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog"
+        aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="forgotPasswordModalLabel">Lupa Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('forgot-password') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="forgot-email">Email</label>
+                            <input type="email" class="form-control" id="forgot-email" name="email" required
+                                placeholder="Masukan Email Anda">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
 
-    <!-- Example using SweetAlert2 for notifications -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     @if ($message = Session::get('failed'))
         <script>
-            Swal.fire({
-                icon: 'error',
-                title: '{{ $message }}',
-                showConfirmButton: true,
-                timer: null
+            $(document).ready(function() {
+                alert('{{ $message }}');
             });
         </script>
     @endif
 
     @if ($message = Session::get('success'))
         <script>
-            Swal.fire({
-                icon: 'success',
-                title: '{{ $message }}',
-                showConfirmButton: false,
-                timer: 1500
+            $(document).ready(function() {
+                alert('{{ $message }}');
             });
         </script>
     @endif
-
-    <script>
-        // Fungsi untuk menampilkan pesan popup
-        function showContactAdminPopup() {
-            Swal.fire({
-                icon: 'info',
-                title: 'Hubungi Administrator',
-                text: 'Silakan hubungi administrator untuk mengatur ulang kata sandi Anda.',
-                showConfirmButton: true,
-                timer: null
-            });
-        }
-    </script>
 
     <script>
         function togglePasswordVisibility() {
@@ -152,6 +158,36 @@
                 passwordIcon.classList.add('bx-hide');
             }
         }
+        $(document).ready(function() {
+            $('form').on('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Collect form data
+                var formData = {
+                    email: $('#email').val(),
+                    _token: $('meta[name="csrf-token"]').attr('content') // Include CSRF token
+                };
+
+                // Perform AJAX request
+                $.ajax({
+                    url: '{{ route('forgot-password') }}',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message); // Show success message
+                        } else {
+                            alert(response.message); // Show error message
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error); // Log any errors to console
+                        alert(
+                        'Terjadi kesalahan saat mengirim permintaan.'); // Show generic error message
+                    }
+                });
+            });
+        });
     </script>
 </body>
 

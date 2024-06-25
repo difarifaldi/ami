@@ -294,6 +294,8 @@
 
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {{-- pie Chart --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             function createChart(chartId) {
@@ -409,7 +411,7 @@
 
         });
     </script>
-
+    {{-- Bar Chart --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             function createLineChart(chartId) {
@@ -418,7 +420,9 @@
                     type: 'line',
                     data: {
                         labels: [],
-                        datasets: []
+                        datasets: [],
+                        cubicInterpolationMode: 'monotone',
+                        pointradius: 5
                     },
                     options: {
                         responsive: true,
@@ -426,7 +430,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Grafik Data Status Temuan Berdasarkan Tahun Akademik'
+                                text: 'Grafik Data Status Temuan Berdasarkan Tanggal'
                             }
                         }
                     }
@@ -453,6 +457,7 @@
                     })
                     .catch(error => {
                         console.error('Error fetching data:', error);
+                        alert('Error fetching data: ' + error.message);
                     });
             }
 

@@ -48,6 +48,11 @@
                                                         <input type="text" readonly class="form-control-plaintext"
                                                             id="email" name="email" value="{{ $user->email }}">
                                                     </div>
+                                                    <div class="form-group mt-4">
+                                                        <label class="font-weight-bold">Password</label> <br>
+                                                        <button type="button" class="btn btn-sm btn-primary"
+                                                            id="change-password-btn">Ubah Password</button>
+                                                    </div>
 
                                                     <div class="form-group mt-4">
                                                         <label class="font-weight-bold">NIP</label>
@@ -146,7 +151,30 @@
         </div>
     </div>
 
+    @if ($message = Session::get('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: '{{ $message }}',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>
+    @endif
+
+    @if ($message = Session::get('failed'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: '{{ $message }}',
+                showConfirmButton: true,
+                timer: null
+            });
+        </script>
+    @endif
     <script>
+        // resources/js/profile.js
+
         function previewImage(inputId, imgClass) {
             const input = document.getElementById(inputId);
             const file = input.files[0];
@@ -160,5 +188,51 @@
                 reader.readAsDataURL(file);
             }
         }
+
+        document.getElementById('change-password-btn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Ubah Password',
+                html: `
+            <input type="password" id="old-password" class="swal2-input" placeholder="Password Lama">
+            <input type="password" id="new-password" class="swal2-input" placeholder="Password Baru">
+            <input type="password" id="confirm-password" class="swal2-input" placeholder="Konfirmasi Password Baru">
+        `,
+                focusConfirm: false,
+                preConfirm: () => {
+                    const oldPassword = Swal.getPopup().querySelector('#old-password').value
+                    const newPassword = Swal.getPopup().querySelector('#new-password').value
+                    const confirmPassword = Swal.getPopup().querySelector('#confirm-password').value
+
+                    if (!oldPassword || !newPassword || !confirmPassword) {
+                        Swal.showValidationMessage(`Silakan isi semua bidang`)
+                    }
+
+                    if (newPassword !== confirmPassword) {
+                        Swal.showValidationMessage(`Password baru dan konfirmasi password tidak cocok`)
+                    }
+
+                    return {
+                        oldPassword: oldPassword,
+                        newPassword: newPassword,
+                        confirmPassword: confirmPassword
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const data = result.value
+                    axios.post('{{ route('profile.change-password') }}', {
+                        old_password: data.oldPassword,
+                        new_password: data.newPassword,
+                        new_password_confirmation: data.confirmPassword,
+                        user_id: {{ $user->id }},
+                        _token: '{{ csrf_token() }}'
+                    }).then(response => {
+                        Swal.fire('Sukses', response.data.message, 'success')
+                    }).catch(error => {
+                        Swal.fire('Error', error.response.data.message, 'error')
+                    })
+                }
+            })
+        });
     </script>
 @endsection

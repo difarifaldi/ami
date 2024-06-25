@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status')->default('inactive');
             $table->string('ttd')->nullable();
             $table->string('foto')->nullable();
+            $table->string('forgot_password')->default('tidak')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('id_unit')->references('id')->on('units')->onDelete('cascade');
