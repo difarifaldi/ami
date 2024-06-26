@@ -66,7 +66,8 @@
                                                         }
                                                     @endphp
 
-                                                    <td>{{ implode(', ', $selisihHari) }}</td>
+                                                    <td>{{ implode(', ', $selisihHari) }} {{ $selisihHari ? 'hari' : '' }}
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

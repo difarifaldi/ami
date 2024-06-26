@@ -18,11 +18,11 @@
                      
                          $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->count();
                      } elseif (Auth::user()->hasRole('auditor')) {
-                         $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditor_ketua', $userId)->orWhere('id_user_auditor_anggota1', $userId)->orWhere('id_user_auditor_anggota2', $userId)->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
+                         $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditor_ketua', $userId)->orWhere('id_user_auditor_anggota1', $userId)->orWhere('id_user_auditor_anggota2', $userId)->pluck('id')->toArray();
                      
-                         $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->get();
+                         $instruments = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->get();
                      
-                         $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count();
+                         $instrumentsCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count();
                      } elseif (Auth::user()->hasRole('manajemen')) {
                          $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_manajemen', $userId)->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
                      

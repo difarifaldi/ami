@@ -34,10 +34,7 @@
                                                     $instrument->ami->id_unit == $unit->id &&
                                                     $instrument->ami->status_audit == 'belum selesai';
                                                 if (Auth::user()->hasRole('auditor')) {
-                                                    $condition =
-                                                        $condition &&
-                                                        is_null($instrument->id_status_temuan) &&
-                                                        $instrument->status_audit == 'belum selesai';
+                                                    $condition = $condition && is_null($instrument->id_status_temuan);
                                                 }
                                                 if (Auth::user()->hasRole('manajemen')) {
                                                     $condition =
@@ -45,8 +42,7 @@
                                                         is_null($instrument->id_status_akhir) &&
                                                         !is_null($instrument->id_status_tercapai) &&
                                                         !is_null($instrument->id_status_temuan) &&
-                                                        !is_null($instrument->tanggapan_auditee) &&
-                                                        $instrument->status_audit == 'belum selesai';
+                                                        !is_null($instrument->tanggapan_auditee);
                                                 }
                                                 return $condition;
                                             })
