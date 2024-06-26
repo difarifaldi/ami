@@ -11,10 +11,29 @@
                  <ul class="navbar-nav">
                      <?php
                      $userId = Auth::id();
-                     $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditee', $userId)->pluck('id')->toArray();
-                     $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->where('status_audit', '=', 'belum selesai')->get();
-                     $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->where('status_audit', '=', 'belum selesai')->count();
+                     if (Auth::user()->hasRole('auditee')) {
+                         $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditee', $userId)->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
                      
+                         $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->get();
+                     
+                         $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->count();
+                     } elseif (Auth::user()->hasRole('auditor')) {
+                         $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditor_ketua', $userId)->orWhere('id_user_auditor_anggota1', $userId)->orWhere('id_user_auditor_anggota2', $userId)->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
+                     
+                         $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->get();
+                     
+                         $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count();
+                     } elseif (Auth::user()->hasRole('manajemen')) {
+                         $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_manajemen', $userId)->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
+                     
+                         $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_akhir')->whereNotNull('tanggapan_auditee')->get();
+                     
+                         $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_akhir')->whereNotNull('tanggapan_auditee')->count();
+                     } elseif (Auth::user()->hasRole('admin')) {
+                         $instruments = App\Models\User::where('forgot_password', 'ya')->get();
+                     
+                         $instrumentsCount = App\Models\User::where('forgot_password', 'ya')->count();
+                     }
                      ?>
 
 
@@ -33,19 +52,34 @@
                              </a>
                              <div class="header-notifications-list">
                                  @forelse ($instruments as $instrument)
-                                     <a class="dropdown-item" href="/instrument/{{ $instrument->id }}/edit">
-                                         <div class="media align-items-center">
-                                             <div class="notify bg-light-success text-success"><i
-                                                     class='bx bx-check-square'></i>
-                                             </div>
-                                             <div class="media-body">
-                                                 <h6 class="msg-name font-weight-bold mb-1">Pesan Baru <span
-                                                         class="msg-time float-right">{{ $instrument->updated_at->diffForHumans() }}</span>
-                                                 </h6>
+                                     @if (Auth::user()->hasRole('admin'))
+                                         <a class="dropdown-item" href="/admin/edit-user/{{ $instrument->id }}">
+                                         @else
+                                             <a class="dropdown-item" href="/instrument/{{ $instrument->id }}/edit">
+                                     @endif
+
+                                     <div class="media align-items-center">
+                                         <div class="notify bg-light-success text-success"><i
+                                                 class='bx bx-check-square'></i>
+                                         </div>
+                                         <div class="media-body">
+                                             <h6 class="msg-name font-weight-bold mb-1">Pesan Baru <span
+                                                     class="msg-time float-right">{{ $instrument->updated_at->diffForHumans() }}</span>
+                                             </h6>
+                                             @if (Auth::user()->hasRole('auditee'))
                                                  <p class="msg-info">Tanggapan Untuk Indikator
                                                      {{ $instrument->indikator->no }}</p>
-                                             </div>
+                                             @elseif (Auth::user()->hasAnyRole(['auditor', 'manajemen']))
+                                                 <p class="msg-info">Silahkan Audit Indikator
+                                                     {{ $instrument->indikator->no }}</p>
+                                             @elseif (Auth::user()->hasRole('admin'))
+                                                 <p class="msg-info">Pengguna
+                                                     <strong>{{ $instrument->name }}</strong> Lupa Password
+                                                 </p>
+                                             @endif
+
                                          </div>
+                                     </div>
                                      </a>
                                  @empty
                                      <a class="dropdown-item" href="javascript:;">
@@ -54,7 +88,6 @@
                                                      class="bx bx-task-x"></i></div>
                                              <div class="media-body">
                                                  <h6 class="msg-name font-weight-bold mb-1">Pesan Kosong</h6>
-                                                 <p class="msg-info">Auditor Belum Mengisi Data</p>
                                              </div>
                                          </div>
                                      </a>
@@ -63,6 +96,7 @@
 
                          </div>
                      </li>
+
 
 
 

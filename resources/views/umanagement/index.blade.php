@@ -46,7 +46,11 @@
                                             @forelse ($users as $user)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $user->name }}</td>
+                                                    <td>{{ $user->name }} @if ($user->forgot_password == 'ya')
+                                                            <span class="badge bg-danger text-white">Lupa
+                                                                Password</span>
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $user->email }}</td>
                                                     <td>{{ $user->nip ? $user->nip : '-' }}</td>
                                                     <td>

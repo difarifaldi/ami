@@ -28,6 +28,7 @@ class User extends Authenticatable
         'nip',
         'ttd',
         'foto',
+        'forgot_password',
     ];
 
     /**

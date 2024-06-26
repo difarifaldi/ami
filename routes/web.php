@@ -40,6 +40,8 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 // Register
 Route::get('/register', [UserController::class, 'index'])->name('register.index');
 Route::post('/register', [UserController::class, 'store'])->name('register.store');
+Route::get('/forgot-password', [UserController::class, 'forgotPassword'])->name('forgot-password');
+Route::post('/forgot-password', [UserController::class, 'requestPassword'])->name('forgot-password');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -79,15 +81,12 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    // Reset Password
-    Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('user.reset-password');
-    Route::get('/reset-password', [UserController::class, 'showResetPasswordForm'])->name('user.show-reset-password-form');
+
 
     // Profile
     Route::get('/profile/edit-profile/{id}', [UserController::class, 'editProfile'])->name('profile.edit-profile');
     Route::post('/profile/update-profile', [UserController::class, 'updateProfile'])->name('profile.update-profile');
     Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('profile.change-password');
-    Route::post('/forgot-password', [UserController::class, 'forgotPassword'])->name('forgot-password');
 
 
 

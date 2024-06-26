@@ -61,13 +61,13 @@
                                         $instrumentCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)
                                             ->whereNull('id_status_temuan')
                                             ->whereNotNull('id_status_tercapai')
-                                            ->where('status_audit', '=', 'belum selesai')
                                             ->count();
                                     } elseif (Auth::user()->hasRole('manajemen')) {
                                         $auditMutuIds = App\Models\AuditMutuInternal::where(
                                             'id_user_manajemen',
                                             $userId,
                                         )
+                                            ->where('status_audit', '=', 'belum selesai')
                                             ->pluck('id')
                                             ->toArray();
                                         $instrumentCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)
@@ -75,7 +75,6 @@
                                             ->whereNotNull('id_status_tercapai')
                                             ->whereNotNull('tanggapan_auditee')
                                             ->whereNull('id_status_akhir')
-                                            ->where('status_audit', '=', 'belum selesai')
                                             ->count();
                                     }
                                 @endphp

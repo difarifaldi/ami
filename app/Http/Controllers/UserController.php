@@ -77,7 +77,7 @@ class UserController extends Controller
     protected function sendAccountDetails($email, $name, $password)
     {
         $details = [
-            'title' => 'Account Details',
+            'title' => 'Detail Akun SIAMI',
             'body' => "Halo $name,\n\nAkun anda berhasil dibuat. Berikut merupakan detail akun anda:\n\nEmail: $email\nPassword: $password\n\nSilahkan ubah password anda ketika anda sudah melakukan login.",
         ];
 
@@ -254,8 +254,10 @@ class UserController extends Controller
             // Update password jika diisi
             if ($request->filled('password')) {
                 $user->update([
-                    'password' => Hash::make($validatedData['password'])
+                    'password' => Hash::make($validatedData['password']),
+                    'forgot_password' => 'tidak'
                 ]);
+                $this->changePasswordAccount($validatedData['email'], $validatedData['name'], $validatedData['password']);
             }
 
             // Hapus peran sebelumnya jika ada dan tambahkan peran baru
@@ -266,6 +268,19 @@ class UserController extends Controller
             return redirect()->back()->with(['failed' => $e->getMessage()])->withInput();
         }
     }
+    protected function changePasswordAccount($email, $name, $password)
+    {
+        $details = [
+            'title' => 'Password Baru Akun SIAMI',
+            'body' => "Halo $name,\n\nBerikut merupakan password baru anda:\n\nEmail: $email\nPassword: $password\n\nSilahkan ubah password anda ketika anda sudah melakukan login.",
+        ];
+
+        Mail::raw($details['body'], function ($message) use ($email, $details) {
+            $message->to($email)
+                ->subject($details['title']);
+        });
+    }
+
 
     public function editProfile($id)
     {
@@ -347,26 +362,27 @@ class UserController extends Controller
     }
 
 
-    public function forgotPassword(Request $request)
+    public function forgotPassword()
     {
-        Log::info('Masuk ke fungsi forgotPassword', ['request' => $request->all()]);
+        return view('forgotPassword');
+    }
+    public function requestPassword(Request $request)
+    {
 
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
+        $validatedData = $request->validate([
+            'email' => 'required|email'
         ]);
-
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $validatedData['email'])->first();
 
         if (!$user) {
-            return back()->with('failed', 'Email tidak terdaftar');
+            return redirect()->back()->with('failed', 'Email Anda Tidak Terdaftar');
         }
+        $user->update(['forgot_password' => 'ya']);
 
-        // Update the forgot_password column to 'ya'
-        $user->forgot_password = 'ya';
-        $user->save();
-
-        return back()->with('success', 'Instruksi untuk mengatur ulang password telah dikirim ke email Anda');
+        return redirect('/forgot-password')->with('success', 'Permintaan Anda Akan Diproses');
     }
+
+
 
 
     public function toggleUserStatus(Request $request)
@@ -384,26 +400,5 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-    }
-
-    public function showResetPasswordForm()
-    {
-        return view('reset-password');
-    }
-
-    public function resetPassword(Request $request)
-    {
-        $user = Auth::user();
-
-        // Validasi input password
-        $request->validate([
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        // Update password pengguna
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        return redirect('/')->with('success', 'Password berhasil direset.');
     }
 }

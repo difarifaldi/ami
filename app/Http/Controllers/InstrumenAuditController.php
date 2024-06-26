@@ -134,11 +134,6 @@ class InstrumenAuditController extends Controller
                 return redirect()->back()->with('failed', 'Terdapat Indikator yang belum diaudit.');
             }
 
-            // Update status_audit menjadi "selesai" untuk instrumen yang terpilih
-            $instruments->each(function ($instrument) {
-                $instrument->status_audit = 'selesai';
-                $instrument->save();
-            });
             AuditMutuInternal::whereIn('id', $auditMutuIds)->update(['status_audit' => 'selesai']);
 
             // Berikan pesan sukses jika diperlukan
