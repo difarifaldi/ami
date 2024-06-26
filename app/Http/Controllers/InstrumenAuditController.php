@@ -92,6 +92,7 @@ class InstrumenAuditController extends Controller
 
 
 
+
     public function selesaikanAudit(Request $request)
     {
         try {
@@ -164,14 +165,14 @@ class InstrumenAuditController extends Controller
 
         // Filter indikator berdasarkan pernyataan yang ditemukan dan yang belum ada di Instrumen Audit
         $indikators = Indikator::whereIn('id_pernyataan', $pernyataanIds)
-            ->whereNotIn('id', $instrumentIds)
+            ->whereNotIn('id', $instrumentIds)->orderBy('no', 'ASC')
             ->get();
 
         // Ambil semua status tercapai
         $status_tercapai = StatusTercapai::all();
 
         // Ambil semua indikator (opsional, tergantung kebutuhan view)
-        $indikator_lists = Indikator::whereIn('id_pernyataan', $pernyataanIds)->get();
+        $indikator_lists = Indikator::whereIn('id_pernyataan', $pernyataanIds)->orderBy('no', 'ASC')->get();
 
         return view('instrument.create', compact('indikators', 'status_tercapai', 'indikator_lists', 'instrumentIds'));
     }

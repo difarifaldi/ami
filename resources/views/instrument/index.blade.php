@@ -27,7 +27,7 @@
                             <ul class="nav nav-tabs">
                                 @foreach ($uniqueUnits as $unit)
                                     @php
-                                        $hasPendingAudit = $allInstruments
+                                        $pendingAuditCount = $allInstruments
                                             ->filter(function ($instrument) use ($unit) {
                                                 $condition =
                                                     $instrument->ami &&
@@ -48,20 +48,19 @@
                                             })
                                             ->count();
                                     @endphp
-                                    @if ($hasPendingAudit)
-                                        <li class="nav-item">
-                                            <a class="nav-link {{ $selectedUnitId == $unit->id ? 'active bg-primary text-white' : 'bg-white' }}"
-                                                href="{{ route('instrument.index', ['unit_id' => $unit->id]) }}">
-                                                {{ $unit->nama }}
-                                                <span class="rounded bg-success badge text-white ml-1">
-                                                    {{ $hasPendingAudit }}
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endif
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ $selectedUnitId == $unit->id ? 'active bg-primary text-white' : 'bg-white' }}"
+                                            href="{{ route('instrument.index', ['unit_id' => $unit->id]) }}">
+                                            {{ $unit->nama }}
+                                            <span class="rounded bg-success badge text-white ml-1">
+                                                {{ $pendingAuditCount }}
+                                            </span>
+                                        </a>
+                                    </li>
                                 @endforeach
                             </ul>
                         @endif
+
                     @endunlessrole
 
 
