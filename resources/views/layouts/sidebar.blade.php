@@ -114,7 +114,7 @@
                 <ul>
                     <li> <a href="/lha"><i class="bi bi-file-post"></i>Daftar LHA Audit</a>
                     </li>
-                    <li> <a href="/history"><i class="bi bi-calendar4-week"></i>Riwayat Audit</a>
+                    <li> <a href="/adminIndikator"><i class="bi bi-calendar4-week"></i>Audit Mutu Internal</a>
                     </li>
 
 

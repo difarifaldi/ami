@@ -4,6 +4,7 @@ use App\Http\Controllers\AuditMutuInternalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\IndikatorController;
 use App\Http\Controllers\InstrumenAuditController;
 use App\Http\Controllers\KetercapaianStandarController;
@@ -52,10 +53,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('/audit', AuditMutuInternalController::class);
     Route::resource('/unit', UnitController::class);
+    Route::resource('/history', HistoryController::class);
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
     Route::resource('/lha', LhaController::class);
-    Route::get('/history', [LhaController::class, 'history'])->name('history');
+    Route::get('/adminIndikator', [LhaController::class, 'adminIndikator'])->name('adminIndikator');
 
 
     // export pdf

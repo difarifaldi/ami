@@ -22,7 +22,7 @@
                             <hr />
 
                             <div class="d-flex mx-3">
-                                <form id="filterForm" action="{{ route('history') }}" method="GET" class="d-flex">
+                                <form id="filterForm" action="{{ route('adminIndikator') }}" method="GET" class="d-flex">
                                     <select name="select_unit" id="select_unit" class="form-control  mr-3">
                                         <option value="">Pilih Unit</option>
                                         @foreach ($units as $unit)
