@@ -8,7 +8,7 @@
                         alt="" /></a>
             </div>
             <div>
-                <h4 class="logo-text"><a href="/" style="color: blue;">PNJ</a></h4>
+                <h4 class="logo-text"><a href="/" style="color: green;">SIAMI</a></h4>
             </div>
             <a href="javascript:;" class="toggle-btn ml-auto"> <i class="bx bx-menu"></i>
             </a>
@@ -92,20 +92,21 @@
             </li>
 
             {{-- Status Audit --}}
-            <li>
-                <a class="has-arrow" href="javascript:;">
-                    <div class="parent-icon text-success"> <i class="bx bx-shape-circle"></i>
-                    </div>
-                    <div class="menu-title ">Status Audit</div>
-                </a>
-                <ul>
-                    <li> <a href="/statusAudit"><i class="bx bx-filter"></i>Daftar Status</a>
-                    </li>
+            @hasanyrole('admin' | 'manajemen')
+                <li>
+                    <a class="has-arrow" href="javascript:;">
+                        <div class="parent-icon text-success"> <i class="bx bx-shape-circle"></i>
+                        </div>
+                        <div class="menu-title ">Status Audit</div>
+                    </a>
+                    <ul>
+                        <li> <a href="/statusAudit"><i class="bx bx-filter"></i>Daftar Status</a>
+                        </li>
 
 
-                </ul>
-            </li>
-
+                    </ul>
+                </li>
+            @endhasanyrole
             {{-- History --}}
             <li>
                 <a class="has-arrow" href="javascript:;">
@@ -124,7 +125,7 @@
             </li>
 
             @role('admin')
-                <li class="menu-label">Admin Section</li>
+                <li class="menu-label">Pengaturan</li>
 
                 <li>
                     <a class="has-arrow" href="javascript:;">

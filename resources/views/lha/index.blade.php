@@ -26,9 +26,11 @@
                                                     class="list-inline-item text-white bg-wall"><i
                                                         class="bx bx-download"></i></a>
                                                 @role('manajemen')
-                                                    <a href="{{ route('instrument.index', ['unit_id' => $audit->id_unit]) }}"
-                                                        class="list-inline-item text-white bg-wall"><i
-                                                            class="bx bx-show"></i></a>
+                                                    @if ($audit->status_audit == 'belum selesai')
+                                                        <a href="{{ route('instrument.index', ['unit_id' => $audit->id_unit]) }}"
+                                                            class="list-inline-item text-white bg-wall"><i
+                                                                class="bx bx-show"></i></a>
+                                                    @endif
                                                 @endrole
                                             </div>
                                         </div>

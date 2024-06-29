@@ -53,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('/audit', AuditMutuInternalController::class);
     Route::resource('/unit', UnitController::class);
-    Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
     Route::resource('/lha', LhaController::class);

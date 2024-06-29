@@ -353,7 +353,7 @@
                             // Tampilkan spinner loading
                             loadingSpinner.style.display = 'block';
 
-                            fetch(`{{ route('history.index') }}?select_unit2=${unitId}`, {
+                            fetch(`{{ route('dashboard.index') }}?select_unit2=${unitId}`, {
                                     headers: {
                                         'X-Requested-With': 'XMLHttpRequest'
                                     }

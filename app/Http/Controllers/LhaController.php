@@ -34,6 +34,7 @@ class LhaController extends Controller
 
         $auditMutuInternals = AuditMutuInternal::whereIn('id', $ami)->get();
 
+
         // Periksa apakah ada AuditMutuInternal yang status_audit-nya "belum selesai"
         $hasUnfinishedAudit = $auditMutuInternals->where('status_audit', 'belum selesai')->isNotEmpty();
 
@@ -56,7 +57,7 @@ class LhaController extends Controller
         // Jika semua pemeriksaan lolos, buat dan unduh PDF
         $pdf = PDF::loadView('lha.pdf', compact('instruments'))->setPaper('a4', 'portrait');
 
-        return $pdf->download('Form LHA AMI Manajemen.pdf');
+        return $pdf->download('Form LHA AMI Manajemen' . $auditMutuInternals->first()->unit->nama . '.pdf');
     }
 
 

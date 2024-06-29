@@ -111,7 +111,7 @@
     <!-- end wrapper -->
     <!--start switcher-->
     <div class="switcher-wrapper">
-        <div class="switcher-btn"> <i class='bx bx-cog bx-spin'></i>
+        <div class="switcher-btn bg-success"> <i class='bx bx-cog bx-spin'></i>
         </div>
         <div class="switcher-body">
             <h5 class="mb-0 text-uppercase">Theme Customizer</h5>
