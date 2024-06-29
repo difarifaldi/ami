@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="assets/css/icons.css" />
     <!-- App CSS -->
     <link rel="stylesheet" href="assets/css/app.css" />
+
 </head>
 
 <body class="bg-login">
@@ -25,17 +26,15 @@
     <div class="wrapper">
         <div class="section-authentication-login d-flex align-items-center justify-content-center">
             <div class="row">
-                <div class="col-12 col-lg-10 mx-auto">
-                    <div class="card radius-15">
+                <div class="col-10 col-lg-8 mx-auto">
+                    <div class="card radius-15 " style="background-color: #f0f8ff;">
                         <div class="row no-gutters">
                             <div class="col-lg-6">
                                 <div class="card-body p-md-5">
                                     <div class="text-center">
-                                        <img style="margin-right: 150px" src="assets/images/PNJ.png" width="80"
-                                            alt="">
-                                        <h3 style="margin-right: 150px" class="mt-4 font-weight-bold">Welcome Back</h3>
+                                        <h3 class="mt-4 font-weight-bold text-success">Sistem Audit Mutu Internal</h3>
                                     </div>
-                                    <form style="width: 23rem;" action="{{ route('login') }}" method="POST">
+                                    <form action="{{ route('login') }}" method="POST">
                                         @csrf
                                         <div class="form-group mt-4">
                                             <label>Email</label>
@@ -50,7 +49,7 @@
                                                     class="form-control border-right-0 @error('password') is-invalid @enderror"
                                                     type="password" name="password" id="password"
                                                     placeholder="Masukan Password">
-                                                <div class="input-group-append">
+                                                <div class="input-group-append bg-white">
                                                     <a href="javascript:;"
                                                         class="input-group-text bg-transparent border-left-0 @error('password') border-danger @enderror"
                                                         onclick="togglePasswordVisibility()">
@@ -71,18 +70,15 @@
                                             </div>
                                         </div>
                                         <div class="btn-group mt-3 w-100">
-                                            <button type="submit" class="btn btn-primary btn-block">Log In</button>
-                                            <button type="submit" class="btn btn-primary"><i
-                                                    class="lni lni-arrow-right"></i>
-                                            </button>
+                                            <button type="submit" class="btn btn-success btn-block">Log In</button>
+
                                         </div>
                                     </form>
-                                    <hr>
+
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <img src="assets/images/login-images/login-img.jpg" class="card-img login-img h-100"
-                                    alt="...">
+                            <div class="col-lg-6 ">
+                                <img src="assets/images/login-images/login3.jpg" class="card-img login-img w-full">
                             </div>
                         </div>
                         <!--end row-->
@@ -91,11 +87,7 @@
             </div>
         </div>
     </div>
-    <footer class="text-center">
-        <p class="mb-0">&copy;2024 | Developed By : <a href="#" target="_blank" style="color: blue;">POLITEKNIK
-                NEGERI JAKARTA</a>
-        </p>
-    </footer>
+
     <!-- end wrapper -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>

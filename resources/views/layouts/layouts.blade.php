@@ -52,6 +52,35 @@
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/dark-sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/dark-theme.css') }}">
+
+    <style>
+        .loading-spinner {
+            display: none;
+            margin: 0 auto;
+            width: 35px;
+            height: 35px;
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #3498db;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-container {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>

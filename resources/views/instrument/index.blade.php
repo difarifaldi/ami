@@ -142,6 +142,9 @@
                                                 foreach ($statusNames as $statusName => $colorVar) {
                                                     if (isset($instrument->$statusName->nama)) {
                                                         switch ($instrument->$statusName->nama) {
+                                                            case 'menyimpang':
+                                                                $$colorVar = 'text-danger';
+                                                                break;
                                                             case 'belum mencapai':
                                                                 $$colorVar = 'text-danger';
                                                                 break;

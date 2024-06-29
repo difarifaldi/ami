@@ -30,8 +30,6 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">Unit</th>
-                                                <th scope="col">No Pernyataan</th>
-                                                <th scope="col">Pernyataan Standar </th>
                                                 <th scope="col">No Indikator</th>
                                                 <th scope="col">Indikator </th>
                                                 <th scope="col">Aksi</th>
@@ -42,8 +40,6 @@
                                             @forelse ($indikators as $indikator)
                                                 <tr>
                                                     <td>{{ $indikator->pernyataan->unit->nama }}</td>
-                                                    <td>{{ $indikator->pernyataan->no_ps }}</td>
-                                                    <td class="text-left">{!! $indikator->pernyataan->pernyataan_standar !!}</td>
                                                     <td>{{ $indikator->no }}</td>
                                                     <td class="text-left">{!! $indikator->indikator !!}</td>
 

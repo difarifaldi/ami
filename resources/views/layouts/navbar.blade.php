@@ -12,19 +12,19 @@
                      <?php
                      $userId = Auth::id();
                      if (Auth::user()->hasRole('auditee')) {
-                         $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditee', $userId)->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
+                         $auditMutuIds = App\Models\AuditMutuInternal::where('status_audit', '=', 'belum selesai')->where('id_user_auditee', $userId)->pluck('id')->toArray();
                      
                          $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->get();
                      
                          $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->count();
                      } elseif (Auth::user()->hasRole('auditor')) {
-                         $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_auditor_ketua', $userId)->orWhere('id_user_auditor_anggota1', $userId)->orWhere('id_user_auditor_anggota2', $userId)->pluck('id')->toArray();
+                         $auditMutuIds = App\Models\AuditMutuInternal::where('status_audit', '=', 'belum selesai')->where('id_user_auditor_ketua', $userId)->orWhere('id_user_auditor_anggota1', $userId)->orWhere('id_user_auditor_anggota2', $userId)->pluck('id')->toArray();
                      
                          $instruments = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->get();
                      
                          $instrumentsCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count();
                      } elseif (Auth::user()->hasRole('manajemen')) {
-                         $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_manajemen', $userId)->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
+                         $auditMutuIds = App\Models\AuditMutuInternal::where('status_audit', '=', 'belum selesai')->where('id_user_manajemen', $userId)->pluck('id')->toArray();
                      
                          $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_akhir')->whereNotNull('tanggapan_auditee')->get();
                      
@@ -59,8 +59,13 @@
                                      @endif
 
                                      <div class="media align-items-center">
-                                         <div class="notify bg-light-success text-success"><i
-                                                 class='bx bx-check-square'></i>
+                                         <div
+                                             class="notify  {{ Auth::user()->hasRole('admin') ? 'bg-light-danger text-danger' : 'bg-light-success text-success' }}">
+                                             @if (Auth::user()->hasRole('admin'))
+                                                 <i class="bi bi-person-exclamation"></i>
+                                             @else
+                                                 <i class='bx bx-check-square'></i>
+                                             @endif
                                          </div>
                                          <div class="media-body">
                                              <h6 class="msg-name font-weight-bold mb-1">Pesan Baru <span

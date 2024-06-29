@@ -13,15 +13,59 @@ use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
+
     public function index(Request $request)
     {
+        $units = Unit::all();
         $selectedTA = $request->input('select_TA');
         $selectedUnit = $request->input('select_Unit');
         $tahuns = TahunAkademik::all();
         $statusInstrument = InstrumenAudit::all();
-        $units = Unit::all();
-        return view('dashboard', compact('tahuns', 'units', 'statusInstrument', 'selectedTA', 'selectedUnit'));
+
+        // History
+        $selectedUnit2 = $request->input('select_unit2');
+        $statusHistory = InstrumenAudit::with(['ami', 'statusTemuan', 'indikator'])
+            ->whereHas('ami', function ($query) use ($selectedUnit2) {
+                $query->where('id_unit', $selectedUnit2);
+            })
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->indikator->no;
+            });
+
+        if ($request->ajax()) {
+            $dates = $statusHistory->flatMap(function ($instruments) {
+                return $instruments->pluck('ami.tanggal');
+            })->unique()->sort()->values();
+
+            $data = $statusHistory->map(function ($instruments, $noIndikator) use ($dates) {
+                return [
+                    'noIndikator' => $noIndikator,
+                    'instruments' => $dates->map(function ($date) use ($instruments) {
+                        $instrument = $instruments->firstWhere('ami.tanggal', $date);
+                        return [
+                            'statusTemuan' => $instrument ? ($instrument->statusTemuan ? $instrument->statusTemuan->nama : '') : '',
+                            'tanggal' => $date,
+                        ];
+                    })
+                ];
+            })->values();
+
+            return response()->json([
+                'dates' => $dates,
+                'data' => $data
+            ]);
+        }
+
+
+        return view('dashboard', compact('units', 'selectedTA', 'selectedUnit', 'tahuns', 'statusInstrument', 'selectedUnit2', 'statusHistory'));
     }
+
+
+
+
+
+
 
     public function fetchStatusTemuanData(Request $request)
     {

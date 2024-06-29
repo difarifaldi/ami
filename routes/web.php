@@ -46,14 +46,14 @@ Route::post('/forgot-password', [UserController::class, 'requestPassword'])->nam
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     // standar
     Route::resource('/instrument', InstrumenAuditController::class);
     Route::post('/instrument/selesaikan-audit', [InstrumenAuditController::class, 'selesaikanAudit'])->name('instrument.selesaikan-audit');
 
     Route::resource('/audit', AuditMutuInternalController::class);
     Route::resource('/unit', UnitController::class);
-    Route::resource('/history', HistoryController::class);
+    Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
     Route::resource('/lha', LhaController::class);

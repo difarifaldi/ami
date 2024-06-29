@@ -55,7 +55,7 @@
                                 </div>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg btn-block radius-30">Kirim</button>
+                        <button type="submit" class="btn btn-success btn-lg btn-block radius-30">Kirim</button>
                     </form> <a href="/login" class="btn btn-link btn-block"><i
                             class='bx bx-arrow-back mr-1'></i>Kembali</a>
                 </div>

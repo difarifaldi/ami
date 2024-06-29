@@ -277,7 +277,7 @@ class InstrumenAuditController extends Controller
         $instrument->update($validatedData);
 
 
-        return redirect('/instrument')->with('success', 'Instrumen berhasil diperbaharui');
+        return redirect()->route('instrument.index', ['unit_id' => $instrument->ami->id_unit])->with('success', 'Instrumen berhasil diperbaharui');
     }
 
 

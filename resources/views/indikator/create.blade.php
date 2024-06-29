@@ -14,7 +14,7 @@
                         <div class="pl-3">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-0 p-0">
-                                    <li class="breadcrumb-item"><a href="/pernyataan"><i class='bx bx-home-alt'></i></a>
+                                    <li class="breadcrumb-item"><a href="/indikator"><i class='bx bx-home-alt'></i></a>
                                     </li>
                                     <li class="breadcrumb-item active" aria-current="page">Form Indikator</li>
                                 </ol>
@@ -147,4 +147,23 @@
 
         updatePernyataanStandar();
     </script>
+    @if ($message = Session::get('success'))
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 1400,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: '{{ $message }}'
+            });
+        </script>
+    @endif
 @endsection

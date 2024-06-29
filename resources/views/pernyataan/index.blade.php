@@ -35,32 +35,12 @@
 
                                             </tr>
                                         </thead>
-                                        @php
-                                            $colors = [
-                                                'btn-primary',
-                                                'btn-danger',
-                                                'btn-success',
-                                                'btn-warning',
-                                                'btn-info',
-                                                'btn-dark',
-                                            ];
-                                            $currentUnit = null;
-                                            $colorIndex = 0;
-                                            $unitColors = [];
-                                        @endphp
+
 
                                         <tbody>
                                             @forelse ($pernyataans as $pernyataan)
-                                                @php
-                                                    $unitId = $pernyataan->unit->id ?? 'no-unit';
-                                                    if (!array_key_exists($unitId, $unitColors)) {
-                                                        $unitColors[$unitId] = $colors[$colorIndex % count($colors)];
-                                                        $colorIndex++;
-                                                    }
-                                                    $bgClass = $unitColors[$unitId];
-                                                @endphp
-                                                <td> <button class="btn btn-sm {{ $bgClass }} text-white ">
-                                                        {{ $pernyataan->unit ? $pernyataan->unit->nama : 'tidak memiliki unit' }}</button>
+                                                <td>
+                                                    {{ $pernyataan->unit ? $pernyataan->unit->nama : 'tidak memiliki unit' }}
                                                 </td>
                                                 <td>{{ $pernyataan->no_ps }}</td>
                                                 <td class="text-left">{!! $pernyataan->pernyataan_standar !!}</td>

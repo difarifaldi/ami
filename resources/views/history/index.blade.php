@@ -11,12 +11,11 @@
 
                             <div class="d-flex mx-3">
                                 <form id="filterForm" action="{{ route('history.index') }}" method="GET" class="d-flex">
-                                    <select name="select_unit" id="select_unit" class="form-control mr-3"
-                                        onchange="this.form.submit()">
-                                        <option value="">Pilih Unit</option>
+                                    <select name="select_unit2" id="select_unit2" class="form-control mr-3"
+                                        onchange="updateTable()">
                                         @foreach ($units as $unit)
                                             <option value="{{ $unit->id }}"
-                                                {{ $selectedUnit == $unit->id ? 'selected' : '' }}>
+                                                {{ $selectedUnit2 == $unit->id ? 'selected' : '' }}>
                                                 {{ $unit->nama }}
                                             </option>
                                         @endforeach
@@ -25,54 +24,33 @@
                             </div>
 
                             <div class="table-responsive">
-                                @if ($statusInstrument->isEmpty())
-                                    <p class="text-center">Tidak ada data untuk unit yang dipilih.</p>
-                                @else
-                                    <table class="table table-striped table-bordered text-center">
-                                        <thead>
-                                            <tr>
-                                                <th>No Indikator</th>
-                                                @foreach ($statusInstrument->first() as $instrument)
+                                <div class="loading-container">
+                                    <div class="loading-spinner" id="loading-spinner"></div>
+                                </div>
+                                <table class="table table-striped table-bordered text-center" id="data-table">
+                                    <thead>
+                                        <tr id="data-header">
+                                            <th>No Indikator</th>
+                                            @if ($statusHistory->isNotEmpty())
+                                                @foreach ($statusHistory->first() as $instrument)
                                                     <th>{{ \Carbon\Carbon::parse($instrument->ami->tanggal)->format('d-m-Y') }}
                                                     </th>
                                                 @endforeach
-                                                <th>Selisih Hari</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($statusInstrument as $noIndikator => $instruments)
-                                                <tr>
-                                                    <td>{{ $noIndikator }}</td>
-                                                    @php
-                                                        $dates = [];
-                                                        $statuses = [];
-                                                    @endphp
-                                                    @foreach ($instruments as $instrument)
-                                                        @php
-                                                            $dates[] = $instrument->ami->tanggal;
-                                                            $statuses[] = $instrument->statusTemuan->nama;
-                                                        @endphp
-                                                        <td>{{ $instrument->statusTemuan->nama }}</td>
-                                                    @endforeach
-
-                                                    @php
-                                                        $selisihHari = [];
-                                                        for ($i = 0; $i < count($dates) - 1; $i++) {
-                                                            if ($statuses[$i] != $statuses[$i + 1]) {
-                                                                $selisihHari[] = \Carbon\Carbon::parse(
-                                                                    $dates[$i + 1],
-                                                                )->diffInDays(\Carbon\Carbon::parse($dates[$i]));
-                                                            }
-                                                        }
-                                                    @endphp
-
-                                                    <td>{{ implode(', ', $selisihHari) }} {{ $selisihHari ? 'hari' : '' }}
+                                            @endif
+                                        </tr>
+                                    </thead>
+                                    <tbody id="data-tbody">
+                                        @foreach ($statusHistory as $noIndikator => $instruments)
+                                            <tr>
+                                                <td>{{ $noIndikator }}</td>
+                                                @foreach ($instruments as $instrument)
+                                                    <td>{{ $instrument->statusTemuan ? $instrument->statusTemuan->nama : '' }}
                                                     </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                @endif
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -80,4 +58,85 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function updateTable() {
+            const unitId = document.getElementById('select_unit2').value;
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const tableBody = document.getElementById('data-tbody');
+            const tableHeader = document.getElementById('data-header');
+
+            // Tampilkan spinner loading
+            loadingSpinner.style.display = 'block';
+
+            fetch(`{{ route('history.index') }}?select_unit2=${unitId}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    tableBody.innerHTML = ''; // Kosongkan tbody
+                    tableHeader.innerHTML = '<th>No Indikator</th>'; // Kosongkan header kecuali kolom pertama
+
+                    // Buat header berdasarkan tanggal audit
+                    data.dates.forEach(date => {
+                        const headerCell = document.createElement('th');
+                        headerCell.textContent = new Date(date).toLocaleDateString('id-ID');
+                        tableHeader.appendChild(headerCell);
+                    });
+
+                    if (data.data.length === 0) {
+                        const row = document.createElement('tr');
+                        const cell = document.createElement('td');
+                        cell.colSpan = data.dates.length + 1; // Sesuaikan dengan jumlah kolom
+                        cell.textContent = 'Tidak ada data untuk unit yang dipilih.';
+                        row.appendChild(cell);
+                        tableBody.appendChild(row);
+                    } else {
+                        data.data.forEach(item => {
+                            const row = document.createElement('tr');
+                            const noIndikatorCell = document.createElement('td');
+                            noIndikatorCell.textContent = item.noIndikator;
+                            row.appendChild(noIndikatorCell);
+
+                            item.instruments.forEach((instrument, index) => {
+                                const statusCell = document.createElement('td');
+                                statusCell.textContent = instrument.statusTemuan;
+
+                                // Check if previous and current statusTemuan are not empty before adding badge
+                                if (index > 0 &&
+                                    item.instruments[index - 1].statusTemuan &&
+                                    instrument.statusTemuan &&
+                                    item.instruments[index - 1].statusTemuan !== instrument.statusTemuan
+                                ) {
+                                    const daysDiff = Math.abs(new Date(data.dates[index]) - new Date(
+                                        data.dates[index - 1])) / (1000 * 60 * 60 * 24);
+                                    const badge = document.createElement('span');
+                                    badge.className = 'ml-1 badge badge-info';
+                                    badge.textContent = `${daysDiff} hari`;
+                                    statusCell.appendChild(badge);
+                                }
+
+                                row.appendChild(statusCell);
+                            });
+
+                            tableBody.appendChild(row);
+                        });
+                    }
+
+                    // Sembunyikan spinner loading
+                    loadingSpinner.style.display = 'none';
+                })
+                .catch(() => {
+                    // Sembunyikan spinner loading jika ada error
+                    loadingSpinner.style.display = 'none';
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTable(); // Memuat data pertama kali
+        });
+    </script>
+
 @endsection

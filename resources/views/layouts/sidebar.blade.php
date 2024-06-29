@@ -51,9 +51,11 @@
                                     $instrumentCount = 0;
                                     if (Auth::user()->hasRole('auditor')) {
                                         $auditMutuIds = App\Models\AuditMutuInternal::where(
-                                            'id_user_auditor_ketua',
-                                            $userId,
+                                            'status_audit',
+                                            '=',
+                                            'belum selesai',
                                         )
+                                            ->where('id_user_auditor_ketua', $userId)
                                             ->orWhere('id_user_auditor_anggota1', $userId)
                                             ->orWhere('id_user_auditor_anggota2', $userId)
                                             ->pluck('id')

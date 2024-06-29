@@ -36,18 +36,15 @@ class IndikatorController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $validatedData = $request->validate([
-                'no' => 'required',
-                'indikator' => 'required',
-                'id_pernyataan' => 'required',
-            ]);
 
-            Indikator::create($validatedData);
-            return redirect('/indikator')->with('success', 'Indikator baru berhasil ditambahkan');
-        } catch (Exception $e) {
-            dd($e->getMessage());
-        }
+        $validatedData = $request->validate([
+            'no' => 'required',
+            'indikator' => 'required',
+            'id_pernyataan' => 'required',
+        ]);
+
+        Indikator::create($validatedData);
+        return redirect('/indikator/create')->with('success', 'Indikator baru berhasil ditambahkan');
     }
 
 
