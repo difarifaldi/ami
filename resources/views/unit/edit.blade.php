@@ -48,6 +48,8 @@
                                                     <div class="d-block text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
+
+
                                             <div class="form-group mt-4">
                                                 <label for="gambar" class="form-label d-block">Logo Unit</label>
 
@@ -57,8 +59,15 @@
                                                 @else
                                                     <img class="img-preview img-fluid mb-3 col-sm-3">
                                                 @endif
-                                                <input class="form-control  @error('gambar')is-invalid @enderror"
-                                                    type="file" id="gambar" name="gambar" onchange="previewImage()">
+
+                                                <div class="custom-file">
+                                                    <input type="file"
+                                                        class="custom-file-input @error('gambar')is-invalid @enderror"
+                                                        name="gambar" id="gambar"
+                                                        aria-describedby="inputGroupFileAddon01" onchange="previewImage()">
+                                                    <label class="custom-file-label" for="gambar">Choose
+                                                        File</label>
+                                                </div>
                                                 @error('gambar')
                                                     <div class="d-block text-danger">
                                                         {{ $message }}

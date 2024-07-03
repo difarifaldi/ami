@@ -38,16 +38,27 @@
                                             <div class="row">
                                                 <div class="col-md-8">
                                                     <div class="form-group mt-4">
-                                                        <label>Nama</label>
-                                                        <input type="text" class="form-control" id="name"
-                                                            name="name" value="{{ $user->name }}">
+                                                        <label>Nama </label>
+                                                        <input type="text" name="name" id="name"
+                                                            class="form-control @error('name') is-invalid @enderror"
+                                                            value="{{ old('name', $user->name) }}"
+                                                            placeholder="Masukan Nama" />
+                                                        <!-- error message untuk name -->
+                                                        @error('name')
+                                                            <div class="d-block text-danger">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                     <div class="form-group mt-4">
                                                         <label>Email</label>
-                                                        <input type="text" class="form-control" id="email"
-                                                            name="email" value="{{ $user->email }}">
+                                                        <input type="email" name="email" id="email"
+                                                            class="form-control @error('email') is-invalid @enderror"
+                                                            placeholder="Masukan email"
+                                                            value="{{ old('email', $user->email) }}" />
+                                                        <!-- error message untuk email -->
+                                                        @error('email')
+                                                            <div class="d-block text-danger">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
-
                                                     @if ($user->forgot_password == 'ya')
                                                         <div class="form-group mt-4">
                                                             <label>Password Baru</label>
@@ -69,7 +80,7 @@
                                                     </div>
 
                                                     <div class="form-group mt-4">
-                                                        <label>Role</label>
+                                                        <label>Peran</label>
                                                         <select class="form-control" name="roles" id="roles">
                                                             @foreach ($roles as $role)
                                                                 @if ($user->roles->isEmpty())
@@ -197,4 +208,14 @@
             }
         }
     </script>
+    @if ($message = Session::get('failed'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: '{{ $message }}',
+                showConfirmButton: true,
+                timer: null
+            });
+        </script>
+    @endif
 @endsection

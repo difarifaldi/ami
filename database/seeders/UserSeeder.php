@@ -16,13 +16,13 @@ class UserSeeder extends Seeder
     {
 
         $user_super_admin = User::create([
-            'name' => 'Difa',
+            'name' => 'Muhammad Difa Rifaldi',
             'email' => 'difa@gmail.com',
             'id_unit' => null,
             'password' => Hash::make('password123'),
             'status' => 'active'
         ]);
 
-        $user_super_admin->assignRole('superadmin');
+        $user_super_admin->assignRole('admin');
     }
 }

@@ -214,10 +214,16 @@
 
                                                     <!-- Penanggung Jawab -->
                                                     <div class="form-group mt-4">
-                                                        <label>Penanggung Jawab</label>
+                                                        <label>Penanggung Jawab <span class="font-italic font-weight-bolder">
+                                                                Status Belum
+                                                                Mencapai</span></label>
                                                         <select name="penanggung_jawab" id="penanggung_jawab"
                                                             class="single-select"
                                                             @hasanyrole('auditee|manajemen') disabled @endhasanyrole>
+                                                            @hasanyrole('auditee|manajemen')
+                                                                <option value="">Tidak ada penanggung jawab</option>
+                                                            @endhasanyrole
+                                                            <option value="">Pilih Penanggung jawab</option>
                                                             @foreach ($user as $usr)
                                                                 <option value="{{ $usr->name }}"
                                                                     {{ old('penanggung_jawab', $instrument->penanggung_jawab) == $usr->name ? 'selected' : '' }}>

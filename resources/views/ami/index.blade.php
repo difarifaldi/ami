@@ -20,8 +20,9 @@
                                 <h4 class="text-center my-4">Audit Mutu Internal</h4>
                             </div>
                             <hr />
-
-                            <a href="/audit/create" class="btn btn-md btn-success mb-3 ml-3">Tambah Data</a>
+                            @hasrole('admin')
+                                <a href="/audit/create" class="btn btn-md btn-success mb-3 ml-3">Tambah Data</a>
+                            @endrole
 
                             <div class="table-responsive">
                                 <div class="card-body">

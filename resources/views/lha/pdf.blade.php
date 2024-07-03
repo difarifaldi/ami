@@ -257,26 +257,30 @@
                 <td style="background-color: #d9d9d9">Ketua Auditor</td>
                 <td>{{ $instruments->first()->ami->auditorKetua->name }}</td>
                 <td>Tanda tangan <br>
-                    <?php
-                    $pathttd1 = public_path('storage/' . $instruments->first()->ami->auditorKetua->ttd);
-                    $typettd1 = pathinfo($pathttd1, PATHINFO_EXTENSION);
-                    $datattd1 = file_get_contents($pathttd1);
-                    $base64ttd1 = 'data:image/' . $typettd1 . ';base64,' . base64_encode($datattd1);
-                    ?>
-                    <img src="{{ $base64ttd1 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                    @if ($instruments->first()->ami->auditorKetua->ttd)
+                        <?php
+                        $pathttd1 = public_path('storage/' . $instruments->first()->ami->auditorKetua->ttd);
+                        $typettd1 = pathinfo($pathttd1, PATHINFO_EXTENSION);
+                        $datattd1 = file_get_contents($pathttd1);
+                        $base64ttd1 = 'data:image/' . $typettd1 . ';base64,' . base64_encode($datattd1);
+                        ?>
+                        <img src="{{ $base64ttd1 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                    @endif
                 </td>
             </tr>
             <tr>
                 <td style="background-color: #d9d9d9">Anggota Auditor</td>
                 <td>{{ $instruments->first()->ami->auditorAnggota1->name }}</td>
                 <td>Tanda tangan <br>
-                    <?php
-                    $pathttd2 = public_path('storage/' . $instruments->first()->ami->auditorAnggota1->ttd);
-                    $typettd2 = pathinfo($pathttd2, PATHINFO_EXTENSION);
-                    $datattd2 = file_get_contents($pathttd2);
-                    $base64ttd2 = 'data:image/' . $typettd2 . ';base64,' . base64_encode($datattd2);
-                    ?>
-                    <img src="{{ $base64ttd2 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                    @if ($instruments->first()->ami->auditorKetua->ttd)
+                        <?php
+                        $pathttd2 = public_path('storage/' . $instruments->first()->ami->auditorAnggota1->ttd);
+                        $typettd2 = pathinfo($pathttd2, PATHINFO_EXTENSION);
+                        $datattd2 = file_get_contents($pathttd2);
+                        $base64ttd2 = 'data:image/' . $typettd2 . ';base64,' . base64_encode($datattd2);
+                        ?>
+                        <img src="{{ $base64ttd2 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                    @endif
                 </td>
             </tr>
 

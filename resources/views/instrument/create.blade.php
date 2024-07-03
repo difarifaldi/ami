@@ -10,13 +10,13 @@
                 <div class="page-content">
                     <!--breadcrumb-->
                     <div class="page-breadcrumb d-none d-md-flex align-items-center mb-3">
-                        <div class="breadcrumb-title pr-3">Forms</div>
+                        <div class="breadcrumb-title pr-3">Form</div>
                         <div class="pl-3">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-0 p-0">
                                     <li class="breadcrumb-item"><a href="/instrument"><i class='bx bx-home-alt'></i></a>
                                     </li>
-                                    <li class="breadcrumb-item active" aria-current="page">Form Instrument</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Form Instrumen</li>
                                 </ol>
                             </nav>
                         </div>
@@ -28,7 +28,7 @@
                                 <div class="card border-0 shadow-sm rounded">
                                     <div class="card-body">
                                         <div>
-                                            <h4 class="text-center my-4">Form Instrument</h4>
+                                            <h4 class="text-center my-4">Form Instrumen</h4>
                                         </div>
                                         <hr />
                                         <!-- Formulir pendaftaran -->
@@ -161,7 +161,7 @@
                             <div class="col-md-3">
                                 <div class="card">
                                     <div class="card-header text-center font-weight-bold">
-                                        Daftar Instrument
+                                        Daftar Instrumen
                                     </div>
                                     <div class="card-body">
                                         @foreach ($indikator_lists as $list)

@@ -24,11 +24,11 @@
                      
                          $instrumentsCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count();
                      } elseif (Auth::user()->hasRole('manajemen')) {
-                         $auditMutuIds = App\Models\AuditMutuInternal::where('status_audit', '=', 'belum selesai')->where('id_user_manajemen', $userId)->pluck('id')->toArray();
+                         $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_manajemen', $userId)->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
                      
-                         $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_akhir')->whereNotNull('tanggapan_auditee')->get();
+                         $instruments = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_temuan')->whereNotNull('id_status_tercapai')->whereNotNull('tanggapan_auditee')->whereNull('id_status_akhir')->get();
                      
-                         $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_akhir')->whereNotNull('tanggapan_auditee')->count();
+                         $instrumentsCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_temuan')->whereNotNull('id_status_tercapai')->whereNotNull('tanggapan_auditee')->whereNull('id_status_akhir')->count();
                      } elseif (Auth::user()->hasRole('admin')) {
                          $instruments = App\Models\User::where('forgot_password', 'ya')->get();
                      
@@ -111,11 +111,12 @@
                              <div class="media user-box align-items-center">
                                  <div class="media-body user-info">
                                      <p class="user-name mb-0">
-                                         {{ Auth::user()->name ? Auth::user()->name : 'Data Nama tidak ditemukan' }} -
-                                         {{ Auth::user()->roles[0]->name ? Auth::user()->roles[0]->name : 'Data Role tidak ditemukan' }}
+                                         {{ Auth::user()->name ? Auth::user()->name : 'Data Nama tidak ditemukan' }}
+
                                      </p>
                                      <p class="designattion mb-0 text-success">
-                                         {{ Auth::user() ? Auth::user()->status : 'Data Nama tidak ditemukan' }}</p>
+                                         {{ Auth::user()->roles[0]->name ? Auth::user()->roles[0]->name : 'Data Role tidak ditemukan' }}
+                                     </p>
                                  </div>
                                  <i class="fas fa-user-circle fa-fw"></i>
 

@@ -43,7 +43,7 @@ class PernyataanStandarController extends Controller
         ]);
 
         PernyataanStandar::create($validatedData);
-        return redirect('/pernyataan')->with('success', 'Pernyataan baru berhasil ditambahkan');
+        return redirect('/pernyataan/create')->with('success', 'Pernyataan baru berhasil ditambahkan');
     }
 
     /**

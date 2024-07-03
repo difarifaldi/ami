@@ -38,6 +38,7 @@
                     <div class="menu-title">Audit Mutu</div>
                 </a>
                 <ul>
+
                     <li> <a href="/audit"><i class="bi bi-person-check"></i>Identitas AMI</a>
                     </li>
                     <li class="border-top">
@@ -92,7 +93,7 @@
             </li>
 
             {{-- Status Audit --}}
-            @hasanyrole('admin' | 'manajemen')
+            @hasanyrole('admin|manajemen')
                 <li>
                     <a class="has-arrow" href="javascript:;">
                         <div class="parent-icon text-success"> <i class="bx bx-shape-circle"></i>

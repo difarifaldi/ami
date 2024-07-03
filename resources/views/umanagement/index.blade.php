@@ -17,7 +17,7 @@
                         <div class="card-body">
                             <div class="card-title">
                                 <!-- Isi judul card -->
-                                <h4 class="text-center my-4">User Management</h4>
+                                <h4 class="text-center my-4">Manajemen Akun</h4>
                             </div>
                             <hr />
 
@@ -34,7 +34,7 @@
                                                 <th scope="col">Nama</th>
                                                 <th scope="col">Email</th>
                                                 <th scope="col">NIP</th>
-                                                <th scope="col">Role</th>
+                                                <th scope="col">Peran</th>
                                                 <th scope="col">Unit</th>
                                                 <th scope="col">Tanda Tangan</th>
                                                 <th scope="col">Status</th>

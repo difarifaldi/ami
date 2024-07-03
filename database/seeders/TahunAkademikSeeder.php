@@ -14,6 +14,9 @@ class TahunAkademikSeeder extends Seeder
     public function run(): void
     {
         $TA = [
+            '2022/2023 Ganjil',
+            '2022/2023 Genap',
+            '2023/2024 Ganjil',
             '2023/2024 Genap',
             '2024/2025 Ganjil',
             '2024/2025 Genap',

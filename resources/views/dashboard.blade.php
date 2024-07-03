@@ -134,16 +134,17 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- UPA Perpustakaan -->
+
+                        <!-- UPA Layanan Uji Kompetensi -->
                         <div class="card radius-15">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <h5 class="mb-0 font-weight-bold">UPA Perpustakaan</h5>
+                                        <h5 class="mb-0 font-weight-bold">UPA Layanan Uji Kompetensi</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-3 m-0">
-                                    <select name="select_TA_Perpus" id="select_TA_Perpus" class="form-control w-50">
+                                    <select name="select_TA_Layanan" id="select_TA_Layanan" class="form-control w-50">
                                         @foreach ($tahuns as $tahun)
                                             <option value="{{ $tahun->id }}"
                                                 {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
@@ -152,7 +153,7 @@
                                     </select>
                                 </div>
                                 <div class="mt-4">
-                                    <canvas id="statusTemuanChartPerpus" width="400" height="400"></canvas>
+                                    <canvas id="statusTemuanChartLayanan" width="400" height="400"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -181,16 +182,17 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- UPA Layanan Uji Kompetensi -->
+
+                        <!-- UPA Perpustakaan -->
                         <div class="card radius-15">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <h5 class="mb-0 font-weight-bold">UPA Layanan Uji Kompetensi</h5>
+                                        <h5 class="mb-0 font-weight-bold">UPA Perpustakaan</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-3 m-0">
-                                    <select name="select_TA_Layanan" id="select_TA_Layanan" class="form-control w-50">
+                                    <select name="select_TA_Perpus" id="select_TA_Perpus" class="form-control w-50">
                                         @foreach ($tahuns as $tahun)
                                             <option value="{{ $tahun->id }}"
                                                 {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
@@ -199,7 +201,7 @@
                                     </select>
                                 </div>
                                 <div class="mt-4">
-                                    <canvas id="statusTemuanChartLayanan" width="400" height="400"></canvas>
+                                    <canvas id="statusTemuanChartPerpus" width="400" height="400"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -428,6 +430,7 @@
 
                 @section('scripts')
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
                     {{-- pie Chart --}}
                     <script>

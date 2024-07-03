@@ -107,11 +107,10 @@ class InstrumenAuditController extends Controller
                 $unitId = $unitIds->first();
             }
 
-            $auditMutuIds = $data->where('id_unit', $unitId)->pluck('id');
+            $auditMutuIds = $data->where('id_unit', $unitId)->where('status_audit', 'belum selesai')->pluck('id');
 
             // Ambil instrumen yang terkait dengan audit mutu internal yang sedang berlangsung
             $instruments = InstrumenAudit::whereIn('id_AMI', $auditMutuIds)
-                ->where('status_audit', 'belum selesai')
                 ->get();
 
             // Hitung jumlah instrumen dan indikator
@@ -182,10 +181,10 @@ class InstrumenAuditController extends Controller
 
         $validateData = $request->validate([
             'deskripsi_temuan' => 'required',
-            'bukti' => 'required|url',
+            'bukti' => 'nullable|url',
             'id_status_tercapai' => 'required',
             'akar_penyebab' => 'required',
-            'akibat' => 'required',
+            'akibat' => 'nullable',
             'id_indikator' => 'required',
         ]);
         $user = Auth::user();
@@ -237,10 +236,10 @@ class InstrumenAuditController extends Controller
         if ($request->user()->hasRole('auditee')) {
             $validatedData = $request->validate([
                 'deskripsi_temuan' => 'required',
-                'bukti' => 'required|url',
+                'bukti' => 'nullable|url',
                 'id_status_tercapai' => 'nullable',
                 'akar_penyebab' => 'required',
-                'akibat' => 'required',
+                'akibat' => 'nullable',
                 'tanggapan_auditee' => 'nullable',
             ]);
             $user = Auth::user();
@@ -260,16 +259,16 @@ class InstrumenAuditController extends Controller
             $validatedData = $request->validate([
                 'temuan_audit' => 'required',
                 'rekomendasi_auditor' => 'required',
-                'penanggung_jawab' => 'required',
-                'link' => 'required|url',
+                'penanggung_jawab' => 'nullable',
+                'link' => 'nullable|url',
                 'id_status_temuan' => 'required',
             ]);
         }
 
         if ($request->user()->hasRole('manajemen')) {
             $validatedData = $request->validate([
-                'jadwal_penyelesaian' => 'required',
-                'rencana_perbaikan' => 'required',
+                'jadwal_penyelesaian' => 'nullable',
+                'rencana_perbaikan' => 'nullable',
                 'id_status_akhir' => 'required',
             ]);
         }

@@ -33,45 +33,38 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:8',
-                'roles' => 'required|string|exists:roles,name',
-                'status' => 'required',
-                'id_unit' => 'required|integer',
-                'nip' => 'numeric|nullable',
-                'ttd' => 'nullable|image|file|max:1024',
-            ]);
 
-            if ($request->file('ttd')) {
-                $validatedData['ttd'] = $request->file('ttd')->store('tanda-tangan', 'public');
-            }
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'roles' => 'required|string|exists:roles,name',
+            'status' => 'required',
+            'id_unit' => 'required|integer',
+            'nip' => 'numeric|nullable',
+            'ttd' => 'nullable|image|file|max:1024',
+        ]);
 
-            $user = User::create([
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'password' => Hash::make($validatedData['password']),
-                'status' => $validatedData['status'],
-                'id_unit' => $validatedData['id_unit'],
-                'nip' => $validatedData['nip'],
-                'ttd' => $validatedData['ttd'] ?? null,
-            ]);
-
-            $user->assignRole($validatedData['roles']);
-
-            // Mengirim email ke user baru
-            $this->sendAccountDetails($validatedData['email'], $validatedData['name'], $validatedData['password']);
-
-            return redirect()->route('umanagement.index')->with('success', 'Berhasil menambahkan akun baru');
-        } catch (Exception $e) {
-            dd([
-                'Message' => $e->getMessage(),
-                'File' => $e->getFile(),
-                'Line' => $e->getLine(),
-            ]);
+        if ($request->file('ttd')) {
+            $validatedData['ttd'] = $request->file('ttd')->store('tanda-tangan', 'public');
         }
+
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'status' => $validatedData['status'],
+            'id_unit' => $validatedData['id_unit'],
+            'nip' => $validatedData['nip'],
+            'ttd' => $validatedData['ttd'] ?? null,
+        ]);
+
+        $user->assignRole($validatedData['roles']);
+
+        // Mengirim email ke user baru
+        $this->sendAccountDetails($validatedData['email'], $validatedData['name'], $validatedData['password']);
+
+        return redirect()->route('umanagement.index')->with('success', 'Berhasil menambahkan akun baru');
     }
 
     protected function sendAccountDetails($email, $name, $password)
@@ -364,6 +357,9 @@ class UserController extends Controller
 
     public function forgotPassword()
     {
+        if (Auth::check()) {
+            return redirect('/')->with('warning', 'Anda sudah login. Harap logout terlebih dahulu.');
+        }
         return view('forgotPassword');
     }
     public function requestPassword(Request $request)

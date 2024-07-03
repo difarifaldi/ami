@@ -41,11 +41,18 @@
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $unit->nama }}</td>
 
-                                                    <td> <img src="{{ asset('storage/' . $unit->gambar) }}"
-                                                            class="img-fluid" style="width: 65px"></td>
+                                                    <td>
+                                                        @if ($unit->gambar)
+                                                            <img src="{{ asset('storage/' . $unit->gambar) }}"
+                                                                class="img-fluid" style="width: 65px">
+                                                        @else
+                                                            <i class="bi bi-x-octagon-fill text-red"
+                                                                style="font-size: 1.4rem;"></i> <br>
+                                                            kosong
+                                                        @endif
+                                                    </td>
 
                                                     <td>
-
                                                         <a href="/unit/{{ $unit->id }}/edit"
                                                             class="btn btn-warning btn-sm"><i class="bi bi-brush"></i></a>
 
@@ -53,7 +60,6 @@
                                                             onclick="deleteUnit({{ $unit->id }})"><i
                                                                 class="bi bi-trash"></i></button>
                                                         </form>
-
                                                     </td>
                                                 </tr>
                                             @empty
