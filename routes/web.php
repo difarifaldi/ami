@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Auth;
 // Login
 Route::get('/login', function () {
     if (Auth::check()) {
-        return redirect('/')->with('warning', 'Anda sudah login. Harap logout terlebih dahulu.');
+        return redirect('/')->with('failed', 'Anda sudah login. Harap logout terlebih dahulu.');
     }
     return view('login');
 })->name('login');

@@ -358,7 +358,7 @@ class UserController extends Controller
     public function forgotPassword()
     {
         if (Auth::check()) {
-            return redirect('/')->with('warning', 'Anda sudah login. Harap logout terlebih dahulu.');
+            return redirect('/')->with('failed', 'Anda sudah login. Harap logout terlebih dahulu.');
         }
         return view('forgotPassword');
     }
