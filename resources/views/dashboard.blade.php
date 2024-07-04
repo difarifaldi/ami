@@ -260,7 +260,7 @@
                     {{-- History --}}
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="text-center my-4">Daftar Laporan Hasil Akhir</h4>
+                            <h4 class="text-center my-4">Riwayat Status Temuan Audit</h4>
 
                             <div class="d-flex mx-3">
                                 <form id="filterForm" action="{{ route('dashboard.index') }}" method="GET"

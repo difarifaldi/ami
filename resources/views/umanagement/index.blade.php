@@ -98,7 +98,7 @@
                                                         <a href="{{ route('admin.edit-user', ['id' => $user->id]) }}"
                                                             class="btn btn-primary">Edit</a>
                                                         <button class="btn btn-danger"
-                                                            onclick="deleteUser({{ $user->id }})">Delete</button>
+                                                            onclick="deleteUser({{ $user->id }})">Hapus</button>
                                                     </td>
                                                 </tr>
                                             @empty

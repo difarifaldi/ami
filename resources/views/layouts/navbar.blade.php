@@ -78,7 +78,7 @@
                                                  <p class="msg-info">Silahkan Audit Indikator
                                                      {{ $instrument->indikator->no }}</p>
                                              @elseif (Auth::user()->hasRole('admin'))
-                                                 <p class="msg-info">Pengguna
+                                                 <p class="msg-info">
                                                      <strong>{{ $instrument->name }}</strong> Lupa Password
                                                  </p>
                                              @endif

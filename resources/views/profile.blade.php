@@ -71,7 +71,8 @@
                                                     <div class="form-group mt-4">
                                                         <label class="font-weight-bold">Asal Unit</label>
                                                         <input type="text" readonly class="form-control-plaintext"
-                                                            id="id_unit" name="id_unit" value="{{ $user->unit->nama }}">
+                                                            id="id_unit" name="id_unit"
+                                                            value="{{ $user->unit ? $user->unit->nama : '-' }}">
                                                     </div>
 
                                                     <div class="form-group mt-4">
