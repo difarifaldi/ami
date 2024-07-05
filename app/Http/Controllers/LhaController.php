@@ -57,7 +57,7 @@ class LhaController extends Controller
         // Jika semua pemeriksaan lolos, buat dan unduh PDF
         $pdf = PDF::loadView('lha.pdf', compact('instruments'))->setPaper('a4', 'portrait');
 
-        return $pdf->download('Form LHA AMI Manajemen ' . $auditMutuInternals->first()->unit->nama . '.pdf');
+        return $pdf->download('Form LHA AMI Manajemen ' . $auditMutuInternals->first()->unit->nama . ' ' . $auditMutuInternals->first()->tahunAkademik->nama . '.pdf');
     }
 
 

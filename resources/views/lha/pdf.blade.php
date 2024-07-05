@@ -253,34 +253,50 @@
                 <td>{{ $instruments->first()->ami->auditee->name }}</td>
                 <td>Telp:</td>
             </tr>
+
             <tr>
                 <td style="background-color: #d9d9d9">Ketua Auditor</td>
                 <td>{{ $instruments->first()->ami->auditorKetua->name }}</td>
                 <td>Tanda tangan <br>
-                    @if ($instruments->first()->ami->auditorKetua->ttd)
-                        <?php
-                        $pathttd1 = public_path('storage/' . $instruments->first()->ami->auditorKetua->ttd);
-                        $typettd1 = pathinfo($pathttd1, PATHINFO_EXTENSION);
-                        $datattd1 = file_get_contents($pathttd1);
-                        $base64ttd1 = 'data:image/' . $typettd1 . ';base64,' . base64_encode($datattd1);
-                        ?>
+                    <?php
+                    $ttdValue1 = $instruments->first()->ami->auditorKetua->ttd;
+                    if ($ttdValue1) {
+                        $pathttd1 = public_path('storage/' . $ttdValue1);
+                        if (file_exists($pathttd1)) {
+                            $typettd1 = pathinfo($pathttd1, PATHINFO_EXTENSION);
+                            $datattd1 = file_get_contents($pathttd1);
+                            $base64ttd1 = 'data:image/' . $typettd1 . ';base64,' . base64_encode($datattd1);
+                        } else {
+                            echo 'File tidak ditemukan: ' . $pathttd1;
+                        }
+                    }
+                    ?>
+                    @isset($base64ttd1)
                         <img src="{{ $base64ttd1 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
-                    @endif
+                    @endisset
                 </td>
             </tr>
+
             <tr>
                 <td style="background-color: #d9d9d9">Anggota Auditor</td>
                 <td>{{ $instruments->first()->ami->auditorAnggota1->name }}</td>
                 <td>Tanda tangan <br>
-                    @if ($instruments->first()->ami->auditorKetua->ttd)
-                        <?php
-                        $pathttd2 = public_path('storage/' . $instruments->first()->ami->auditorAnggota1->ttd);
-                        $typettd2 = pathinfo($pathttd2, PATHINFO_EXTENSION);
-                        $datattd2 = file_get_contents($pathttd2);
-                        $base64ttd2 = 'data:image/' . $typettd2 . ';base64,' . base64_encode($datattd2);
-                        ?>
+                    <?php
+                    $ttdValue2 = $instruments->first()->ami->auditorAnggota1->ttd;
+                    if ($ttdValue2) {
+                        $pathttd2 = public_path('storage/' . $ttdValue2);
+                        if (file_exists($pathttd2)) {
+                            $typettd2 = pathinfo($pathttd2, PATHINFO_EXTENSION);
+                            $datattd2 = file_get_contents($pathttd2);
+                            $base64ttd2 = 'data:image/' . $typettd2 . ';base64,' . base64_encode($datattd2);
+                        } else {
+                            echo 'File tidak ditemukan: ' . $pathttd2;
+                        }
+                    }
+                    ?>
+                    @isset($base64ttd2)
                         <img src="{{ $base64ttd2 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
-                    @endif
+                    @endisset
                 </td>
             </tr>
 
