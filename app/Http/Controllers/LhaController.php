@@ -64,7 +64,7 @@ class LhaController extends Controller
 
 
 
-    public function adminIndikator(Request $request)
+    public function riwayat(Request $request)
     {
         $selectedUnit = $request->input('select_unit');
         $selectedTA = $request->input('select_TA');
@@ -90,7 +90,7 @@ class LhaController extends Controller
         // Ambil instrumen terkait berdasarkan ID dari AMI
         $instruments = InstrumenAudit::whereIn('id_AMI', $AuditID)->get();
 
-        return view('lha.adminIndikator', compact('instruments', 'units', 'tahuns', 'selectedUnit', 'selectedTA'));
+        return view('lha.riwayat', compact('instruments', 'units', 'tahuns', 'selectedUnit', 'selectedTA'));
     }
 
     // public function exportPDF1(Request $request)

@@ -17,14 +17,14 @@
                         <div class="card-body">
                             <div class="card-title">
                                 <!-- Isi judul card -->
-                                <h4 class="text-center my-4">Daftar Laporan Hasil Akhir</h4>
+                                <h4 class="text-center my-4">Riwayat Audit Mutu Internal</h4>
                             </div>
                             <hr />
 
                             <div class="d-flex mx-3">
-                                <form id="filterForm" action="{{ route('adminIndikator') }}" method="GET" class="d-flex">
+                                <form id="filterForm" action="{{ route('riwayat') }}" method="GET" class="d-flex">
                                     <select name="select_unit" id="select_unit" class="form-control  mr-3">
-                                        <option value="">Pilih Unit</option>
+                                        <option value="">Semua Unit</option>
                                         @foreach ($units as $unit)
                                             <option value="{{ $unit->id }}"
                                                 {{ $selectedUnit == $unit->id ? 'selected' : '' }}>{{ $unit->nama }}
@@ -32,7 +32,7 @@
                                         @endforeach
                                     </select>
                                     <select name="select_TA" id="select_TA" class="form-control ">
-                                        <option value="">Pilih Tahun Akademik</option>
+                                        <option value="">Semua Tahun Akademik</option>
                                         @foreach ($tahuns as $tahun)
                                             <option value="{{ $tahun->id }}"
                                                 {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}

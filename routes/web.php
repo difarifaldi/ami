@@ -57,7 +57,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/pernyataan', PernyataanStandarController::class);
     Route::resource('/indikator', IndikatorController::class);
     Route::resource('/lha', LhaController::class);
-    Route::get('/adminIndikator', [LhaController::class, 'adminIndikator'])->name('adminIndikator');
+    Route::get('/riwayat', [LhaController::class, 'riwayat'])->name('riwayat');
 
 
     // export pdf
