@@ -21,26 +21,28 @@
                             </div>
                             <hr />
 
-                            <div class="d-flex mx-3">
-                                <form id="filterForm" action="{{ route('riwayat') }}" method="GET" class="d-flex">
-                                    <select name="select_unit" id="select_unit" class="form-control  mr-3">
-                                        <option value="">Semua Unit</option>
-                                        @foreach ($units as $unit)
-                                            <option value="{{ $unit->id }}"
-                                                {{ $selectedUnit == $unit->id ? 'selected' : '' }}>{{ $unit->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <select name="select_TA" id="select_TA" class="form-control ">
-                                        <option value="">Semua Tahun Akademik</option>
-                                        @foreach ($tahuns as $tahun)
-                                            <option value="{{ $tahun->id }}"
-                                                {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </form>
-                            </div>
+                            @hasanyrole('admin' | 'manajemen')
+                                <div class="d-flex mx-3">
+                                    <form id="filterForm" action="{{ route('riwayat') }}" method="GET" class="d-flex">
+                                        <select name="select_unit" id="select_unit" class="form-control  mr-3">
+                                            <option value="">Semua Unit</option>
+                                            @foreach ($units as $unit)
+                                                <option value="{{ $unit->id }}"
+                                                    {{ $selectedUnit == $unit->id ? 'selected' : '' }}>{{ $unit->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <select name="select_TA" id="select_TA" class="form-control ">
+                                            <option value="">Semua Tahun Akademik</option>
+                                            @foreach ($tahuns as $tahun)
+                                                <option value="{{ $tahun->id }}"
+                                                    {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </form>
+                                </div>
+                            @endhasanyrole
 
                             <div class="table-responsive">
                                 <div class="card-body">

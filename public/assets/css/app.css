@@ -399,7 +399,7 @@ a:hover {
 
     height: 13px;
 
-    background: #673ab7;
+    background: #00cd98;
 
     position: absolute;
 
@@ -409,9 +409,9 @@ a:hover {
 
     transform: rotate(45deg);
 
-    border-top: 1px solid #673ab7;
+    border-top: 1px solid #00cd98;
 
-    border-left: 1px solid #673ab7;
+    border-left: 1px solid #00cd98;
 }
 
 .top-header .navbar .dropdown-menu::after {

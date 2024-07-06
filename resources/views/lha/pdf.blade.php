@@ -210,7 +210,7 @@
         <div class="penutup">
             <p>
                 Depok,
-                {{ \Carbon\Carbon::parse($instruments->first()->ami->tanggal)->format('d, M Y') }} <br />
+                {{ \Carbon\Carbon::parse($instruments->first()->ami->tanggal)->translatedFormat('d F Y') }} <br />
                 Auditor <br />
                 <br /><br />
                 {{ $instruments->first()->ami->auditorKetua->name }} <br>

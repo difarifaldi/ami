@@ -55,7 +55,8 @@
                                                     <td>{{ $audit->auditorAnggota2 ? $audit->auditorAnggota2->name : '-' }}
                                                     </td>
                                                     <td>{{ $audit->manajemen->name }}</td>
-                                                    <td> {{ \Carbon\Carbon::parse($audit->tanggal)->format('d, M Y') }}
+                                                    <td>
+                                                        {{ \Carbon\Carbon::parse($audit->tanggal)->translatedFormat('d F Y') }}
                                                     </td>
                                                 </tr>
                                             @empty

@@ -15,18 +15,13 @@
         </div>
         <!--navigation-->
         <ul class="metismenu" id="menu">
+
             <li>
-                <a href="javascript:;" class="has-arrow">
+                <a href="/">
                     <div class="parent-icon text-success"><i class="bx bx-home-alt"></i>
                     </div>
                     <div class="menu-title">Dashboard</div>
                 </a>
-                <ul>
-                    <li> <a href="/"><i class="bx bx-right-arrow-alt"></i>Home</a>
-                    </li>
-                    <!-- <li> <a href="index2.html"><i class="bx bx-right-arrow-alt"></i>Sales</a>
-      </li> -->
-                </ul>
             </li>
 
             {{-- Audit Mutu --}}
@@ -107,23 +102,22 @@
 
                     </ul>
                 </li>
+
+                {{-- History --}}
+                <li>
+                    <a class="has-arrow" href="javascript:;">
+                        <div class="parent-icon text-success"> <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <div class="menu-title ">LHA Audit</div>
+                    </a>
+                    <ul>
+                        <li> <a href="/lha"><i class="bi bi-file-post"></i>Daftar LHA Audit</a>
+                        </li>
+                        <li> <a href="/riwayat"><i class="bi bi-calendar4-week"></i>Audit Mutu Internal</a>
+                        </li>
+                    </ul>
+                </li>
             @endhasanyrole
-            {{-- History --}}
-            <li>
-                <a class="has-arrow" href="javascript:;">
-                    <div class="parent-icon text-success"> <i class="bi bi-file-earmark-text"></i>
-                    </div>
-                    <div class="menu-title ">LHA Audit</div>
-                </a>
-                <ul>
-                    <li> <a href="/lha"><i class="bi bi-file-post"></i>Daftar LHA Audit</a>
-                    </li>
-                    <li> <a href="/riwayat"><i class="bi bi-calendar4-week"></i>Audit Mutu Internal</a>
-                    </li>
-
-
-                </ul>
-            </li>
 
             @role('admin')
                 <li class="menu-label">Pengaturan</li>

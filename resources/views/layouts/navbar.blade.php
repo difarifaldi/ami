@@ -12,19 +12,28 @@
                      <?php
                      $userId = Auth::id();
                      if (Auth::user()->hasRole('auditee')) {
-                         $auditMutuIds = App\Models\AuditMutuInternal::where('status_audit', '=', 'belum selesai')->where('id_user_auditee', $userId)->pluck('id')->toArray();
+                         $auditData = App\Models\AuditMutuInternal::where('id_user_auditee', $userId);
+                     
+                         $auditHistory = $auditData->where('status_audit', '=', 'selesai')->get();
+                         $auditMutuIds = $auditData->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
                      
                          $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->get();
                      
                          $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('tanggapan_auditee')->whereNotNull('id_status_temuan')->count();
                      } elseif (Auth::user()->hasRole('auditor')) {
-                         $auditMutuIds = App\Models\AuditMutuInternal::where('status_audit', '=', 'belum selesai')->where('id_user_auditor_ketua', $userId)->orWhere('id_user_auditor_anggota1', $userId)->orWhere('id_user_auditor_anggota2', $userId)->pluck('id')->toArray();
+                         $auditData = App\Models\AuditMutuInternal::where('id_user_auditor_ketua', $userId)->orWhere('id_user_auditor_anggota1', $userId)->orWhere('id_user_auditor_anggota2', $userId);
+                     
+                         $auditHistory = $auditData->where('status_audit', '=', 'selesai')->get();
+                         $auditMutuIds = $auditData->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
                      
                          $instruments = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->get();
                      
                          $instrumentsCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNull('id_status_temuan')->whereNotNull('id_status_tercapai')->count();
                      } elseif (Auth::user()->hasRole('manajemen')) {
-                         $auditMutuIds = App\Models\AuditMutuInternal::where('id_user_manajemen', $userId)->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
+                         $auditData = App\Models\AuditMutuInternal::where('id_user_manajemen', $userId);
+                     
+                         $auditHistory = $auditData->where('status_audit', '=', 'selesai')->get();
+                         $auditMutuIds = $auditData->where('status_audit', '=', 'belum selesai')->pluck('id')->toArray();
                      
                          $instruments = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_temuan')->whereNotNull('id_status_tercapai')->whereNotNull('tanggapan_auditee')->whereNull('id_status_akhir')->get();
                      
@@ -36,7 +45,56 @@
                      }
                      ?>
 
+                     {{-- Riwayat Dropdown  --}}
+                     @unlessrole('admin')
+                         <li class="nav-item dropdown dropdown-lg">
+                             <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative "
+                                 href="javascript:;" data-toggle="dropdown"> <i
+                                     class="bi bi-calendar3 vertical-align-middle "></i>
+                             </a>
+                             <div class="dropdown-menu dropdown-menu-right">
+                                 <a href="javascript:;">
+                                 </a>
+                                 <div class="header-notifications-list mt-2">
+                                     @forelse ($auditHistory as $audit)
+                                         <a class="dropdown-item"
+                                             href="{{ route('riwayat', ['select_unit' => $audit->unit->id, 'select_TA' => $audit->tahunAkademik->id]) }}">
+                                             <div class="media align-items-center">
 
+                                                 <div class="media-body">
+                                                     <h6 class="msg-name font-weight-bold mb-1">
+                                                         {{ $audit->unit->nama }}<span
+                                                             class="msg-time float-right">{{ $audit->tanggal->diffForHumans() }}</span>
+
+                                                     </h6>
+
+                                                     <p class="msg-info">
+                                                         {{ $audit->tahunAkademik->nama }}
+                                                     </p>
+
+
+                                                 </div>
+                                             </div>
+                                         </a>
+                                     @empty
+
+                                         <a class="dropdown-item" href="javascript:;">
+                                             <div class="media align-items-center">
+                                                 <div class="notify bg-light-danger text-danger"><i
+                                                         class="bx bx-task-x"></i>
+                                                 </div>
+                                                 <div class="media-body">
+                                                     <h6 class="msg-name font-weight-bold mb-1">Riwayat Kosong</h6>
+                                                 </div>
+                                             </div>
+                                         </a>
+                                     @endforelse
+                                 </div>
+                             </div>
+                         </li>
+                     @endunlessrole
+
+                     {{-- Notifikasi --}}
                      <li class="nav-item dropdown dropdown-lg ">
                          <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative "
                              href="javascript:;" data-toggle="dropdown"> <i
@@ -103,8 +161,7 @@
                      </li>
 
 
-
-
+                     {{-- Akun dropdown --}}
                      <li class="nav-item dropdown dropdown-user-profile">
                          <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
                              data-toggle="dropdown">

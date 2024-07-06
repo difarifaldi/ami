@@ -10,6 +10,10 @@ class AuditMutuInternal extends Model
     use HasFactory;
     protected $guarded = [''];
 
+    protected $casts = [
+        'tanggal' => 'datetime',
+    ];
+
     public function unit()
     {
         return $this->belongsTo(Unit::class, 'id_unit');
