@@ -7,7 +7,7 @@
                 <div class="page-content">
 
                     <!--statistik Status Start-->
-                    <div class="row">
+                    <div class="row justify-content-center">
                         <div class="col-12 col-lg-3">
                             <div class="card radius-15 bg-wall">
                                 <div class="card-body">
@@ -48,14 +48,14 @@
                             </div>
                         </div>
                         <div class="col-12 col-lg-3">
-                            <div class="card radius-15 bg-rose">
+                            <div class="card radius-15 bg-sunset">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <h2 class="mb-0 text-white">
                                                 {{ $statusInstrument->where('id_status_temuan', 1)->count() }} </h2>
                                         </div>
-                                        <div class="ml-auto font-35 text-white"><i class="bx bx-tachometer"></i>
+                                        <div class="ml-auto font-35 text-white"><i class="bi bi-exclamation-triangle"></i>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center">
@@ -66,27 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-3">
-                            <div class="card radius-15 bg-sunset">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            <h2 class="mb-0 text-white">
-                                                {{ $statusInstrument->where('id_status_temuan', 4)->count() }} </h2>
-                                        </div>
-                                        <div class="ml-auto font-35 text-white"><i class="bi bi-exclamation-triangle"></i>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            <p class="mb-0 text-white">Menyimpang</p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> 
+                    </div>
                     <!--statistik Status End-->
 
                     <div class="card radius-15">
@@ -109,7 +89,7 @@
                                 <canvas id="chartData" width="400" height="400"></canvas>
                             </div>
                         </div>
-                    </div> 
+                    </div>
 
                     <div class="card-deck">
                         <!-- UPT Urusan Internasional (KUI) -->
@@ -217,7 +197,8 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3 m-0">
-                                    <select name="select_TA_Perawatan" id="select_TA_Perawatan" class="form-control w-50">
+                                    <select name="select_TA_Perawatan" id="select_TA_Perawatan"
+                                        class="form-control w-50">
                                         @foreach ($tahuns as $tahun)
                                             <option value="{{ $tahun->id }}"
                                                 {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}

@@ -47,6 +47,8 @@
                                                     <td>{{ $audit->unit->nama }}
                                                         @if ($audit->status_audit == 'selesai')
                                                             <span class="badge text-white bg-success ">Selesai</span>
+                                                        @else
+                                                            <span class="badge text-white bg-sunset ">Berjalan</span>
                                                         @endif
                                                     </td>
                                                     <td>{{ $audit->auditee->name }}</td>
