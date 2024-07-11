@@ -56,7 +56,7 @@
                                                 <th scope="col">Bukti</th>
                                                 <th scope="col">Status Ketercapaian</th>
                                                 <th scope="col">Temuan</th>
-                                                <th scope="col">Link tindak Lanjut</th>
+                                                {{-- <th scope="col">Link tindak Lanjut</th> --}}
                                                 <th scope="col">Status Temuan</th>
                                                 <th scope="col">Jadwal</th>
                                                 <th scope="col">Status Akhir</th>
@@ -71,7 +71,7 @@
                                                     <td>{{ $instrument->bukti }}</td>
                                                     <td>{{ $instrument->statusTercapai->nama }}</td>
                                                     <td>{{ $instrument->temuan_audit }}</td>
-                                                    <td>{{ $instrument->link }}</td>
+                                                    {{-- <td>{{ $instrument->link }}</td> --}}
                                                     <td>{{ $instrument->statusTemuan->nama }}</td>
                                                     <td>{{ $instrument->jadwal }}</td>
                                                     <td>{{ $instrument->statusAkhir->nama }}</td>

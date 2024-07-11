@@ -23,7 +23,11 @@
                      
                          //  Auditor
                      } elseif (Auth::user()->hasRole('auditor')) {
-                         $auditHistory = App\Models\AuditMutuInternal::where('status_audit', '=', ' selesai')->where('id_user_auditor_ketua', $userId)->orWhere('id_user_auditor_anggota1', $userId)->orWhere('id_user_auditor_anggota2', $userId)->get();
+                         $auditHistory = App\Models\AuditMutuInternal::where('status_audit', 'selesai')
+                             ->where(function ($query) use ($userId) {
+                                 $query->where('id_user_auditor_ketua', $userId)->orWhere('id_user_auditor_anggota1', $userId)->orWhere('id_user_auditor_anggota2', $userId);
+                             })
+                             ->get();
                      
                          $auditMutuIds = App\Models\AuditMutuInternal::where('status_audit', '=', 'belum selesai')->where('id_user_auditor_ketua', $userId)->orWhere('id_user_auditor_anggota1', $userId)->orWhere('id_user_auditor_anggota2', $userId)->pluck('id')->toArray();
                      
