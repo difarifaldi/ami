@@ -140,6 +140,29 @@
             text-align: center;
             font-size: 12pt;
         }
+
+        /* Form PTK*/
+        .ptk-page h3 {
+            margin-top: 0.5cm;
+            font-size: 14px
+                /* Kurangi margin top */
+        }
+
+        .ptk-page table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            page-break-inside: auto;
+        }
+
+        .ptk-page th,
+        .ptk-page td {
+
+            padding: 20px;
+            text-align: center;
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
     </style>
 </head>
 
@@ -278,7 +301,8 @@
             </tr>
 
             <tr>
-                <td style="background-color: #d9d9d9">Anggota Auditor</td>
+                <td style="background-color: #d9d9d9" @if ($instruments->first()->ami->auditorAnggota2) rowspan="2" @endif>Anggota
+                    Auditor</td>
                 <td>{{ $instruments->first()->ami->auditorAnggota1->name }}</td>
                 <td>Tanda tangan <br>
                     <?php
@@ -300,9 +324,34 @@
                 </td>
             </tr>
 
+            @if (isset($instruments->first()->ami->auditorAnggota2))
+                <tr>
+                    <td>{{ $instruments->first()->ami->auditorAnggota2 ? $instruments->first()->ami->auditorAnggota2->name : '' }}
+                    </td>
+                    <td>Tanda tangan <br>
+                        <?php
+                        $ttdValue3 = $instruments->first()->ami->auditorAnggota2->ttd;
+                        if ($ttdValue3) {
+                            $pathttd3 = public_path('storage/' . $ttdValue3);
+                            if (file_exists($pathttd3)) {
+                                $typettd3 = pathinfo($pathttd3, PATHINFO_EXTENSION);
+                                $datattd3 = file_get_contents($pathttd3);
+                                $base64ttd3 = 'data:image/' . $typettd3 . ';base64,' . base64_encode($datattd3);
+                            } else {
+                                echo 'File tidak ditemukan: ' . $pathttd3;
+                            }
+                        }
+                        ?>
+                        @isset($base64ttd3)
+                            <img src="{{ $base64ttd3 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                        @endisset
+                    </td>
+                </tr>
+            @endif
 
 
         </table>
+
         <h3>II. TUJUAN DAN RUANG LINGKUP AUDIT</h3>
         <ul>
             <li>
@@ -315,6 +364,7 @@
                 unitnya
             </li>
         </ul>
+
         <h3>
             III. TEMUAN POSITIF
             <span style="font-style: italic; font-weight: lighter">
@@ -326,6 +376,7 @@
                 <th>No</th>
                 <th>Deskripsi / Uraian Temuan</th>
             </tr>
+
             @foreach ($instruments as $instrument)
                 <tr>
                     <td>{{ $instrument->indikator->no }}</td>
@@ -345,7 +396,7 @@
                 <tr>
                     <th rowspan="2">No</th>
                     <th rowspan="2">Deskripsi/ Uraian Temuan</th>
-                    <th colspan="4" style="text-align: center">
+                    <th colspan="3" style="text-align: center">
                         Kategori Temuan <br />
                         (beri tanda <span style="font-family: ZapfDingbats, sans-serif;">4</span> yang sesuai)
                     </th>
@@ -354,11 +405,11 @@
                     <th>Melampaui</th>
                     <th>Mencapai</th>
                     <th>Belum Mencapai</th>
-                    <th>Menyimpang</th>
+
                 </tr>
             </thead>
             <tbody>
-                @foreach ($instruments as $instrument)
+                @foreach ($positiveInstruments as $instrument)
                     <tr>
                         <td>{{ $instrument->indikator->no }}</td>
                         <td style="text-align: justify; padding: 12px">{!! $instrument->indikator->indikator !!}</td>
@@ -367,8 +418,6 @@
                         <td style="font-family: ZapfDingbats, sans-serif; text-align: center">{!! $instrument->statusTemuan->nama == 'tercapai' ? '4' : '' !!}
                         </td>
                         <td style="font-family: ZapfDingbats, sans-serif; text-align: center">{!! $instrument->statusTemuan->nama == 'belum mencapai' ? '4' : '' !!}
-                        </td>
-                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">{!! $instrument->statusTemuan->nama == 'menyimpang' ? '4' : '' !!}
                         </td>
 
                     </tr>
@@ -419,6 +468,130 @@
                 @endforeach
             </ul>
         </ul>
+    </div>
+
+    <div class="ptk-page">
+        <table>
+            <thead style="background-color: gray">
+                <tr>
+                    <th style="width: 15%">Nomor PTK</th>
+                    <th style="width: 15%">Nomor Indikator</th>
+                    <th style="width: 55%">Deskripsi Uraian</th>
+                    <th style="width: 20%">Capaian Standar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($negativeInstruments as $instrument)
+                    <tr>
+                        <td style="width: 15%">{{ $loop->iteration }}</td>
+                        <td style="width: 15%">{{ $instrument->indikator->no }}</td>
+                        <td style="width: 55%">{!! $instrument->indikator->indikator !!}</td>
+                        <td style="width: 20%">{{ $instrument->statusTemuan->nama }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <table>
+            <thead style="background-color: gray">
+                <tr>
+                    <th style="width: 15%">Nomor PTK</th>
+                    <th style="width: 15%">Nomor Indikator</th>
+                    <th style="width: 50%">Rencana Perbaikan</th>
+                    <th style="width: 20%">Jadwal Perbaikan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($negativeInstruments as $instrument)
+                    <tr>
+                        <td style="width: 15%">{{ $loop->iteration }}</td>
+                        <td style="width: 15%">{{ $instrument->indikator->no }}</td>
+                        <td style="width: 55%">{{ $instrument->rencana_perbaikan }}</td>
+                        <td style="width: 20%">
+                            {{ $instrument->jadwal_penyelesaian ? \Carbon\Carbon::parse($instrument->jadwal_penyelesaian)->format('d M Y') : '-' }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <table>
+            <tr>
+                <td colspan="4" style="background-color: gray">Tempat dan Tanggal Penandatanganan</td>
+            </tr>
+            <tr>
+                <td>Nama Auditee</td>
+                <td>Tanda Tangan</td>
+                <td>Nama Ketua Auditor</td>
+                <td>Tanda Tangan</td>
+            </tr>
+            <tr>
+                <td>{{ $instruments->first()->ami->auditee->name }}</td>
+                <td>
+                    <?php
+                    $ttdValue4 = $instruments->first()->ami->auditee->ttd;
+                    if ($ttdValue4) {
+                        $pathttd4 = public_path('storage/' . $ttdValue4);
+                        if (file_exists($pathttd4)) {
+                            $typettd4 = pathinfo($pathttd4, PATHINFO_EXTENSION);
+                            $datattd4 = file_get_contents($pathttd4);
+                            $base64ttd4 = 'data:image/' . $typettd4 . ';base64,' . base64_encode($datattd4);
+                        } else {
+                            echo 'File tidak ditemukan: ' . $pathttd4;
+                        }
+                    }
+                    ?>
+                    @isset($base64ttd4)
+                        <img src="{{ $base64ttd4 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                    @endisset
+                </td>
+                <td>{{ $instruments->first()->ami->auditorKetua->name }}</td>
+                <td>
+                    <?php
+                    $ttdValue1 = $instruments->first()->ami->auditorKetua->ttd;
+                    if ($ttdValue1) {
+                        $pathttd1 = public_path('storage/' . $ttdValue1);
+                        if (file_exists($pathttd1)) {
+                            $typettd1 = pathinfo($pathttd1, PATHINFO_EXTENSION);
+                            $datattd1 = file_get_contents($pathttd1);
+                            $base64ttd1 = 'data:image/' . $typettd1 . ';base64,' . base64_encode($datattd1);
+                        } else {
+                            echo 'File tidak ditemukan: ' . $pathttd1;
+                        }
+                    }
+                    ?>
+                    @isset($base64ttd1)
+                        <img src="{{ $base64ttd1 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                    @endisset
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="background-color: gray">Direviu oleh:</td>
+            </tr>
+            <tr>
+                <td>Penjaminan Mutu</td>
+                <td>Kepala Penjaminan Mutu</td>
+                <td>
+                    <?php
+                    $ttdValue5 = $instruments->first()->ami->manajemen->ttd;
+                    if ($ttdValue5) {
+                        $pathttd5 = public_path('storage/' . $ttdValue5);
+                        if (file_exists($pathttd5)) {
+                            $typettd5 = pathinfo($pathttd5, PATHINFO_EXTENSION);
+                            $datattd5 = file_get_contents($pathttd5);
+                            $base64ttd5 = 'data:image/' . $typettd5 . ';base64,' . base64_encode($datattd5);
+                        } else {
+                            echo 'File tidak ditemukan: ' . $pathttd5;
+                        }
+                    }
+                    ?>
+                    @isset($base64ttd5)
+                        <img src="{{ $base64ttd5 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                    @endisset
+                </td>
+
+            </tr>
+        </table>
     </div>
 
 

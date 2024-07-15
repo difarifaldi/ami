@@ -40,7 +40,7 @@
                     <h4 class="mt-5 font-weight-bold">Lupa Password?</h4>
 
                     <p class="text-muted">Masukan email yang terdaftar di sistem SIAMI</p>
-                    <form action="{{ route('forgot-password') }}" method="POST">
+                    <form action="{{ route('password-post') }}" method="POST">
                         @csrf
                         <div class="form-group mt-5">
                             <label>Email</label>

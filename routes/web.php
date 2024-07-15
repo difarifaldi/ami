@@ -34,20 +34,21 @@ Route::get('/login', function () {
     }
     return view('login');
 })->name('login');
-Route::post('/login', [UserController::class, 'check_login'])->name('login');
+
+Route::post('/login', [UserController::class, 'check_login'])->name('login.post');
 
 // Logout
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
-// Register
-Route::get('/register', [UserController::class, 'index'])->name('register.index');
-Route::post('/register', [UserController::class, 'store'])->name('register.store');
+
+
 Route::get('/forgot-password', [UserController::class, 'forgotPassword'])->name('forgot-password');
-Route::post('/forgot-password', [UserController::class, 'requestPassword'])->name('forgot-password');
+Route::post('/password-post', [UserController::class, 'requestPassword'])->name('password-post');
+
 
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
-    // standar
+
     Route::resource('/instrument', InstrumenAuditController::class);
     Route::post('/instrument/selesaikan-audit', [InstrumenAuditController::class, 'selesaikanAudit'])->name('instrument.selesaikan-audit');
 
@@ -100,5 +101,8 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/admin/delete-user/{id}', [UserController::class, 'deleteUser'])->name('admin.delete-user');
         Route::get('/admin/edit-user/{id}', [UserController::class, 'editUser'])->name('admin.edit-user');
         Route::post('/admin/update-user', [UserController::class, 'updateUser'])->name('admin.update-user');
+        // Register
+        Route::get('/register', [UserController::class, 'index'])->name('register.index');
+        Route::post('/register', [UserController::class, 'store'])->name('register.store');
     });
 });

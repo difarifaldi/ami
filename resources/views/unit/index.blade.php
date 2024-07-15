@@ -30,7 +30,7 @@
                                             <tr>
                                                 <th scope="col">No</th>
                                                 <th scope="col">Nama</th>
-                                                <th scope="col">Logo</th>
+                                                <th scope="col">Sampul</th>
                                                 <th scope="col">Aksi</th>
 
                                             </tr>

@@ -37,7 +37,7 @@
                      
                          //  Manajemen
                      } elseif (Auth::user()->hasRole('manajemen')) {
-                         $auditHistory = App\Models\AuditMutuInternal::where('status_audit', '=', 'belum selesai')->where('id_user_manajemen', $userId)->get();
+                         $auditHistory = App\Models\AuditMutuInternal::where('status_audit', '=', 'selesai')->where('id_user_manajemen', $userId)->get();
                      
                          $auditMutuIds = App\Models\AuditMutuInternal::where('status_audit', '=', 'belum selesai')->where('id_user_manajemen', $userId)->pluck('id')->toArray();
                      
@@ -61,9 +61,14 @@
                                      class="bi bi-calendar3 vertical-align-middle "></i>
                              </a>
                              <div class="dropdown-menu dropdown-menu-right">
+
                                  <a href="javascript:;">
+                                     <div class="msg-header bg-wall">
+                                         <h6 class="msg-header-title"> Riwayat Audit</h6>
+
+                                     </div>
                                  </a>
-                                 <div class="header-notifications-list mt-2">
+                                 <div class="header-notifications-list ">
                                      @forelse ($auditHistory as $audit)
                                          <a class="dropdown-item"
                                              href="{{ route('riwayat', ['select_unit' => $audit->unit->id, 'select_TA' => $audit->tahunAkademik->id]) }}">

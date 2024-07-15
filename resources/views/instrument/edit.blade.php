@@ -237,7 +237,7 @@
                                                     </div>
 
                                                     <!-- Link -->
-                                                    {{-- <div class="form-group mt-4">
+                                                    <div class="form-group mt-4">
                                                         <label>Link</label>
                                                         <input type="text" name="link" id="link"
                                                             class="form-control bg-white @error('link') is-invalid @enderror"
@@ -251,7 +251,7 @@
                                                         <a href="{{ $instrument->link }}" target="_blank"
                                                             class="btn btn-sm btn-primary mt-2 {{ !$instrument->link ? 'd-none' : '' }}">Buka
                                                             Tautan</a>
-                                                    </div> --}}
+                                                    </div>
 
                                                     <!-- Status Temuan -->
                                                     <div class="form-group mt-4">

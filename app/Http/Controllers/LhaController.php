@@ -19,6 +19,16 @@ class LhaController extends Controller
             $audits = AuditMutuInternal::with(['instrument'])
                 ->where('id_user_manajemen', $userID)
                 ->get();
+        } else if (auth()->user()->hasRole('auditee')) {
+            $audits = AuditMutuInternal::with(['instrument'])
+                ->where('id_user_auditee', $userID)
+                ->get();
+        } else if (auth()->user()->hasRole('auditor')) {
+            $audits = AuditMutuInternal::with(['instrument'])
+                ->where(function ($query) use ($userID) {
+                    $query->where('id_user_auditor_ketua', $userID)->orWhere('id_user_auditor_anggota1', $userID)->orWhere('id_user_auditor_anggota2', $userID);
+                })
+                ->get();
         } else {
             $audits = AuditMutuInternal::with(['instrument'])->get();
         }
@@ -40,6 +50,8 @@ class LhaController extends Controller
 
         // Dapatkan semua instrumen yang terkait dengan audit
         $instruments = InstrumenAudit::whereIn('id_AMI', $ami)->get();
+        $positiveInstruments = InstrumenAudit::whereIn('id_AMI', $ami)->whereNot('id_status_temuan', 1)->get();
+        $negativeInstruments = InstrumenAudit::whereIn('id_AMI', $ami)->where('id_status_temuan', 1)->get();
 
         // Periksa apakah ada InstrumenAudit yang id_status_temuan-nya null
         $hasNullStatusTemuan = $instruments->whereNull('id_status_temuan')->isNotEmpty();
@@ -55,7 +67,7 @@ class LhaController extends Controller
         }
 
         // Jika semua pemeriksaan lolos, buat dan unduh PDF
-        $pdf = PDF::loadView('lha.pdf', compact('instruments'))->setPaper('a4', 'portrait');
+        $pdf = PDF::loadView('lha.pdf', compact('instruments', 'negativeInstruments', 'positiveInstruments'))->setPaper('a4', 'portrait');
 
         return $pdf->download('Form LHA AMI Manajemen ' . $auditMutuInternals->first()->unit->nama . ' ' . $auditMutuInternals->first()->tahunAkademik->nama . '.pdf');
     }

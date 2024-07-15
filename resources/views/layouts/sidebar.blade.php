@@ -88,7 +88,7 @@
             </li>
 
             {{-- Status Audit --}}
-            @hasanyrole('admin|manajemen')
+            @hasanyrole('manajemen|admin|auditor')
                 <li>
                     <a class="has-arrow" href="javascript:;">
                         <div class="parent-icon text-success"> <i class="bx bx-shape-circle"></i>

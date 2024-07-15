@@ -34,7 +34,7 @@
                                 <div class="text-center">
                                     <h3 class="mt-4 font-weight-bold text-success">Sistem Audit Mutu Internal</h3>
                                 </div>
-                                <form action="{{ route('login') }}" method="POST">
+                                <form action="{{ route('login.post') }}" method="POST">
                                     @csrf
                                     <div class="form-group mt-4">
                                         <label>Email</label>

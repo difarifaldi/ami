@@ -100,7 +100,7 @@
                                                 <th scope="col">Status Ketercapaian</th>
                                                 @hasanyrole('auditor|manajemen')
                                                     <th scope="col">Temuan Audit</th>
-                                                    {{-- <th scope="col">Link tindak Lanjut</th> --}}
+                                                    <th scope="col">Link tindak Lanjut</th>
                                                     <th scope="col">Status Temuan</th>
                                                 @endhasanyrole
                                             @endhasanyrole
@@ -206,11 +206,11 @@
                                                             <td class="{{ $bg }}">
                                                                 {{ $instrument->temuan_audit ? $instrument->temuan_audit : '-' }}
                                                             </td>
-                                                            {{-- <td class="{{ $bg }}">
+                                                            <td class="{{ $bg }}">
                                                                 <a href="{{ $instrument->link }}" target="_blank">
                                                                     {{ $instrument->link ? $instrument->link : '-' }}</a>
 
-                                                            </td> --}}
+                                                            </td>
                                                             <td class="{{ $bg }} {{ $colorTemuan }}">
                                                                 {{ $instrument->statusTemuan ? $instrument->statusTemuan->nama : '-' }}
                                                             </td>
