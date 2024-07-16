@@ -17,11 +17,17 @@
                         <div class="card-body">
                             <div class="card-title">
                                 <!-- Isi judul card -->
-                                <h4 class="text-center my-4">Riwayat Audit Mutu Internal</h4>
+                                @if (auth()->user()->hasRole('admin'))
+                                    <h4 class="text-center my-4">Riwayat Audit Mutu Internal</h4>
+                                @else
+                                    <h4 class="text-center mt-4">Riwayat AMI {{ $instruments->first()->ami->unit->nama }}
+                                    </h4>
+                                    <p class="text-center mb-4">{{ $instruments->first()->ami->tahunAkademik->nama }}</p>
+                                @endif
                             </div>
                             <hr />
 
-                            @hasanyrole('admin' | 'manajemen')
+                            @hasanyrole('admin')
                                 <div class="d-flex mx-3">
                                     <form id="filterForm" action="{{ route('riwayat') }}" method="GET" class="d-flex">
                                         <select name="select_unit" id="select_unit" class="form-control  mr-3">
@@ -56,7 +62,7 @@
                                                 <th scope="col">Bukti</th>
                                                 <th scope="col">Status Ketercapaian</th>
                                                 <th scope="col">Temuan</th>
-                                                {{-- <th scope="col">Link tindak Lanjut</th> --}}
+                                                <th scope="col">Link tindak Lanjut</th>
                                                 <th scope="col">Status Temuan</th>
                                                 <th scope="col">Jadwal</th>
                                                 <th scope="col">Status Akhir</th>
@@ -71,7 +77,7 @@
                                                     <td>{{ $instrument->bukti }}</td>
                                                     <td>{{ $instrument->statusTercapai->nama }}</td>
                                                     <td>{{ $instrument->temuan_audit }}</td>
-                                                    {{-- <td>{{ $instrument->link }}</td> --}}
+                                                    <td>{{ $instrument->link }}</td>
                                                     <td>{{ $instrument->statusTemuan->nama }}</td>
                                                     <td>{{ $instrument->jadwal }}</td>
                                                     <td>{{ $instrument->statusAkhir->nama }}</td>

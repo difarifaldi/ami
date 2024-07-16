@@ -9,6 +9,7 @@ use App\Models\tahunAkademik;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuditMutuInternalController extends Controller
 {
@@ -17,9 +18,26 @@ class AuditMutuInternalController extends Controller
      */
     public function index()
     {
-        $audits = AuditMutuInternal::all();
+        $userId = Auth::id();
+        $audits = collect(); // Inisialisasi variabel audits sebagai koleksi kosong
+
+        if (auth()->user()->hasRole('auditee')) {
+            $audits = AuditMutuInternal::where('id_user_auditee', $userId)->get();
+        } elseif (auth()->user()->hasRole('auditor')) {
+            $audits = AuditMutuInternal::where(function ($query) use ($userId) {
+                $query->where('id_user_auditor_ketua', $userId)
+                    ->orWhere('id_user_auditor_anggota1', $userId)
+                    ->orWhere('id_user_auditor_anggota2', $userId);
+            })->get();
+        } elseif (auth()->user()->hasRole('manajemen')) {
+            $audits = AuditMutuInternal::where('id_user_manajemen', $userId)->get();
+        } else {
+            $audits = AuditMutuInternal::all(); // Jika pengguna tidak memiliki salah satu peran di atas, ambil semua audit
+        }
+
         return view('ami.index', compact('audits'));
     }
+
 
     /**
      * Show the form for creating a new resource.
