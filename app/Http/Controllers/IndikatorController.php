@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Indikator;
 use App\Http\Requests\StoreIndikatorRequest;
 use App\Http\Requests\UpdateIndikatorRequest;
+use App\Models\InstrumenAudit;
 use App\Models\PernyataanStandar;
 use App\Models\Unit;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class IndikatorController extends Controller
 {
@@ -38,16 +40,35 @@ class IndikatorController extends Controller
      */
     public function store(Request $request)
     {
+        try {
+            // Validasi data yang diterima dari request
+            $validatedData = $request->validate([
+                'no' => 'required',
+                'indikator' => 'required',
+                'id_pernyataan' => 'required',
+            ]);
 
-        $validatedData = $request->validate([
-            'no' => 'required',
-            'indikator' => 'required',
-            'id_pernyataan' => 'required',
-        ]);
+            // Cek apakah indikator dengan no dan id_pernyataan yang sama sudah ada
+            $exists = Indikator::where('no', $validatedData['no'])
+                ->where('id_pernyataan', $validatedData['id_pernyataan'])
+                ->exists();
 
-        Indikator::create($validatedData);
-        return redirect('/indikator/create')->with('success', 'Indikator baru berhasil ditambahkan');
+            if ($exists) {
+                // Jika sudah ada, kembalikan pesan kesalahan
+                return redirect()->back()->with('failed', 'Indikator sudah ada');
+            }
+
+            // Jika tidak ada, simpan data indikator baru
+            Indikator::create($validatedData);
+
+            // Kembalikan pesan sukses setelah menyimpan data
+            return redirect()->back()->with('success', 'Indikator berhasil ditambahkan');
+        } catch (\Exception $e) {
+            // Tangani pengecualian dengan menampilkan pesan kesalahan
+            dd($e->getMessage());
+        }
     }
+
 
 
     public function getPernyataanByUnit($unitId)
@@ -98,6 +119,26 @@ class IndikatorController extends Controller
      */
     public function destroy(Indikator $indikator)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $checkInstrument = InstrumenAudit::where('id_indikator', $indikator->id)->first();
+
+
+            if ($checkInstrument) {
+                DB::rollBack();
+                return response()->json(['message' => 'Tidak dapat menghapus Indikator karena masih terkait dengan entitas lain.'], 400);
+            }
+
+            $indikator->delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Indikator berhasil dihapus!'], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => 'Terjadi kesalahan!'], 500);
+        }
     }
 }

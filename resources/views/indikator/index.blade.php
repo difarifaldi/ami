@@ -151,10 +151,6 @@
         });
     </script>
 
-
-
-
-
     @if ($message = Session::get('success'))
         <script>
             Swal.fire({
