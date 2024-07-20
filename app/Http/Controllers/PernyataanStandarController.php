@@ -41,9 +41,13 @@ class PernyataanStandarController extends Controller
             'pernyataan_standar' => 'required',
             'id_unit' => 'required',
         ]);
+        $existPernyataan = PernyataanStandar::where('no_ps', $validatedData['no_ps'])->where('id_unit', $validatedData['id_unit'])->where('status', 'aktif')->exists();
 
+        if ($existPernyataan) {
+            return redirect()->back()->with('failed', 'Sudah terdapat pernyataan standar pada unit ini');
+        }
         PernyataanStandar::create($validatedData);
-        return redirect('/pernyataan/create')->with('success', 'Pernyataan baru berhasil ditambahkan');
+        return redirect('/pernyataan/create')->with('success', 'Pernyataan standar baru berhasil ditambahkan');
     }
 
     /**
@@ -74,7 +78,15 @@ class PernyataanStandarController extends Controller
             'pernyataan_standar' => 'required',
             'id_unit' => 'required',
         ]);
+        $existPernyataan = PernyataanStandar::where('no_ps', $validatedData['no_ps'])
+            ->where('id_unit', $validatedData['id_unit'])
+            ->where('status', 'aktif')
+            ->where('id', '!=', $pernyataan->id) // Pastikan tidak termasuk data yang sedang diupdate
+            ->exists();
 
+        if ($existPernyataan) {
+            return redirect()->back()->with('failed', 'Sudah terdapat pernyataan standar pada unit ini');
+        }
         $pernyataan->update($validatedData);
         return redirect('/pernyataan')->with('success', 'Pernyataan berhasil diubah');
     }
@@ -106,4 +118,42 @@ class PernyataanStandarController extends Controller
             return response()->json(['message' => 'Terjadi kesalahan!'], 500);
         }
     }
+
+    public function togglePernyataanStatus(Request $request)
+    {
+        try {
+            // Ambil ID pernyataan dari request
+            $pernyataanId = $request->input('pernyataanId');
+            $pernyataan = PernyataanStandar::findOrFail($pernyataanId);
+    
+            // Ambil nomor pernyataan dan ID unit dari pernyataan yang sedang diupdate
+            $noPernyataan = $pernyataan->no_ps;
+            $idUnit = $pernyataan->id_unit;
+    
+            // Cek jika ada pernyataan lain dengan nomor yang sama dan unit yang sama yang statusnya aktif
+            $existingActive = PernyataanStandar::where('no_ps', $noPernyataan)
+                ->where('id_unit', $idUnit)
+                ->where('status', 'aktif')
+                ->where('id', '!=', $pernyataanId)
+                ->exists();
+    
+            // Jika pernyataan yang sama sudah aktif, dan status yang sedang diupdate ingin diubah menjadi aktif
+            if ($existingActive && $pernyataan->status === 'tidak aktif') {
+                return response()->json([
+                    'error' => 'Tidak dapat mengubah status menjadi aktif. Pernyataan dengan nomor yang sama sudah ada dan aktif.'
+                ], 400);
+            }
+    
+            // Toggle status pernyataan
+            $pernyataan->status = $pernyataan->status === 'aktif' ? 'tidak aktif' : 'aktif';
+    
+            // Simpan perubahan status ke dalam database
+            $pernyataan->save();
+    
+            return response()->json(['message' => 'Status pernyataan berhasil diperbarui!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
 }

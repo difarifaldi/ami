@@ -49,12 +49,13 @@
                                                     <div class="custom-control custom-switch">
                                                         <input type="checkbox" class="custom-control-input"
                                                             id="status_{{ $pernyataan->id }}"
-                                                            onchange="toggleUserStatus({{ $pernyataan->id }})"
+                                                            onchange="togglePernyataanStatus({{ $pernyataan->id }})"
                                                             {{ $pernyataan->status === 'aktif' ? 'checked' : '' }}>
                                                         <label class="custom-control-label"
                                                             for="status_{{ $pernyataan->id }}">{{ ucfirst($pernyataan->status) }}</label>
                                                     </div>
                                                 </td>
+
                                                 <td>
                                                     <a href="/pernyataan/{{ $pernyataan->id }}/edit"
                                                         class="btn btn-warning btn-sm"><i class="bi bi-brush"></i></a>
@@ -158,6 +159,54 @@
             }
         });
     </script>
+
+    <script>
+        function togglePernyataanStatus(pernyataanId) {
+            fetch(`/pernyataan/toggle-pernyataan-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        pernyataanId: pernyataanId
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.error || 'Network response was not ok');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Jika berhasil, tampilkan SweetAlert dan refresh halaman
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Status pernyataan berhasil diperbarui!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        location.reload(); // Refresh halaman setelah berhasil memperbarui status
+                    });
+                })
+                .catch(error => {
+                    // Jika ada kesalahan, tampilkan pesan error dan refresh halaman
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi kesalahan!',
+                        text: error.message
+                    }).then(() => {
+                        location.reload(); // Refresh halaman setelah menampilkan pesan error
+                    });
+                    console.error('There was an error!', error);
+                });
+        }
+    </script>
+
+
+
 
 
 

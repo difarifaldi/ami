@@ -114,4 +114,14 @@
             });
         </script>
     @endif
+    @if ($message = Session::get('failed'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: '{{ $message }}',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>
+    @endif
 @endsection

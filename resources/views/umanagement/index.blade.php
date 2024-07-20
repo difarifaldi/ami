@@ -214,15 +214,27 @@
                     return response.json();
                 })
                 .then(data => {
-                    alert('Status pengguna berhasil diperbarui!');
-                    // Refresh halaman setelah berhasil memperbarui status pengguna
-                    location.reload();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Status pengguna berhasil diperbarui!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        // Refresh halaman setelah berhasil memperbarui status pengguna
+                        location.reload();
+                    });
                 })
                 .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi kesalahan!',
+                        text: 'Tidak dapat memperbarui status pengguna.',
+                    });
                     console.error('There was an error!', error);
                 });
         }
     </script>
+
 
 
 

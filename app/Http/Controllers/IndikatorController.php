@@ -65,7 +65,7 @@ class IndikatorController extends Controller
             return redirect()->back()->with('success', 'Indikator berhasil ditambahkan');
         } catch (\Exception $e) {
             // Tangani pengecualian dengan menampilkan pesan kesalahan
-            dd($e->getMessage());
+            return redirect()->back()->with('failed', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 

@@ -69,22 +69,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/fetch-line-chart-data', [DashboardController::class, 'fetchLineChartData'])->name('fetch-line-chart-data');
 
 
-
-
-
-
-
     Route::get('/statusAudit', [StatusTemuanController::class, 'index'])->name('statusAudit.index');
     Route::get('/statusAudit/filter', [StatusTemuanController::class, 'filter'])->name('statusAudit.filter');
 
 
     Route::get('/pernyataan/by-unit/{unitId}', [IndikatorController::class, 'getPernyataanByUnit'])->name('pernyataan.byUnit');
-    // routes/web.php
+
     Route::get('/auditee/by-unit/{unitId}', [AuditMutuInternalController::class, 'getAuditeeByUnit']);
 
-
-
-
+    // status pernyataan
+    Route::post('/pernyataan/toggle-pernyataan-status', [PernyataanStandarController::class, 'togglePernyataanStatus'])->name('pernyataan.toggle-pernyataan-status');
 
     // Profile
     Route::get('/profile/edit-profile/{id}', [UserController::class, 'editProfile'])->name('profile.edit-profile');
