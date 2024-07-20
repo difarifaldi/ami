@@ -17,7 +17,9 @@ class IndikatorController extends Controller
      */
     public function index()
     {
-        $indikators = Indikator::all();
+        $pernyataanID = PernyataanStandar::where('status', 'aktif')->pluck('id');
+        $indikators = Indikator::whereIn('id_pernyataan', $pernyataanID)->get();
+
         return view('indikator.index', compact('indikators'));
     }
 

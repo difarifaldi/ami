@@ -8,6 +8,31 @@
 
     <title>LHA PDF</title>
     <style>
+        .identitas-unit {
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-sizing: border-box;
+            /* Pastikan padding dan border dihitung dalam lebar dan tinggi elemen */
+        }
+
+        /* CSS untuk gambar-unit */
+        .gambar-unit {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Gambar memenuhi div tanpa mengubah proporsi */
+            display: block;
+            /* Menghapus margin default pada gambar */
+        }
+
+
+
         .page-break {
             page-break-before: always;
             margin-top: 0;
@@ -167,12 +192,37 @@
 </head>
 
 <body>
+    <!-- Halaman Sampul Unit -->
+    <?php
+    $sampulUnit = $instruments->first()->ami->unit->gambar;
+    $base64Sampul = '';
+    
+    if ($sampulUnit) {
+        $pathSampul = public_path('storage/' . $sampulUnit);
+        if (file_exists($pathSampul)) {
+            $typeSampul = pathinfo($pathSampul, PATHINFO_EXTENSION);
+            $dataSampul = file_get_contents($pathSampul);
+            $base64Sampul = 'data:image/' . $typeSampul . ';base64,' . base64_encode($dataSampul);
+        } else {
+            echo 'File tidak ditemukan: ' . $pathSampul;
+        }
+    }
+    ?>
+
+    @if ($base64Sampul)
+        <div class="identitas-unit">
+            <img src="{{ $base64Sampul }}" class="gambar-unit">
+        </div>
+        <!-- Pisahkan halaman -->
+        <div class="page-break"></div>
+    @endif
+
     <!-- Halaman Cover -->
     <div class="cover-page">
         <table>
             <tr>
                 <th colspan="2" style="font-weight: 500">LAPORAN HASIL AUDIT <br> TAHUN 2024</th>
-                <th colspan="2">AUDIT MUTU INTERNAL <br> UNIT/BAGIAN <br>
+                <th colspan="2">AUDIT MUTU INTERNAL <br> UNIT <br>
                     {{ $instruments->first()->ami->unit->nama }}
                 </th>
             </tr>
@@ -211,10 +261,9 @@
                 ”Laporan Hasil Audit Mutu Internal unit kerja
                 <span style="font-weight: bold">{{ $instruments->first()->ami->unit->nama }}
                 </span>
-                PNJ Tahun 2024” ini dapat diselesaikan. Laporan ini disusun
+                PNJ” ini dapat diselesaikan. Laporan ini disusun
                 sebagai laporan hasil audit oleh Tim Audit Internal
-                berdasarkan Surat Tugas Direktur PNJ Nomor
-                1317/PL3/JM.01.00/2022 tanggal 8 Desember 2021 tentang
+                berdasarkan Surat Keputusan Direktur PNJ tentang
                 Pelaksanaan Audit Mutu Internal. <br />
                 Berdasarkan hasil audit terdapat beberapa temuan yang
                 keseluruhannya sudah mendapat tanggapan dari pihak unit
@@ -356,7 +405,7 @@
         <ul>
             <li>
                 Ketercapaian sasaran mutu dan indikator kinerja yang
-                terdapat dalam standar UPT KUI.
+                terdapat dalam standar {{ $instruments->first()->ami->unit->nama }}.
             </li>
             <li>Ketersediaan prosedur dan konsistensi pelaksanaannya</li>
             <li>
@@ -377,7 +426,7 @@
                 <th>Deskripsi / Uraian Temuan</th>
             </tr>
 
-            @foreach ($instruments as $instrument)
+            @foreach ($positiveInstruments as $instrument)
                 <tr>
                     <td>{{ $instrument->indikator->no }}</td>
                     <td> {!! $instrument->indikator->indikator !!}</td>
@@ -409,7 +458,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($positiveInstruments as $instrument)
+                @foreach ($instruments as $instrument)
                     <tr>
                         <td>{{ $instrument->indikator->no }}</td>
                         <td style="text-align: justify; padding: 12px">{!! $instrument->indikator->indikator !!}</td>
@@ -470,130 +519,134 @@
         </ul>
     </div>
 
-    <div class="ptk-page">
-        <table>
-            <thead style="background-color: gray">
-                <tr>
-                    <th style="width: 15%">Nomor PTK</th>
-                    <th style="width: 15%">Nomor Indikator</th>
-                    <th style="width: 55%">Deskripsi Uraian</th>
-                    <th style="width: 20%">Capaian Standar</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($negativeInstruments as $instrument)
+    @if ($hasNoNullStatusSelesai)
+
+        <h3 style="text-align: center">Form Permintaan Tindakan Koreksi</h3>
+        <div class="ptk-page">
+            <table>
+                <thead style="background-color: gray">
                     <tr>
-                        <td style="width: 15%">{{ $loop->iteration }}</td>
-                        <td style="width: 15%">{{ $instrument->indikator->no }}</td>
-                        <td style="width: 55%">{!! $instrument->indikator->indikator !!}</td>
-                        <td style="width: 20%">{{ $instrument->statusTemuan->nama }}</td>
+                        <th style="width: 15%">Nomor PTK</th>
+                        <th style="width: 15%">Nomor Indikator</th>
+                        <th style="width: 55%">Deskripsi Uraian</th>
+                        <th style="width: 20%">Capaian Standar</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($negativeInstruments as $instrument)
+                        <tr>
+                            <td style="width: 15%">{{ $loop->iteration }}</td>
+                            <td style="width: 15%">{{ $instrument->indikator->no }}</td>
+                            <td style="width: 55%">{!! $instrument->indikator->indikator !!}</td>
+                            <td style="width: 20%">{{ $instrument->statusTemuan->nama }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
 
-        <table>
-            <thead style="background-color: gray">
-                <tr>
-                    <th style="width: 15%">Nomor PTK</th>
-                    <th style="width: 15%">Nomor Indikator</th>
-                    <th style="width: 50%">Rencana Perbaikan</th>
-                    <th style="width: 20%">Jadwal Perbaikan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($negativeInstruments as $instrument)
+            <table>
+                <thead style="background-color: gray">
                     <tr>
-                        <td style="width: 15%">{{ $loop->iteration }}</td>
-                        <td style="width: 15%">{{ $instrument->indikator->no }}</td>
-                        <td style="width: 55%">{{ $instrument->rencana_perbaikan }}</td>
-                        <td style="width: 20%">
-                            {{ $instrument->jadwal_penyelesaian ? \Carbon\Carbon::parse($instrument->jadwal_penyelesaian)->format('d M Y') : '-' }}
-                        </td>
+                        <th style="width: 15%">Nomor PTK</th>
+                        <th style="width: 15%">Nomor Indikator</th>
+                        <th style="width: 50%">Rencana Perbaikan</th>
+                        <th style="width: 20%">Jadwal Perbaikan</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($negativeInstruments as $instrument)
+                        <tr>
+                            <td style="width: 15%">{{ $loop->iteration }}</td>
+                            <td style="width: 15%">{{ $instrument->indikator->no }}</td>
+                            <td style="width: 55%">{{ $instrument->rencana_perbaikan }}</td>
+                            <td style="width: 20%">
+                                {{ $instrument->jadwal_penyelesaian ? \Carbon\Carbon::parse($instrument->jadwal_penyelesaian)->format('d M Y') : '-' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
 
-        <table>
-            <tr>
-                <td colspan="4" style="background-color: gray">Tempat dan Tanggal Penandatanganan</td>
-            </tr>
-            <tr>
-                <td>Nama Auditee</td>
-                <td>Tanda Tangan</td>
-                <td>Nama Ketua Auditor</td>
-                <td>Tanda Tangan</td>
-            </tr>
-            <tr>
-                <td>{{ $instruments->first()->ami->auditee->name }}</td>
-                <td>
-                    <?php
-                    $ttdValue4 = $instruments->first()->ami->auditee->ttd;
-                    if ($ttdValue4) {
-                        $pathttd4 = public_path('storage/' . $ttdValue4);
-                        if (file_exists($pathttd4)) {
-                            $typettd4 = pathinfo($pathttd4, PATHINFO_EXTENSION);
-                            $datattd4 = file_get_contents($pathttd4);
-                            $base64ttd4 = 'data:image/' . $typettd4 . ';base64,' . base64_encode($datattd4);
-                        } else {
-                            echo 'File tidak ditemukan: ' . $pathttd4;
+            <table>
+                <tr>
+                    <td colspan="4" style="background-color: gray">Tempat dan Tanggal Penandatanganan</td>
+                </tr>
+                <tr>
+                    <td>Nama Auditee</td>
+                    <td>Tanda Tangan</td>
+                    <td>Nama Ketua Auditor</td>
+                    <td>Tanda Tangan</td>
+                </tr>
+                <tr>
+                    <td>{{ $instruments->first()->ami->auditee->name }}</td>
+                    <td>
+                        <?php
+                        $ttdValue4 = $instruments->first()->ami->auditee->ttd;
+                        if ($ttdValue4) {
+                            $pathttd4 = public_path('storage/' . $ttdValue4);
+                            if (file_exists($pathttd4)) {
+                                $typettd4 = pathinfo($pathttd4, PATHINFO_EXTENSION);
+                                $datattd4 = file_get_contents($pathttd4);
+                                $base64ttd4 = 'data:image/' . $typettd4 . ';base64,' . base64_encode($datattd4);
+                            } else {
+                                echo 'File tidak ditemukan: ' . $pathttd4;
+                            }
                         }
-                    }
-                    ?>
-                    @isset($base64ttd4)
-                        <img src="{{ $base64ttd4 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
-                    @endisset
-                </td>
-                <td>{{ $instruments->first()->ami->auditorKetua->name }}</td>
-                <td>
-                    <?php
-                    $ttdValue1 = $instruments->first()->ami->auditorKetua->ttd;
-                    if ($ttdValue1) {
-                        $pathttd1 = public_path('storage/' . $ttdValue1);
-                        if (file_exists($pathttd1)) {
-                            $typettd1 = pathinfo($pathttd1, PATHINFO_EXTENSION);
-                            $datattd1 = file_get_contents($pathttd1);
-                            $base64ttd1 = 'data:image/' . $typettd1 . ';base64,' . base64_encode($datattd1);
-                        } else {
-                            echo 'File tidak ditemukan: ' . $pathttd1;
+                        ?>
+                        @isset($base64ttd4)
+                            <img src="{{ $base64ttd4 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                        @endisset
+                    </td>
+                    <td>{{ $instruments->first()->ami->auditorKetua->name }}</td>
+                    <td>
+                        <?php
+                        $ttdValue1 = $instruments->first()->ami->auditorKetua->ttd;
+                        if ($ttdValue1) {
+                            $pathttd1 = public_path('storage/' . $ttdValue1);
+                            if (file_exists($pathttd1)) {
+                                $typettd1 = pathinfo($pathttd1, PATHINFO_EXTENSION);
+                                $datattd1 = file_get_contents($pathttd1);
+                                $base64ttd1 = 'data:image/' . $typettd1 . ';base64,' . base64_encode($datattd1);
+                            } else {
+                                echo 'File tidak ditemukan: ' . $pathttd1;
+                            }
                         }
-                    }
-                    ?>
-                    @isset($base64ttd1)
-                        <img src="{{ $base64ttd1 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
-                    @endisset
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" style="background-color: gray">Direviu oleh:</td>
-            </tr>
-            <tr>
-                <td>Penjaminan Mutu</td>
-                <td>Kepala Penjaminan Mutu</td>
-                <td>
-                    <?php
-                    $ttdValue5 = $instruments->first()->ami->manajemen->ttd;
-                    if ($ttdValue5) {
-                        $pathttd5 = public_path('storage/' . $ttdValue5);
-                        if (file_exists($pathttd5)) {
-                            $typettd5 = pathinfo($pathttd5, PATHINFO_EXTENSION);
-                            $datattd5 = file_get_contents($pathttd5);
-                            $base64ttd5 = 'data:image/' . $typettd5 . ';base64,' . base64_encode($datattd5);
-                        } else {
-                            echo 'File tidak ditemukan: ' . $pathttd5;
+                        ?>
+                        @isset($base64ttd1)
+                            <img src="{{ $base64ttd1 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                        @endisset
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background-color: gray">Direviu oleh:</td>
+                </tr>
+                <tr>
+                    <td>Penjaminan Mutu</td>
+                    <td>Kepala Penjaminan Mutu</td>
+                    <td>{{ $instruments->first()->ami->manajemen->name }}</td>
+                    <td>
+                        <?php
+                        $ttdValue5 = $instruments->first()->ami->manajemen->ttd;
+                        if ($ttdValue5) {
+                            $pathttd5 = public_path('storage/' . $ttdValue5);
+                            if (file_exists($pathttd5)) {
+                                $typettd5 = pathinfo($pathttd5, PATHINFO_EXTENSION);
+                                $datattd5 = file_get_contents($pathttd5);
+                                $base64ttd5 = 'data:image/' . $typettd5 . ';base64,' . base64_encode($datattd5);
+                            } else {
+                                echo 'File tidak ditemukan: ' . $pathttd5;
+                            }
                         }
-                    }
-                    ?>
-                    @isset($base64ttd5)
-                        <img src="{{ $base64ttd5 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
-                    @endisset
-                </td>
+                        ?>
+                        @isset($base64ttd5)
+                            <img src="{{ $base64ttd5 }}" class="logo-icon-2" style="width: auto; height: 1cm;">
+                        @endisset
+                    </td>
 
-            </tr>
-        </table>
-    </div>
-
+                </tr>
+            </table>
+        </div>
+    @endif
 
 </body>
 

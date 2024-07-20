@@ -123,7 +123,7 @@
                                                             <img src="{{ asset('/storage/' . $user->ttd) }}"
                                                                 class="img-preview-ttd img-fluid mb-3 col-sm-3">
                                                         @else
-                                                            <img src="{{ asset('../assets/images/user.png') }}"
+                                                            <img src="{{ asset('../assets/images/iconttd.png') }}"
                                                                 class="img-preview-ttd img-fluid mb-3 col-sm-3">
                                                         @endif
 

@@ -160,7 +160,7 @@ class InstrumenAuditController extends Controller
         $instrumentIds = InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->pluck('id_indikator')->toArray();
 
         // Ambil pernyataan standar yang unitnya sama dengan unit pengguna yang sedang login
-        $pernyataanIds = PernyataanStandar::where('id_unit', $userUnitId)->pluck('id');
+        $pernyataanIds = PernyataanStandar::where('id_unit', $userUnitId)->where('status', 'aktif')->pluck('id');
 
         // Filter indikator berdasarkan pernyataan yang ditemukan dan yang belum ada di Instrumen Audit
         $indikators = Indikator::whereIn('id_pernyataan', $pernyataanIds)

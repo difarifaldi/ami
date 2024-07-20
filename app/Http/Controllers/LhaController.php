@@ -66,8 +66,12 @@ class LhaController extends Controller
             return redirect()->back()->with('error', 'Auditor Belum Mengaudit Semua Indikator');
         }
 
+        //untuk export managemen
+        $hasNoNullStatusSelesai = $instruments->whereNull('id_status_akhir')->isEmpty();
+
+
         // Jika semua pemeriksaan lolos, buat dan unduh PDF
-        $pdf = PDF::loadView('lha.pdf', compact('instruments', 'negativeInstruments', 'positiveInstruments'))->setPaper('a4', 'portrait');
+        $pdf = PDF::loadView('lha.pdf', compact('instruments', 'negativeInstruments', 'positiveInstruments', 'hasNoNullStatusSelesai'))->setPaper('a4', 'portrait');
 
         return $pdf->download('Form LHA AMI Manajemen ' . $auditMutuInternals->first()->unit->nama . ' ' . $auditMutuInternals->first()->tahunAkademik->nama . '.pdf');
     }

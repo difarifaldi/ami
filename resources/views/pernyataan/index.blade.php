@@ -31,6 +31,7 @@
                                                 <th scope="col">Unit</th>
                                                 <th scope="col">No Pernyataan</th>
                                                 <th scope="col">Pernyataan Standar</th>
+                                                <th scope="col">Status</th>
                                                 <th scope="col">Aksi</th>
 
                                             </tr>
@@ -44,6 +45,16 @@
                                                 </td>
                                                 <td>{{ $pernyataan->no_ps }}</td>
                                                 <td class="text-left">{!! $pernyataan->pernyataan_standar !!}</td>
+                                                <td>
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                            id="status_{{ $pernyataan->id }}"
+                                                            onchange="toggleUserStatus({{ $pernyataan->id }})"
+                                                            {{ $pernyataan->status === 'aktif' ? 'checked' : '' }}>
+                                                        <label class="custom-control-label"
+                                                            for="status_{{ $pernyataan->id }}">{{ ucfirst($pernyataan->status) }}</label>
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <a href="/pernyataan/{{ $pernyataan->id }}/edit"
                                                         class="btn btn-warning btn-sm"><i class="bi bi-brush"></i></a>

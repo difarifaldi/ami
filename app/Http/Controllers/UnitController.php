@@ -38,7 +38,7 @@ class UnitController extends Controller
     {
         $validatedData = $request->validate([
             'nama' => 'required',
-            'gambar' => 'nullable|image|file|max:1024'
+            'gambar' => 'nullable|image|file'
         ]);
         if ($request->file('gambar')) {
             $validatedData['gambar'] = $request->file('gambar')->store('unit-images', 'public');
@@ -72,7 +72,7 @@ class UnitController extends Controller
 
         $validatedData = $request->validate([
             'nama' => 'required',
-            'gambar' => 'nullable|image|file|max:1024'
+            'gambar' => 'nullable|image|file'
         ]);
 
         if ($request->file('gambar')) {
