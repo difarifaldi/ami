@@ -16,11 +16,14 @@ class PernyataanStandarController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pernyataans = PernyataanStandar::all();
-        return view('pernyataan.index', compact('pernyataans'));
+        $selectedStatus = $request->input('select_status', 'aktif'); // Default ke 'aktif'
+        $pernyataans = PernyataanStandar::where('status', $selectedStatus)->get();
+
+        return view('pernyataan.index', compact('pernyataans', 'selectedStatus'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -125,35 +128,34 @@ class PernyataanStandarController extends Controller
             // Ambil ID pernyataan dari request
             $pernyataanId = $request->input('pernyataanId');
             $pernyataan = PernyataanStandar::findOrFail($pernyataanId);
-    
+
             // Ambil nomor pernyataan dan ID unit dari pernyataan yang sedang diupdate
             $noPernyataan = $pernyataan->no_ps;
             $idUnit = $pernyataan->id_unit;
-    
+
             // Cek jika ada pernyataan lain dengan nomor yang sama dan unit yang sama yang statusnya aktif
             $existingActive = PernyataanStandar::where('no_ps', $noPernyataan)
                 ->where('id_unit', $idUnit)
                 ->where('status', 'aktif')
                 ->where('id', '!=', $pernyataanId)
                 ->exists();
-    
+
             // Jika pernyataan yang sama sudah aktif, dan status yang sedang diupdate ingin diubah menjadi aktif
             if ($existingActive && $pernyataan->status === 'tidak aktif') {
                 return response()->json([
                     'error' => 'Tidak dapat mengubah status menjadi aktif. Pernyataan dengan nomor yang sama sudah ada dan aktif.'
                 ], 400);
             }
-    
+
             // Toggle status pernyataan
             $pernyataan->status = $pernyataan->status === 'aktif' ? 'tidak aktif' : 'aktif';
-    
+
             // Simpan perubahan status ke dalam database
             $pernyataan->save();
-    
+
             return response()->json(['message' => 'Status pernyataan berhasil diperbarui!'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
 }

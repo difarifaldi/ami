@@ -23,6 +23,18 @@
 
                             <a href="/pernyataan/create" class="btn btn-md btn-success mb-3 ml-3">Pernyataan Baru</a>
 
+                            <div class="d-flex mx-3">
+                                <form id="filterForm" action="{{ route('pernyataan.index') }}" method="GET"
+                                    class="d-flex">
+                                    <select name="select_status" id="select_status" class="form-control  mr-3">
+                                        <option value="aktif" {{ $selectedStatus == 'aktif' ? 'selected' : '' }}>Aktif
+                                        </option>
+                                        <option value="tidak aktif"
+                                            {{ $selectedStatus == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                                    </select>
+                                </form>
+                            </div>
+
                             <div class="table-responsive">
                                 <div class="card-body">
                                     <table id="example" class="table  table-bordered text-center" style="width:100%">
@@ -203,6 +215,12 @@
                     console.error('There was an error!', error);
                 });
         }
+    </script>
+
+    <script>
+        document.getElementById('select_status').addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
     </script>
 
 
