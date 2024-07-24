@@ -83,6 +83,10 @@
                             @endif
                         </a>
                     </li>
+                    @role('admin')
+                        <li class="border-top"> <a href="/riwayat"><i class="bi bi-calendar4-week"></i>Riwayat Audit</a>
+                        </li>
+                    @endrole
 
                 </ul>
             </li>
@@ -113,10 +117,6 @@
                     <ul>
                         <li> <a href="/lha"><i class="bi bi-file-post"></i>Daftar LHA Audit</a>
                         </li>
-                        @role('admin')
-                            <li> <a href="/riwayat"><i class="bi bi-calendar4-week"></i>Riwayat Audit</a>
-                            </li>
-                        @endrole
                     </ul>
                 </li>
             @endhasanyrole
