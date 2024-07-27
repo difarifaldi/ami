@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AuditMutuInternal;
 use App\Http\Requests\StoreAuditMutuInternalRequest;
 use App\Http\Requests\UpdateAuditMutuInternalRequest;
-use App\Models\tahunAkademik;
+use App\Models\TahunAkademik;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -49,7 +49,7 @@ class AuditMutuInternalController extends Controller
         $auditors = User::role('auditor')->get();
         $manajemens = User::role('manajemen')->get();
         $admins = User::role('admin')->get();
-        $tahuns = tahunAkademik::all();
+        $tahuns = TahunAkademik::all();
         return view('ami.create', compact('units', 'auditees', 'auditors', 'admins', 'manajemens', 'tahuns'));
     }
 

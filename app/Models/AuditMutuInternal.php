@@ -24,7 +24,7 @@ class AuditMutuInternal extends Model
     }
     public function tahunAkademik()
     {
-        return $this->belongsTo(tahunAkademik::class, 'id_TA');
+        return $this->belongsTo(TahunAkademik::class, 'id_TA');
     }
     public function auditee()
     {

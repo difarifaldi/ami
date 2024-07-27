@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\StatusTemuan;
 use App\Http\Requests\StoreStatusTemuanRequest;
 use App\Http\Requests\UpdateStatusTemuanRequest;
-use App\Models\tahunAkademik;
+use App\Models\TahunAkademik;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 
@@ -22,7 +22,7 @@ class StatusTemuanController extends Controller
 
         // Ambil data unit dan tahun akademik
         $units = Unit::all();
-        $tahuns = tahunAkademik::all();
+        $tahuns = TahunAkademik::all();
 
         // Query status temuan dengan relasi instrument
         $query = StatusTemuan::with(['instrument' => function ($query) use ($selectedUnit, $selectedTA) {

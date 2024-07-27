@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AuditMutuInternal;
 use App\Models\InstrumenAudit;
-use App\Models\tahunAkademik;
+use App\Models\TahunAkademik;
 use App\Models\Unit;
 use PDF;
 use Illuminate\Http\Request;
@@ -85,7 +85,7 @@ class LhaController extends Controller
         $selectedUnit = $request->input('select_unit');
         $selectedTA = $request->input('select_TA');
         $units = Unit::all();
-        $tahuns = tahunAkademik::all();
+        $tahuns = TahunAkademik::all();
 
         // Mulai query dasar dengan status 'selesai'
         $query = AuditMutuInternal::where('status_audit', 'selesai');
