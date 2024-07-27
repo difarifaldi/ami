@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->belongsTo(Unit::class, 'id_unit');
     }
 
+    public function recordLogin()
+    {
+        return $this->hasMany(RecordLogin::class, 'user_id');
+    }
+
     public function auditAsAuditee()
     {
         return $this->hasMany(AuditMutuInternal::class, 'id_user_auditee');

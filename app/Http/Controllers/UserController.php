@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuditMutuInternal;
+use App\Models\RecordLogin;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -103,6 +104,10 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if ($user->status === 'active') {
+                RecordLogin::create([
+                    'user_id' => $user->id,
+                    'waktu_login' => now('Asia/Jakarta'),  // atau bisa juga dengan date('Y-m-d H:i:s')
+                ]);
                 return redirect('/')->with('success', 'Login berhasil!');
             } else {
                 Auth::logout();
@@ -152,6 +157,9 @@ class UserController extends Controller
             }
 
             $user->delete();
+            $record = RecordLogin::where('user_id', $userId);
+            $record->delete();
+
 
             DB::commit();
 

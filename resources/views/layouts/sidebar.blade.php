@@ -162,6 +162,8 @@
                     <ul>
                         <li> <a href="/admin"><i class="bi bi-people"></i>Daftar Pengguna</a>
                         </li>
+                        <li> <a href="/aktivitas"><i class="bi bi-clock-history"></i>Aktivitas Pengguna</a>
+                        </li>
 
 
                     </ul>

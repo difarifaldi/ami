@@ -11,6 +11,7 @@ use App\Http\Controllers\KetercapaianStandarController;
 use App\Http\Controllers\KuiController;
 use App\Http\Controllers\LhaController;
 use App\Http\Controllers\PernyataanStandarController;
+use App\Http\Controllers\RecordLoginController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatusTemuanController;
 use App\Http\Controllers\UnitController;
@@ -90,6 +91,7 @@ Route::middleware(['auth'])->group(function () {
     // admin
     Route::group(['middleware' => ['role:admin']], function () {
         // User Management
+        Route::resource('/aktivitas', RecordLoginController::class);
         Route::get('/admin', [UserController::class, 'umanagement'])->name('umanagement.index');
         Route::post('/admin/toggle-user-status', [UserController::class, 'toggleUserStatus'])->name('admin.toggle-user-status');
         Route::delete('/admin/delete-user/{id}', [UserController::class, 'deleteUser'])->name('admin.delete-user');
