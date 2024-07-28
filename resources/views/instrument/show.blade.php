@@ -116,12 +116,7 @@
                                                     value="{{ $instrument->rekomendasi_auditor ? $instrument->rekomendasi_auditor : '-' }}"
                                                     readonly />
                                             </div>
-                                            <div class="form-group mt-4">
-                                                <label>Tanggapan Auditee</label>
-                                                <input type="text" class="form-control bg-white"
-                                                    value="{{ $instrument->tanggapan_auditee ? $instrument->tanggapan_auditee : '-' }}"
-                                                    readonly />
-                                            </div>
+
                                             <div class="form-group mt-4">
                                                 <label>Penanggung Jawab Perbaikan</label>
                                                 <input type="text" class="form-control bg-white"
@@ -137,10 +132,16 @@
                                                     class="btn btn-sm btn-primary mt-2 {{ !$instrument->link ? 'd-none' : '' }}">Buka
                                                     Tautan</a>
                                             </div>
-                                            <div class="form-group mt-4 mb-5">
+                                            <div class="form-group mt-4">
                                                 <label>Status Temuan</label>
                                                 <input type="text" class="form-control bg-white"
                                                     value="{{ $instrument->statusTemuan ? $instrument->statusTemuan->nama : '-' }}"
+                                                    readonly />
+                                            </div>
+                                            <div class="form-group mt-4  mb-5">
+                                                <label>Tanggapan Auditee</label>
+                                                <input type="text" class="form-control bg-white"
+                                                    value="{{ $instrument->tanggapan_auditee ? $instrument->tanggapan_auditee : '-' }}"
                                                     readonly />
                                             </div>
                                         @endhasanyrole
@@ -165,7 +166,8 @@
                                             <div class="form-group mt-4">
                                                 <label>Status Akhir</label>
                                                 <input type="text" class="form-control bg-white"
-                                                    value="{{ $instrument->statusAkhir->nama }}" readonly />
+                                                    value="{{ $instrument->statusAkhir ? $instrument->statusAkhir->nama : '-' }}"
+                                                    readonly />
                                             </div>
                                         @endrole
                                     </div>

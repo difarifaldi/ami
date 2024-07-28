@@ -66,7 +66,8 @@
                                             </div>
 
                                             <div class="form-group mt-4">
-                                                <label>No Indikator</label>
+                                                <label>No Indikator <span class="font-italic font-weight-bolder">Contoh
+                                                        1.1</span></label>
                                                 <input type="text" name="no" id="no"
                                                     class="form-control @error('no') is-invalid @enderror"
                                                     value="{{ old('no') }}"

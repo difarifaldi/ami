@@ -270,7 +270,10 @@
 
                                                     <!-- Tanggapan Auditee -->
                                                     <div class="{{ $display }}">
-                                                        <h3 class="mt-4">Tanggapan Auditee</h3>
+                                                        <h4 class="mt-4">Tanggapan Auditee <span
+                                                                class="font-italic font-weight-bolder">
+                                                                belum mencapai</span>
+                                                        </h4>
                                                         <div class="form-group mt-4">
                                                             <input type="text" name="tanggapan_auditee"
                                                                 id="tanggapan_auditee"
