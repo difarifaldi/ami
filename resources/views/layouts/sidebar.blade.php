@@ -71,7 +71,6 @@
                                         $instrumentCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)
                                             ->whereNotNull('id_status_temuan')
                                             ->whereNotNull('id_status_tercapai')
-                                            ->whereNotNull('tanggapan_auditee')
                                             ->whereNull('id_status_akhir')
                                             ->count();
                                     }

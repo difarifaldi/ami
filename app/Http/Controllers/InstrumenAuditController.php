@@ -75,7 +75,7 @@ class InstrumenAuditController extends Controller
         }
         if (auth()->user()->hasRole('manajemen')) {
             $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where('id_user_manajemen', $userId)->pluck('id');
-            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('tanggapan_auditee');
+            $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_temuan');
         }
 
         // Ambil unit yang terkait dengan user

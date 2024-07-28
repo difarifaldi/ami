@@ -41,8 +41,7 @@
                                                         $condition &&
                                                         is_null($instrument->id_status_akhir) &&
                                                         !is_null($instrument->id_status_tercapai) &&
-                                                        !is_null($instrument->id_status_temuan) &&
-                                                        !is_null($instrument->tanggapan_auditee);
+                                                        !is_null($instrument->id_status_temuan);
                                                 }
                                                 return $condition;
                                             })
