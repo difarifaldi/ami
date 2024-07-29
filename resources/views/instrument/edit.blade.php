@@ -238,7 +238,7 @@
 
                                                     <!-- Link -->
                                                     <div class="form-group mt-4">
-                                                        <label>Link</label>
+                                                        <label>Link Tindak Lanjut</label>
                                                         <input type="text" name="link" id="link"
                                                             class="form-control bg-white @error('link') is-invalid @enderror"
                                                             value="{{ old('link', $instrument->link) }}"

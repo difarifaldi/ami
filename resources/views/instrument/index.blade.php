@@ -95,11 +95,11 @@
                                             {{-- <th scope="col">unit</th> --}}
 
                                             @hasanyrole('auditee|auditor|manajemen')
-                                                <th scope="col">Bukti</th>
+                                                <th scope="col">Link Bukti</th>
                                                 <th scope="col">Status Ketercapaian</th>
                                                 @hasanyrole('auditor|manajemen')
                                                     <th scope="col">Temuan Audit</th>
-                                                    <th scope="col">Link tindak Lanjut</th>
+                                                    <th scope="col">Link Tindak Lanjut</th>
                                                     <th scope="col">Status Temuan</th>
                                                 @endhasanyrole
                                             @endhasanyrole

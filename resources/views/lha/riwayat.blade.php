@@ -62,6 +62,7 @@
                                                 <th scope="col">Bukti</th>
                                                 <th scope="col">Status Ketercapaian</th>
                                                 <th scope="col">Temuan</th>
+                                                <th scope="col">Rekomendasi Auditor</th>
                                                 <th scope="col">Link tindak Lanjut</th>
                                                 <th scope="col">Status Temuan</th>
                                                 <th scope="col">Jadwal</th>
@@ -71,16 +72,20 @@
                                         <tbody>
                                             @foreach ($instruments as $instrument)
                                                 <tr>
-                                                    <td>{{ $instrument->ami->unit->nama }}</td>
-                                                    <td>{{ $instrument->indikator->pernyataan->no_ps }}</td>
-                                                    <td>{{ $instrument->indikator->no }}</td>
-                                                    <td>{{ $instrument->bukti }}</td>
-                                                    <td>{{ $instrument->statusTercapai->nama }}</td>
-                                                    <td>{{ $instrument->temuan_audit }}</td>
-                                                    <td>{{ $instrument->link }}</td>
-                                                    <td>{{ $instrument->statusTemuan->nama }}</td>
-                                                    <td>{{ $instrument->jadwal }}</td>
-                                                    <td>{{ $instrument->statusAkhir->nama }}</td>
+                                                    <td class="text-justify">{{ $instrument->ami->unit->nama }}</td>
+                                                    <td class="text-justify">
+                                                        {{ $instrument->indikator->pernyataan->no_ps }}</td>
+                                                    <td class="text-justify">{{ $instrument->indikator->no }}</td>
+                                                    <td class="text-justify">{{ $instrument->bukti }}</td>
+                                                    <td class="text-justify">{{ $instrument->statusTercapai->nama }}</td>
+                                                    <td class="text-justify">{{ $instrument->temuan_audit }}</td>
+                                                    <td class="text-justify">{{ $instrument->rekomendasi_auditor }}</td>
+                                                    <td class="text-justify">{{ $instrument->link }}</td>
+                                                    <td class="text-justify">{{ $instrument->statusTemuan->nama }}</td>
+                                                    <td class="text-justify">
+                                                        {{ $instrument->jadwal_penyelesaian ? \Carbon\Carbon::parse($instrument->jadwal_penyelesaian)->format('d, M Y') : '-' }}
+                                                    </td>
+                                                    <td class="text-justify">{{ $instrument->statusAkhir->nama }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
