@@ -30,9 +30,16 @@ class IndikatorController extends Controller
      */
     public function create()
     {
-        $pernyataans = PernyataanStandar::all();
+        $pernyataans = PernyataanStandar::where('status', 'aktif')->get();
         $units = Unit::all(); // Pastikan untuk mendapatkan semua unit
         return view('indikator.create', compact('pernyataans', 'units'));
+    }
+    public function getPernyataanByUnit($unitId)
+    {
+        $pernyataans = PernyataanStandar::where('id_unit', $unitId)
+            ->where('status', 'aktif')
+            ->get();
+        return response()->json($pernyataans);
     }
 
     /**
@@ -49,14 +56,14 @@ class IndikatorController extends Controller
             ]);
 
             // Cek apakah indikator dengan no dan id_pernyataan yang sama sudah ada
-            $exists = Indikator::where('no', $validatedData['no'])
-                ->where('id_pernyataan', $validatedData['id_pernyataan'])
-                ->exists();
+            // $exists = Indikator::where('no', $validatedData['no'])
+            //     ->where('id_pernyataan', $validatedData['id_pernyataan'])
+            //     ->exists();
 
-            if ($exists) {
-                // Jika sudah ada, kembalikan pesan kesalahan
-                return redirect()->back()->with('failed', 'Indikator sudah ada');
-            }
+            // if ($exists) {
+            //     // Jika sudah ada, kembalikan pesan kesalahan
+            //     return redirect()->back()->with('failed', 'Indikator sudah ada');
+            // }
 
             // Jika tidak ada, simpan data indikator baru
             Indikator::create($validatedData);
@@ -68,17 +75,6 @@ class IndikatorController extends Controller
             return redirect()->back()->with('failed', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-
-
-
-    public function getPernyataanByUnit($unitId)
-    {
-        $pernyataans = PernyataanStandar::where('id_unit', $unitId)->get();
-        return response()->json($pernyataans);
-    }
-
-
-
 
     /**
      * Display the specified resource.

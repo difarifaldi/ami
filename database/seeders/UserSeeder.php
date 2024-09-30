@@ -14,15 +14,16 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        for ($i = 5; $i <= 10; $i++) {
+            $user_auditor = User::create([
+                'name' => 'auditor ' . $i,
+                'email' => 'auditor' . $i . '@gmail.com',
+                'id_unit' => rand(1, 7), // Menggunakan fungsi rand untuk mendapatkan ID unit acak
+                'password' => Hash::make('password123'),
+                'status' => 'active'
+            ]);
 
-        $user_super_admin = User::create([
-            'name' => 'Muhammad Difa Rifaldi',
-            'email' => 'difa@gmail.com',
-            'id_unit' => null,
-            'password' => Hash::make('password123'),
-            'status' => 'active'
-        ]);
-
-        $user_super_admin->assignRole('admin');
+            $user_auditor->assignRole('auditor');
+        }
     }
 }

@@ -34,7 +34,7 @@
                 </a>
                 <ul>
 
-                    <li> <a href="/audit"><i class="bi bi-person-check"></i>Identitas AMI</a>
+                    <li> <a href="/audit"><i class="bi bi-person-check"></i>Penugasan Audit</a>
                     </li>
                     <li class="border-top">
                         <a href="/instrument"><i class="bi bi-pencil-square"></i>Ketercapaian Standar

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\UsersImport;
 use App\Models\AuditMutuInternal;
 use App\Models\RecordLogin;
 use App\Models\Unit;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -63,7 +65,7 @@ class UserController extends Controller
         $user->assignRole($validatedData['roles']);
 
         // Mengirim email ke user baru
-        $this->sendAccountDetails($validatedData['email'], $validatedData['name'], $validatedData['password']);
+        // $this->sendAccountDetails($validatedData['email'], $validatedData['name'], $validatedData['password']);
 
         return redirect()->route('umanagement.index')->with('success', 'Berhasil menambahkan akun baru');
     }
@@ -387,8 +389,6 @@ class UserController extends Controller
     }
 
 
-
-
     public function toggleUserStatus(Request $request)
     {
         try {
@@ -403,6 +403,23 @@ class UserController extends Controller
             return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        try {
+            // Melakukan import
+            Excel::import(new UsersImport, $request->file('file'));
+            return back()->with('success', 'Data berhasil diimpor.');
+        } catch (\Exception $e) {
+            // Tangani kesalahan
+            Log::error('Error importing users: ' . $e->getMessage());
+            return back()->withErrors(['file' => 'Gagal mengimpor data.']);
         }
     }
 }

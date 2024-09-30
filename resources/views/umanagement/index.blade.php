@@ -20,8 +20,14 @@
                                 <h4 class="text-center my-4">Manajemen Akun</h4>
                             </div>
                             <hr />
+                            <div class="d-flex justify-content-between ">
 
-                            <a href="/register" class="btn btn-md btn-success mb-3 ml-3">Buat Akun</a>
+                                <a href="/register" class="btn btn-md btn-success mb-3 ml-3">Buat Akun</a>
+
+                                <button data-toggle="modal" data-target="#importData"
+                                    class="btn btn-md btn-warning mb-3 mr-3 text-white">Import
+                                    Data</button>
+                            </div>
 
 
                             <div class="table-responsive">
@@ -139,6 +145,48 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                     <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="importData" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Data User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="font-weight-bold">Aturan</h6>
+                    <p>Data asal unit pada file Excel harus diubah dengan aturan sebagai berikut:</p>
+                    <ul>
+                        <li>UPT Urusan Internasional (KUI) = 1 </li>
+                        <li>UPA Perpustakaan = 2 </li>
+                        <li>UPA Rekaya Teknologi dan Produk Unggulan = 3</li>
+                        <li>UPA Layanan Uji Kompetensi = 4</li>
+                        <li>UPA Perawatan dan Perbaikan = 5</li>
+                        <li>UPA Pengembangan Karier dan Kewirausahaan = 6</li>
+                        <li>UPA Teknologi Informasi dan Komunikasi = 7</li>
+                    </ul>
+                    <form action="{{ route('import-excel') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <label>Import Data User</label>
+                        <div class="input-group mb-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="importExcel"
+                                    aria-describedby="importExcel" accept=".xls, .xlsx" name="file">
+                                <label class="custom-file-label" for="importExcel">Masukan Data</label>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Import Data</button> <!-- Ubah ke type="submit" -->
+                </div>
+                </form>
             </div>
         </div>
     </div>

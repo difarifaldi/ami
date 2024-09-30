@@ -109,7 +109,6 @@
         function fetchPernyataanByUnit() {
             var unitId = document.getElementById('id_unit').value;
 
-            // Hapus opsi sebelumnya
             var pernyataanSelect = document.getElementById('id_pernyataan');
             pernyataanSelect.innerHTML = '<option value="">Silahkan Pilih Pernyataan Standar</option>';
 
@@ -130,6 +129,7 @@
 
             updatePernyataanStandar();
         }
+
 
         function updatePernyataanStandar() {
             var select = document.getElementById('id_pernyataan');

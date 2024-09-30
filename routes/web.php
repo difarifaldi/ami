@@ -97,6 +97,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/admin/delete-user/{id}', [UserController::class, 'deleteUser'])->name('admin.delete-user');
         Route::get('/admin/edit-user/{id}', [UserController::class, 'editUser'])->name('admin.edit-user');
         Route::post('/admin/update-user', [UserController::class, 'updateUser'])->name('admin.update-user');
+
+        // Register
+        Route::post('/import-excel', [UserController::class, 'importExcel'])->name('import-excel');
+
         // Register
         Route::get('/register', [UserController::class, 'index'])->name('register.index');
         Route::post('/register', [UserController::class, 'store'])->name('register.store');
