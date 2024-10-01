@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
                 'email' => 'auditor' . $i . '@gmail.com',
                 'id_unit' => rand(1, 7), // Menggunakan fungsi rand untuk mendapatkan ID unit acak
                 'password' => Hash::make('password123'),
-                'status' => 'active'
+                'status' => 'aktif'
             ]);
 
             $user_auditor->assignRole('auditor');

@@ -13,7 +13,21 @@
                         <!-- Isi breadcrumb -->
                     </div>
                     <!--end breadcrumb-->
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span
+                                    aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+
                     <div class="card">
+
                         <div class="card-body">
                             <div class="card-title">
                                 <!-- Isi judul card -->
@@ -84,7 +98,7 @@
                                                             <input type="checkbox" class="custom-control-input"
                                                                 id="status_{{ $user->id }}"
                                                                 onchange="toggleUserStatus({{ $user->id }})"
-                                                                {{ $user->status === 'active' ? 'checked' : '' }}>
+                                                                {{ $user->status === 'aktif' ? 'checked' : '' }}>
                                                             <label class="custom-control-label"
                                                                 for="status_{{ $user->id }}">{{ ucfirst($user->status) }}</label>
                                                         </div>
@@ -154,23 +168,62 @@
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Import Data User</h5>
+                    <h5 class="modal-title">Import Data Pengguna SIAMI</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h6 class="font-weight-bold">Aturan</h6>
+                    <h6 class="font-weight-bold">Aturan Import Data</h6>
                     <p>Data asal unit pada file Excel harus diubah dengan aturan sebagai berikut:</p>
-                    <ul>
-                        <li>UPT Urusan Internasional (KUI) = 1 </li>
-                        <li>UPA Perpustakaan = 2 </li>
-                        <li>UPA Rekaya Teknologi dan Produk Unggulan = 3</li>
-                        <li>UPA Layanan Uji Kompetensi = 4</li>
-                        <li>UPA Perawatan dan Perbaikan = 5</li>
-                        <li>UPA Pengembangan Karier dan Kewirausahaan = 6</li>
-                        <li>UPA Teknologi Informasi dan Komunikasi = 7</li>
+                    <ul class="list-unstyled mx-auto">
+                        <li class="font-weight-normal">
+                            1. Asal unit pada file Excel harus diubah dengan aturan sebagai berikut:
+                            <ul class="font-weight-normal">
+                                <li>1 = UPT Urusan Internasional (KUI) </li>
+                                <li>2 = UPA Perpustakaan </li>
+                                <li>3 = UPA Rekaya Teknologi dan Produk Unggulan</li>
+                                <li>4 = UPA Layanan Uji Kompetensi</li>
+                                <li>5 = UPA Perawatan dan Perbaikan</li>
+                                <li>6 = UPA Pengembangan Karier dan Kewirausahaan</li>
+                                <li>7 = UPA Teknologi Informasi dan Komunikasi</li>
+                            </ul>
+                        </li>
+                        <li class="font-weight-normal">
+                            2. Status pengguna <span class="font-weight-bolder">(Wajib Menggunakan Huruf Kecil)</span>
+                            terdiri dari:
+                            <ul class="font-weight-normal">
+                                <li>aktif </li>
+                                <li>tidak Aktif</li>
+
+                            </ul>
+                        </li>
+
+                        <li class="font-weight-normal">
+                            3. Peran pengguna terdiri dari:
+                            <ul class="font-weight-normal">
+                                <li>admin</li>
+                                <li>auditee</li>
+                                <li>auditor</li>
+                                <li>manajemen</li>
+
+                            </ul>
+                        </li>
+
+                        <li class="font-weight-normal">
+                            4. Wajib untuk menyertakan password untuk setiap data pengguna
+                        </li>
+
+                        <li class="font-weight-normal">
+                            5. NIP pengguna bersifat optional sehingga dapat dikosongkan
+                        </li>
                     </ul>
+                    <hr>
+                    <h6 class="font-weight-bold">Contoh file Excel: <a
+                            href="{{ asset('../assets/files/contohData.xlsx') }}" target="_blank"><i
+                                class="bi bi-file-earmark-text font-weight-normal"></i>Contoh data Import Excel</a>
+                    </h6>
+                    <hr>
                     <form action="{{ route('import-excel') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <label>Import Data User</label>
@@ -181,6 +234,7 @@
                                 <label class="custom-file-label" for="importExcel">Masukan Data</label>
                             </div>
                         </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -221,7 +275,7 @@
                             icon: 'success',
                             title: 'Berhasil',
                             text: 'Akun pengguna berhasil dihapus!',
-                            timer: 1400,
+                            timer: 2400,
                             showConfirmButton: false
                         });
                         // Refresh halaman setelah berhasil menghapus akun pengguna

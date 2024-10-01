@@ -105,7 +105,7 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            if ($user->status === 'active') {
+            if ($user->status === 'aktif') {
                 RecordLogin::create([
                     'user_id' => $user->id,
                     'waktu_login' => now('Asia/Jakarta'),  // atau bisa juga dengan date('Y-m-d H:i:s')
@@ -394,8 +394,8 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($request->userId);
 
-            // Toggle status pengguna antara 'active' dan 'inactive'
-            $user->status = $user->status === 'active' ? 'inactive' : 'active';
+            // Toggle status pengguna antara 'aktif' dan 'tidak aktif'
+            $user->status = $user->status === 'aktif' ? 'tidak aktif' : 'aktif';
 
             // Simpan perubahan status ke dalam database
             $user->save();
@@ -412,14 +412,33 @@ class UserController extends Controller
             'file' => 'required|mimes:xls,xlsx'
         ]);
 
+        $import = new UsersImport();
+
         try {
-            // Melakukan import
-            Excel::import(new UsersImport, $request->file('file'));
+            Excel::import($import, $request->file('file'));
+
+            // Cek jika ada error setelah import
+            if (!empty($import->errors)) {
+                // Buat pesan error dalam bentuk string
+                $errorMessages = [];
+                foreach ($import->errors as $index => $error) {
+                    // Menampilkan index baris (1-based index) dan kesalahan
+
+                    //tampilin data pada excel
+                    // $errorMessages[] = 'Baris: ' . implode(', ', $error['row']) . ' - ' . implode(', ', $error['errors']);
+
+                    //sebutin baris
+                    $errorMessages[] = 'Baris ' . ($index + 2) . ': ' . implode(', ', $error['errors']);
+                }
+
+                // Kembalikan pesan error ke view
+                return back()->withErrors($errorMessages);
+            }
+
             return back()->with('success', 'Data berhasil diimpor.');
         } catch (\Exception $e) {
-            // Tangani kesalahan
-            Log::error('Error importing users: ' . $e->getMessage());
-            return back()->withErrors(['file' => 'Gagal mengimpor data.']);
+            // Tangani pengecualian dan kirim pesan error
+            return back()->withErrors(['error' => 'Error importing users: ' . $e->getMessage()]);
         }
     }
 }

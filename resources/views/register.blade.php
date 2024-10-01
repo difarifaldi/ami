@@ -110,8 +110,8 @@
                                             <div class="form-group mt-4">
                                                 <label>Status <span class="text-danger">*</span></label>
                                                 <select class="form-control" name="status" id="status">
-                                                    <option value="active">Aktif</option>
-                                                    <option value="inactive">Tidak Aktif</option>
+                                                    <option value="aktif">Aktif</option>
+                                                    <option value="tidak aktif">Tidak Aktif</option>
                                                 </select>
                                             </div>
                                             <div class="form-group mt-4">

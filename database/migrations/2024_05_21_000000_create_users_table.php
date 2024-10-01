@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedBigInteger('id_unit')->nullable();
             $table->string('nip')->nullable();
-            $table->string('status')->default('inactive');
+            $table->string('status')->default('tidak aktif');
             $table->string('ttd')->nullable();
             $table->string('foto')->nullable();
             $table->string('forgot_password')->default('tidak')->nullable();
