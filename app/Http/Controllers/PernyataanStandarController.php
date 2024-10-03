@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\PernyataanStandar;
 use App\Http\Requests\StorePernyataanStandarRequest;
 use App\Http\Requests\UpdatePernyataanStandarRequest;
+use App\Imports\PernyataanIndikatorImport;
 use App\Models\Indikator;
+use App\Models\TahunAkademik;
 use App\Models\Unit;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PernyataanStandarController extends Controller
 {
@@ -18,10 +21,10 @@ class PernyataanStandarController extends Controller
      */
     public function index(Request $request)
     {
-        $selectedStatus = $request->input('select_status', 'aktif'); // Default ke 'aktif'
-        $pernyataans = PernyataanStandar::where('status', $selectedStatus)->get();
 
-        return view('pernyataan.index', compact('pernyataans', 'selectedStatus'));
+        $pernyataans = PernyataanStandar::all();
+
+        return view('pernyataan.index', compact('pernyataans'));
     }
 
 
@@ -122,40 +125,31 @@ class PernyataanStandarController extends Controller
         }
     }
 
-    public function togglePernyataanStatus(Request $request)
+
+
+    public function formImportData()
     {
+        $units = Unit::all();
+        $tahunAkademiks = TahunAkademik::all();
+        return view('import.create', compact('units', 'tahunAkademiks'));
+    }
+
+
+    public function importData(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx',
+            'id_unit' => 'required',
+            'id_TA' => 'required',
+        ]);
+
         try {
-            // Ambil ID pernyataan dari request
-            $pernyataanId = $request->input('pernyataanId');
-            $pernyataan = PernyataanStandar::findOrFail($pernyataanId);
+            // Kirim id_unit dan id_TA ke dalam class import
+            Excel::import(new PernyataanIndikatorImport($request->id_unit, $request->id_TA), $request->file('file'));
 
-            // Ambil nomor pernyataan dan ID unit dari pernyataan yang sedang diupdate
-            $noPernyataan = $pernyataan->no_ps;
-            $idUnit = $pernyataan->id_unit;
-
-            // Cek jika ada pernyataan lain dengan nomor yang sama dan unit yang sama yang statusnya aktif
-            $existingActive = PernyataanStandar::where('no_ps', $noPernyataan)
-                ->where('id_unit', $idUnit)
-                ->where('status', 'aktif')
-                ->where('id', '!=', $pernyataanId)
-                ->exists();
-
-            // Jika pernyataan yang sama sudah aktif, dan status yang sedang diupdate ingin diubah menjadi aktif
-            if ($existingActive && $pernyataan->status === 'tidak aktif') {
-                return response()->json([
-                    'error' => 'Tidak dapat mengubah status menjadi aktif. Pernyataan dengan nomor yang sama sudah ada dan aktif.'
-                ], 400);
-            }
-
-            // Toggle status pernyataan
-            $pernyataan->status = $pernyataan->status === 'aktif' ? 'tidak aktif' : 'aktif';
-
-            // Simpan perubahan status ke dalam database
-            $pernyataan->save();
-
-            return response()->json(['message' => 'Status pernyataan berhasil diperbarui!'], 200);
+            return back()->with('success', 'Data berhasil diimpor!');
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return back()->with('error', 'Gagal mengimpor data: ' . $e->getMessage());
         }
     }
 }

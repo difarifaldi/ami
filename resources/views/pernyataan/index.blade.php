@@ -23,17 +23,7 @@
 
                             <a href="/pernyataan/create" class="btn btn-md btn-success mb-3 ml-3">Pernyataan Baru</a>
 
-                            <div class="d-flex mx-3">
-                                <form id="filterForm" action="{{ route('pernyataan.index') }}" method="GET"
-                                    class="d-flex">
-                                    <select name="select_status" id="select_status" class="form-control  mr-3">
-                                        <option value="aktif" {{ $selectedStatus == 'aktif' ? 'selected' : '' }}>Aktif
-                                        </option>
-                                        <option value="tidak aktif"
-                                            {{ $selectedStatus == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
-                                    </select>
-                                </form>
-                            </div>
+
 
                             <div class="table-responsive">
                                 <div class="card-body">
@@ -43,7 +33,7 @@
                                                 <th scope="col">Unit</th>
                                                 <th scope="col">No Pernyataan</th>
                                                 <th scope="col">Pernyataan Standar</th>
-                                                <th scope="col">Status</th>
+
                                                 <th scope="col">Aksi</th>
 
                                             </tr>
@@ -57,16 +47,7 @@
                                                 </td>
                                                 <td>{{ $pernyataan->no_ps }}</td>
                                                 <td class="text-left">{!! $pernyataan->pernyataan_standar !!}</td>
-                                                <td>
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input"
-                                                            id="status_{{ $pernyataan->id }}"
-                                                            onchange="togglePernyataanStatus({{ $pernyataan->id }})"
-                                                            {{ $pernyataan->status === 'aktif' ? 'checked' : '' }}>
-                                                        <label class="custom-control-label"
-                                                            for="status_{{ $pernyataan->id }}">{{ ucfirst($pernyataan->status) }}</label>
-                                                    </div>
-                                                </td>
+
 
                                                 <td>
                                                     <a href="/pernyataan/{{ $pernyataan->id }}/edit"
@@ -171,64 +152,6 @@
             }
         });
     </script>
-
-    <script>
-        function togglePernyataanStatus(pernyataanId) {
-            fetch(`/pernyataan/toggle-pernyataan-status`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        pernyataanId: pernyataanId
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(data => {
-                            throw new Error(data.error || 'Network response was not ok');
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Jika berhasil, tampilkan SweetAlert dan refresh halaman
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Status pernyataan berhasil diperbarui!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        location.reload(); // Refresh halaman setelah berhasil memperbarui status
-                    });
-                })
-                .catch(error => {
-                    // Jika ada kesalahan, tampilkan pesan error dan refresh halaman
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Terjadi kesalahan!',
-                        text: error.message
-                    }).then(() => {
-                        location.reload(); // Refresh halaman setelah menampilkan pesan error
-                    });
-                    console.error('There was an error!', error);
-                });
-        }
-    </script>
-
-    <script>
-        document.getElementById('select_status').addEventListener('change', function() {
-            document.getElementById('filterForm').submit();
-        });
-    </script>
-
-
-
-
-
-
-
 
     @if ($message = Session::get('success'))
         <script>

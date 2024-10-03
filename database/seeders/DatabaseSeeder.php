@@ -22,12 +22,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
 
-        // $this->call(RoleSeeder::class);
-        // $this->call(UserSeeder::class);
-        // $this->call(UnitSeeder::class);
-        // $this->call(StatusTemuanSeeder::class);
-        // $this->call(StatusAkhirSeeder::class);
-        // $this->call(StatusTercapaiSeeder::class);
-        // $this->call(TahunAkademikSeeder::class);
+        $this->call(RoleSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(UnitSeeder::class);
+        $this->call(StatusTemuanSeeder::class);
+        $this->call(StatusAkhirSeeder::class);
+        $this->call(StatusTercapaiSeeder::class);
+        $this->call(TahunAkademikSeeder::class);
     }
 }

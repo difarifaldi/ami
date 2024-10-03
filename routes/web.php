@@ -98,8 +98,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/edit-user/{id}', [UserController::class, 'editUser'])->name('admin.edit-user');
         Route::post('/admin/update-user', [UserController::class, 'updateUser'])->name('admin.update-user');
 
-        // Register
+        // Import Excel User
         Route::post('/import-excel', [UserController::class, 'importExcel'])->name('import-excel');
+
+        // Import Excel User
+        Route::get('/importDataPernyataan', [PernyataanStandarController::class, 'formImportData'])->name('formImportData');
+        Route::post('/importDataPernyataan', [PernyataanStandarController::class, 'importData'])->name('importDataPernyataan');
+
+
 
         // Register
         Route::get('/register', [UserController::class, 'index'])->name('register.index');

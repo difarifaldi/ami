@@ -121,16 +121,21 @@
             @endhasanyrole
 
             @role('admin')
-                <li class="menu-label">Pengaturan</li>
+                <li class="menu-label">Data Master</li>
 
                 <li>
+
                     <a class="has-arrow" href="javascript:;">
                         <div class="parent-icon text-success"> <i class="bi bi-backpack4"></i>
                         </div>
-                        <div class="menu-title ">Indikator</div>
+                        <div class="menu-title ">Indikator </div>
                     </a>
                     <ul>
-                        <li> <a href="/pernyataan"><i class="bi bi-card-checklist"></i>Daftar Pernyataan</a>
+                        <li> <a href="/importDataPernyataan"><i class="bi bi-file-earmark-arrow-down"></i></i>Import
+                                Data</a>
+                        </li>
+                        <li class="border-top"> <a href="/pernyataan"><i class="bi bi-card-checklist"></i>Daftar
+                                Pernyataan</a>
                         </li>
                         <li class="border-top"> <a href="/indikator"><i class="bi bi-calendar4-week"></i>Daftar
                                 Indikator</a>
@@ -156,7 +161,7 @@
                     <a class="has-arrow" href="javascript:;">
                         <div class="parent-icon text-success"> <i class="bi bi-person-gear"></i>
                         </div>
-                        <div class="menu-title ">User Management</div>
+                        <div class="menu-title ">Manajemen User</div>
                     </a>
                     <ul>
                         <li> <a href="/admin"><i class="bi bi-people"></i>Daftar Pengguna</a>

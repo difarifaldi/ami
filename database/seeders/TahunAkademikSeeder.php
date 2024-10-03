@@ -14,14 +14,12 @@ class TahunAkademikSeeder extends Seeder
     public function run(): void
     {
         $TA = [
-            '2022/2023 Ganjil',
-            '2022/2023 Genap',
-            '2023/2024 Ganjil',
-            '2023/2024 Genap',
-            '2024/2025 Ganjil',
-            '2024/2025 Genap',
-            '2025/2026 Ganjil',
-            '2025/2026 Genap',
+            '2024',
+            '2025',
+            '2026',
+            '2027',
+            '2028',
+
         ];
         foreach ($TA as $T) {
             tahunAkademik::create([

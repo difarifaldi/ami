@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('no_ps')->nullable();
             $table->text('pernyataan_standar')->nullable();
             $table->unsignedBigInteger('id_unit')->nullable();
-            $table->string('status')->default('aktif')->nullable();
+            $table->unsignedBigInteger('id_TA')->nullable();
 
+            $table->foreign('id_TA')->references('id')->on('tahun_akademiks')->onDelete('cascade');
             $table->foreign('id_unit')->references('id')->on('units')->onDelete('cascade');
             $table->timestamps();
         });

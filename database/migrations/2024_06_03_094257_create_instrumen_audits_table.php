@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('instrumen_audits', function (Blueprint $table) {
             $table->id();
-            $table->string('deskripsi_temuan')->nullable();
+            $table->text('deskripsi_temuan')->nullable();
             $table->string('bukti')->nullable();
-            $table->string('akar_penyebab')->nullable();
-            $table->string('akibat')->nullable();
-            $table->string('temuan_audit')->nullable();
-            $table->string('rekomendasi_auditor')->nullable();
-            $table->string('penanggung_jawab')->nullable();
-            $table->string('rencana_perbaikan')->nullable();
-            $table->string('tanggapan_auditee')->nullable();
+            $table->text('akar_penyebab')->nullable();
+            $table->text('akibat')->nullable();
+            $table->text('temuan_audit')->nullable();
+            $table->text('rekomendasi_auditor')->nullable();
+            $table->text('penanggung_jawab')->nullable();
+            $table->text('rencana_perbaikan')->nullable();
+            $table->text('tanggapan_auditee')->nullable();
             $table->date('jadwal_penyelesaian')->nullable();
             $table->string('link')->nullable();
             $table->unsignedBigInteger('id_status_tercapai')->nullable();
