@@ -112,22 +112,25 @@
     </div>
 
 
+
     @if ($message = Session::get('success'))
         <script>
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
+            Swal.fire({
+                icon: 'success',
+                title: '{{ $message }}',
                 showConfirmButton: false,
-                timer: 1400,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                }
+                timer: 1500
             });
-            Toast.fire({
-                icon: "success",
-                title: '{{ $message }}'
+        </script>
+    @endif
+
+    @if ($message = Session::get('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: '{{ $message }}',
+                showConfirmButton: false,
+                timer: 1500
             });
         </script>
     @endif

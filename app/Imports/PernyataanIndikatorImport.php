@@ -32,6 +32,15 @@ class PernyataanIndikatorImport implements ToCollection
 
                 // Jika ada nilai di kolom No. PS, buat pernyataan baru
                 if ($row[0] !== null) {
+                    $no_ps =  $row[0];
+                    $unit = request()->input('id_unit');
+                    $TA = request()->input('id_TA');
+
+                    $existsPernyataan = PernyataanStandar::where('no_ps', $no_ps)->where('id_unit', $unit)->where('id_TA', $TA)->exists();
+
+                    if ($existsPernyataan) {
+                        throw new \Exception('Pernyataan standar pada unit ini sudah tersedia ');
+                    }
                     $pernyataan = PernyataanStandar::create([
                         'no_ps' => $row[0],
                         'pernyataan_standar' => $row[1],
