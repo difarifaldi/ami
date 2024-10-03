@@ -38,6 +38,7 @@
                                                 <th scope="col">Auditor Anggota 2</th>
                                                 <th scope="col">Manajamen</th>
                                                 <th scope="col">Tanggal Audit</th>
+                                                <th scope="col">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -60,6 +61,8 @@
                                                     <td>
                                                         {{ \Carbon\Carbon::parse($audit->tanggal)->translatedFormat('d F Y') }}
                                                     </td>
+                                                    <td><a href="{{ route('audit.edit', $audit->id) }}"
+                                                            class="btn btn-primary">Edit</a></td>
                                                 </tr>
                                             @empty
                                                 <tr>

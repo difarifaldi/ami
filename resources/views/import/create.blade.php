@@ -34,25 +34,25 @@
                                         </div>
                                         <hr />
                                         <h6 class="font-weight-bold">Aturan Import Data</h6>
-                                        <p>Data asal unit pada file Excel harus diubah dengan aturan sebagai berikut:</p>
+                                        <p>Data pada file Excel harus sesuai dengan aturan sebagai berikut:</p>
                                         <ul class="list-unstyled mx-auto">
                                             <li class="font-weight-normal">
-                                                1. Asal unit pada file Excel harus diubah dengan aturan sebagai berikut:
-                                                <ul class="font-weight-normal">
-                                                    <li>1 = UPT Urusan Internasional (KUI) </li>
-                                                    <li>2 = UPA Perpustakaan </li>
-                                                    <li>3 = UPA Rekaya Teknologi dan Produk Unggulan</li>
-                                                    <li>4 = UPA Layanan Uji Kompetensi</li>
-                                                    <li>5 = UPA Perawatan dan Perbaikan</li>
-                                                    <li>6 = UPA Pengembangan Karier dan Kewirausahaan</li>
-                                                    <li>7 = UPA Teknologi Informasi dan Komunikasi</li>
-                                                </ul>
+                                                1. Baris pertama pada file Excel terdiri dari header
                                             </li>
-
+                                            <li class="font-weight-normal">
+                                                2. Kolom Nomor Pernyataan Standar dan Pernyataan Standar di merge cell
+                                                sesuai
+                                                dengan data indikator br
+                                            </li>
+                                            <li>
+                                                <img src="{{ asset('../assets/images/contohMerge.png') }}" class="img-fluid"
+                                                    width="50%" />
+                                            </li>
                                         </ul>
                                         <hr>
                                         <h6 class="font-weight-bold">Contoh file Excel: <a
-                                                href="{{ asset('../assets/files/contohData.xlsx') }}" target="_blank"><i
+                                                href="{{ asset('../assets/files/contohDataPernyataan.xlsx') }}"
+                                                target="_blank"><i
                                                     class="bi bi-file-earmark-text font-weight-normal"></i>Contoh data
                                                 Import Excel</a>
                                         </h6>

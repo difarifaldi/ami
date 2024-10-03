@@ -18,4 +18,8 @@ class PernyataanStandar extends Model
     {
         return $this->belongsTo(Unit::class, 'id_unit');
     }
+    public function tahunAkademik()
+    {
+        return $this->belongsTo(TahunAkademik::class, 'id_TA');
+    }
 }

@@ -154,13 +154,15 @@ class InstrumenAuditController extends Controller
         $userUnitId = Auth::user()->id_unit; // Ambil unit dari pengguna yang sedang login
 
         // Ambil id Audit Mutu Internal yang terkait dengan user auditee
-        $auditMutuIds = AuditMutuInternal::where('id_user_auditee', $userId)->where('status_audit', 'belum selesai')->pluck('id');
+
+        $auditMutu = AuditMutuInternal::where('id_user_auditee', $userId)->where('status_audit', 'belum selesai')->get();
+        $auditMutuIds = $auditMutu->pluck('id');
 
         // Ambil id indikator dari Instrumen Audit yang terkait dengan id Audit Mutu Internal di atas
         $instrumentIds = InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->pluck('id_indikator')->toArray();
 
         // Ambil pernyataan standar yang unitnya sama dengan unit pengguna yang sedang login
-        $pernyataanIds = PernyataanStandar::where('id_unit', $userUnitId)->where('status', 'aktif')->pluck('id');
+        $pernyataanIds = PernyataanStandar::where('id_unit', $userUnitId)->where('id_TA', $auditMutu->first()->id_TA)->pluck('id');
 
         // Filter indikator berdasarkan pernyataan yang ditemukan dan yang belum ada di Instrumen Audit
         $indikators = Indikator::whereIn('id_pernyataan', $pernyataanIds)

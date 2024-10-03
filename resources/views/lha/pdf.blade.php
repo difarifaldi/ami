@@ -167,6 +167,11 @@
         }
 
         /* Form PTK*/
+        .ptk-page {
+            padding: 20px;
+
+        }
+
         .ptk-page h3 {
             margin-top: 0.5cm;
             font-size: 14px

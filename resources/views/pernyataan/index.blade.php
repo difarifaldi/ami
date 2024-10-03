@@ -31,6 +31,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">Unit</th>
+                                                <th scope="col">Tahun</th>
                                                 <th scope="col">No Pernyataan</th>
                                                 <th scope="col">Pernyataan Standar</th>
 
@@ -45,6 +46,7 @@
                                                 <td>
                                                     {{ $pernyataan->unit ? $pernyataan->unit->nama : 'tidak memiliki unit' }}
                                                 </td>
+                                                <td>{{ $pernyataan->tahunAkademik->nama }}</td>
                                                 <td>{{ $pernyataan->no_ps }}</td>
                                                 <td class="text-left">{!! $pernyataan->pernyataan_standar !!}</td>
 
@@ -142,10 +144,8 @@
                         // Tampilkan pesan SweetAlert gagal
                         Swal.fire({
                             icon: 'error',
-                            title: 'Gagal',
-                            text: 'Anda tidak bisa menghapus pernyataan ini!',
-                            timer: 1400,
-                            showConfirmButton: false
+                            title: 'Anda tidak bisa menghapus pernyataan ini',
+                            text: 'Hapus data Indikator yang terkait dahulu sebelum menghapus Pernyataan!',
                         });
                         console.error('There was an error!', error);
                     });

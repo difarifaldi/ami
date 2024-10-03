@@ -175,10 +175,13 @@
                 </div>
                 <div class="modal-body">
                     <h6 class="font-weight-bold">Aturan Import Data</h6>
-                    <p>Data asal unit pada file Excel harus diubah dengan aturan sebagai berikut:</p>
+                    <p>Data pada file Excel harus sesuai dengan aturan sebagai berikut:</p>
                     <ul class="list-unstyled mx-auto">
                         <li class="font-weight-normal">
-                            1. Asal unit pada file Excel harus diubah dengan aturan sebagai berikut:
+                            1. Baris pertama pada file Excel terdiri dari header
+                        </li>
+                        <li class="font-weight-normal">
+                            2. Asal unit pada file Excel harus diubah dengan aturan sebagai berikut:
                             <ul class="font-weight-normal">
                                 <li>1 = UPT Urusan Internasional (KUI) </li>
                                 <li>2 = UPA Perpustakaan </li>
@@ -190,7 +193,7 @@
                             </ul>
                         </li>
                         <li class="font-weight-normal">
-                            2. Status pengguna <span class="font-weight-bolder">(Wajib Menggunakan Huruf Kecil)</span>
+                            3. Status pengguna <span class="font-weight-bolder">(Wajib Menggunakan Huruf Kecil)</span>
                             terdiri dari:
                             <ul class="font-weight-normal">
                                 <li>aktif </li>
@@ -200,7 +203,7 @@
                         </li>
 
                         <li class="font-weight-normal">
-                            3. Peran pengguna terdiri dari:
+                            4. Peran pengguna terdiri dari:
                             <ul class="font-weight-normal">
                                 <li>admin</li>
                                 <li>auditee</li>
@@ -211,11 +214,11 @@
                         </li>
 
                         <li class="font-weight-normal">
-                            4. Wajib untuk menyertakan password untuk setiap data pengguna
+                            5. Wajib untuk menyertakan password untuk setiap data pengguna
                         </li>
 
                         <li class="font-weight-normal">
-                            5. NIP pengguna bersifat optional sehingga dapat dikosongkan
+                            6. NIP pengguna bersifat optional sehingga dapat dikosongkan
                         </li>
                     </ul>
                     <hr>

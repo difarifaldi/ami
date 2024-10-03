@@ -15,7 +15,7 @@ class UnitSeeder extends Seeder
     public function run(): void
     {
         $units = [
-            'KUI',
+            'UPT Urusan Internasional (KUI)',
             'UPA Perpustakaan',
             'UPA Rekaya Teknologi dan Produk Unggulan',
             'UPA Layanan Uji Kompetensi',

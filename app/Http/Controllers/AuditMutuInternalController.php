@@ -8,8 +8,10 @@ use App\Http\Requests\UpdateAuditMutuInternalRequest;
 use App\Models\TahunAkademik;
 use App\Models\Unit;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuditMutuInternalController extends Controller
 {
@@ -21,15 +23,15 @@ class AuditMutuInternalController extends Controller
         $userId = Auth::id();
         $audits = collect(); // Inisialisasi variabel audits sebagai koleksi kosong
 
-        if (auth()->user()->hasRole('auditee')) {
+        if (User::find(auth()->user()->id)->hasRole('auditee')) {
             $audits = AuditMutuInternal::where('id_user_auditee', $userId)->get();
-        } elseif (auth()->user()->hasRole('auditor')) {
+        } elseif (User::find(auth()->user()->id)->hasRole('auditor')) {
             $audits = AuditMutuInternal::where(function ($query) use ($userId) {
                 $query->where('id_user_auditor_ketua', $userId)
                     ->orWhere('id_user_auditor_anggota1', $userId)
                     ->orWhere('id_user_auditor_anggota2', $userId);
             })->get();
-        } elseif (auth()->user()->hasRole('manajemen')) {
+        } elseif (User::find(auth()->user()->id)->hasRole('manajemen')) {
             $audits = AuditMutuInternal::where('id_user_manajemen', $userId)->get();
         } else {
             $audits = AuditMutuInternal::all(); // Jika pengguna tidak memiliki salah satu peran di atas, ambil semua audit
@@ -110,23 +112,47 @@ class AuditMutuInternalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(AuditMutuInternal $auditMutuInternal)
+    public function edit(AuditMutuInternal $audit)
     {
-        //
+
+        $auditors = User::role('auditor')->get();
+
+        return view('ami.edit', compact('auditors', 'audit'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAuditMutuInternalRequest $request, AuditMutuInternal $auditMutuInternal)
+    public function update(Request $request, AuditMutuInternal $audit)
     {
-        //
+        try {
+            // Cek nilai audit yang akan diupdate
+
+            $validatedData = $request->validate([
+                'id_user_auditor_ketua' => 'required',
+                'id_user_auditor_anggota1' => 'required',
+                'id_user_auditor_anggota2' => 'nullable',
+                'tanggal' => 'required|date',
+            ]);
+
+            // Update data audit
+            $audit->update($validatedData);
+
+            return redirect('/audit')->with('success', 'Data penugasan audit berhasil diubah');
+        } catch (\Exception $e) {
+            Log::error('Update error: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat mengubah data.');
+        }
     }
+
+
+
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AuditMutuInternal $auditMutuInternal)
+    public function destroy(AuditMutuInternal $audit)
     {
         //
     }

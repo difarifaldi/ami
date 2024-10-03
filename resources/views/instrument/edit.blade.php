@@ -292,6 +292,7 @@
 
                                             @role('manajemen')
                                                 <h3 class="mt-4">Diisi Manajemen</h3>
+                                                <h6>Jika status temuan tercapai maka langsung klik tombol kirim</h6>
 
                                                 <!-- Rencana Tindak Lanjut -->
                                                 <div class="form-group mt-4">
