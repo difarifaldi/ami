@@ -161,23 +161,6 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="col-6">
-                                                    <div class="form-group mt-4">
-                                                        <label>Tahun Akademik</label>
-                                                        <select name="id_TA" id="id_TA" class="single-select">
-                                                            <option value="">Silahkan Pilih Tahun Akademik</option>
-                                                            @foreach ($tahuns as $tahun)
-                                                                <option
-                                                                    value="{{ $tahun->id }}"{{ old('id_TA') == $tahun->id ? 'selected' : '' }}>
-                                                                    {{ $tahun->nama }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('id_TA')
-                                                            <div class="d-block text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
 
                                             </div>
 

@@ -224,12 +224,13 @@
                                                                 <option value="">Tidak ada penanggung jawab</option>
                                                             @endhasanyrole
                                                             <option value="">Pilih Penanggung jawab</option>
-                                                            @foreach ($user as $usr)
-                                                                <option value="{{ $usr->name }}"
-                                                                    {{ old('penanggung_jawab', $instrument->penanggung_jawab) == $usr->name ? 'selected' : '' }}>
-                                                                    {{ $usr->name }}
+                                                            @foreach ($units as $unit)
+                                                                <option value="{{ 'KA ' . $unit->nama }}"
+                                                                    {{ old('penanggung_jawab', $instrument->penanggung_jawab) == 'KA ' . $unit->nama ? 'selected' : '' }}>
+                                                                    {{ 'KA ' . $unit->nama }}
                                                                 </option>
                                                             @endforeach
+
                                                         </select>
                                                         @error('penanggung_jawab')
                                                             <div class="d-block text-danger">{{ $message }}</div>

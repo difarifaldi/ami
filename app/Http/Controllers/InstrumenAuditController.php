@@ -221,10 +221,10 @@ class InstrumenAuditController extends Controller
         $status_tercapai = StatusTercapai::all();
         $status_temuan = StatusTemuan::all();
         $status_akhir = StatusAkhir::all();
-        $user = User::all();
+        $units = Unit::all();
 
 
-        return view('instrument.edit', compact('instrument', 'status_tercapai', 'status_akhir', 'status_temuan', 'user'));
+        return view('instrument.edit', compact('instrument', 'status_tercapai', 'status_akhir', 'status_temuan', 'units'));
     }
 
     /**

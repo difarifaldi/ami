@@ -149,7 +149,7 @@ class PernyataanStandarController extends Controller
 
             return back()->with('success', 'Data berhasil diimpor!');
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal mengimpor data: ' . $e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
     }
 }

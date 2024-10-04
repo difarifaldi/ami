@@ -74,28 +74,43 @@ class AuditMutuInternalController extends Controller
             'id_user_auditor_anggota1' => 'required',
             'id_user_auditor_anggota2' => 'nullable',
             'id_user_manajemen' => 'required',
-            'id_TA' => 'required',
-            'tanggal' => 'required',
+            'tanggal' => 'required|date',
         ]);
 
+        // Ambil tahun dari tanggal audit yang dikirim dari form
+        $yearFromTanggal = date('Y', strtotime($validatedData['tanggal']));
+
+        // Cari id_TA dari model TahunAkademik berdasarkan tahun
+        $idTA = TahunAkademik::where('nama', $yearFromTanggal)->value('id');
+
+        // Jika tidak ditemukan, berikan pesan error
+        if (!$idTA) {
+            return redirect()->back()->withInput()->with('error', 'Tahun Akademik tidak ditemukan.');
+        }
+
+        // Cek apakah Audit Mutu Internal sudah ada untuk tahun akademik ini dan unit yang sama
         $existingAMI = AuditMutuInternal::where('id_unit', $validatedData['id_unit'])
-            ->where('id_TA', $validatedData['id_TA'])
-            ->get();
+            ->where('id_TA', $idTA)
+            ->exists();
 
         $onGoingAMI = AuditMutuInternal::where('id_unit', $validatedData['id_unit'])
             ->where('status_audit', 'belum selesai')
-            ->get();
+            ->exists();
 
-        if ($existingAMI->count() > 0) {
+        if ($existingAMI) {
             return redirect()->back()->withInput()->with('error', 'Sudah terdapat Audit Mutu Internal pada Tahun Akademik Ini.');
         }
 
-        if ($onGoingAMI->count() > 0) {
+        if ($onGoingAMI) {
             return redirect()->back()->withInput()->with('error', 'Audit Mutu Internal pada Unit ini sedang berjalan.');
         }
 
+        // Tambahkan id_TA ke data yang divalidasi sebelum menyimpannya ke database
+        $validatedData['id_TA'] = $idTA;
 
+        // Simpan Audit Mutu Internal
         AuditMutuInternal::create($validatedData);
+
         return redirect('/audit')->with('success', 'Data Audit Berhasil Ditambahkan');
     }
 
