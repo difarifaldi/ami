@@ -7,6 +7,7 @@ use App\Http\Requests\StorePernyataanStandarRequest;
 use App\Http\Requests\UpdatePernyataanStandarRequest;
 use App\Imports\PernyataanIndikatorImport;
 use App\Models\Indikator;
+use App\Models\InstrumenAudit;
 use App\Models\TahunAkademik;
 use App\Models\Unit;
 use Exception;
@@ -105,14 +106,20 @@ class PernyataanStandarController extends Controller
         DB::beginTransaction();
 
         try {
-            $checkIndikator = Indikator::where('id_pernyataan', $pernyataan->id)->first();
+            // Cek apakah ada indikator yang terkait dengan instrumen
+            $indikators = Indikator::where('id_pernyataan', $pernyataan->id)->get();
 
+            foreach ($indikators as $indikator) {
+                $check = InstrumenAudit::where('id_indikator', $indikator->id)->first();
 
-            if ($checkIndikator) {
-                DB::rollBack();
-                return response()->json(['message' => 'Tidak dapat menghapus Pernyataan karena masih terkait dengan entitas lain.'], 400);
+                // Jika ada indikator yang sudah terkait dengan instrumen audit
+                if ($check) {
+                    DB::rollBack();
+                    return response()->json(['message' => 'Tidak dapat menghapus Pernyataan karena masih terkait dengan entitas lain.'], 400);
+                }
             }
 
+            // Jika tidak ada indikator terkait dengan instrumen, hapus pernyataan
             $pernyataan->delete();
 
             DB::commit();
@@ -120,10 +127,10 @@ class PernyataanStandarController extends Controller
             return response()->json(['message' => 'Pernyataan berhasil dihapus!'], 200);
         } catch (Exception $e) {
             DB::rollBack();
-
-            return response()->json(['message' => 'Terjadi kesalahan!'], 500);
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
 
 
 

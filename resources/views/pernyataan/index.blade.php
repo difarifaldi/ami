@@ -145,7 +145,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Anda tidak bisa menghapus pernyataan ini',
-                            text: 'Hapus data Indikator yang terkait dahulu sebelum menghapus Pernyataan!',
+                            text: 'Pernyataan standar sudah digunakan dalam instrumen audit !',
                         });
                         console.error('There was an error!', error);
                     });
