@@ -117,22 +117,23 @@ class IndikatorController extends Controller
         DB::beginTransaction();
 
         try {
-            $checkInstrument = InstrumenAudit::where('id_indikator', $indikator->id)->first();
+            // Cek apakah indikator masih terkait dengan instrumen audit
+            $checkInstrument = InstrumenAudit::where('id_indikator', $indikator->id)->exists();
 
-
+            // Jika masih terkait, batalkan penghapusan
             if ($checkInstrument) {
                 DB::rollBack();
                 return response()->json(['message' => 'Tidak dapat menghapus Indikator karena masih terkait dengan entitas lain.'], 400);
             }
 
+            // Hapus indikator
             $indikator->delete();
 
             DB::commit();
 
             return response()->json(['message' => 'Indikator berhasil dihapus!'], 200);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-
             return response()->json(['message' => 'Terjadi kesalahan!'], 500);
         }
     }

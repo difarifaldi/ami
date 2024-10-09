@@ -110,7 +110,7 @@ class PernyataanStandarController extends Controller
             $indikators = Indikator::where('id_pernyataan', $pernyataan->id)->get();
 
             foreach ($indikators as $indikator) {
-                $check = InstrumenAudit::where('id_indikator', $indikator->id)->first();
+                $check = InstrumenAudit::where('id_indikator', $indikator->id)->exists();
 
                 // Jika ada indikator yang sudah terkait dengan instrumen audit
                 if ($check) {

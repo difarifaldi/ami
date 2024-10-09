@@ -61,11 +61,11 @@ class InstrumenAuditController extends Controller
         }
 
         // Tentukan kondisi berdasarkan peran pengguna
-        if (auth()->user()->hasRole('auditee')) {
+        if (User::find(auth()->user()->id)->hasRole('auditee')) {
             $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where('id_user_auditee', $userId)->pluck('id');
             $instrumentsQuery->whereIn('id_AMI', $auditMutuIds);
         }
-        if (auth()->user()->hasRole('auditor')) {
+        if (User::find(auth()->user()->id)->hasRole('auditor')) {
             $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where(function ($query) use ($userId) {
                 $query->where('id_user_auditor_ketua', $userId)
                     ->orWhere('id_user_auditor_anggota1', $userId)
@@ -73,7 +73,7 @@ class InstrumenAuditController extends Controller
             })->pluck('id');
             $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_tercapai');
         }
-        if (auth()->user()->hasRole('manajemen')) {
+        if (User::find(auth()->user()->id)->hasRole('manajemen')) {
             $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where('id_user_manajemen', $userId)->pluck('id');
             $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_temuan');
         }

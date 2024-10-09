@@ -146,7 +146,7 @@ class UserController extends Controller
                     ->orWhere('id_user_auditor_anggota2', $userId)
                     ->orWhere('id_user_manajemen', $userId)
                     ->orWhere('id_user_admin', $userId);
-            })->first();
+            })->exists(); // Menggunakan exists()
 
             if ($relatedAudit) {
                 DB::rollBack(); // Batalkan transaksi
@@ -162,7 +162,6 @@ class UserController extends Controller
             $record = RecordLogin::where('user_id', $userId);
             $record->delete();
 
-
             DB::commit();
 
             return response()->json(['message' => 'Akun pengguna berhasil dihapus!'], 200);
@@ -172,6 +171,7 @@ class UserController extends Controller
             return response()->json(['message' => 'Terjadi kesalahan!'], 500);
         }
     }
+
 
 
     public function umanagement()

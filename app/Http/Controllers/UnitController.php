@@ -93,14 +93,17 @@ class UnitController extends Controller
         DB::beginTransaction();
 
         try {
-            $checkUnitUser = User::where('id_unit', $unit->id)->first();
-            $checkUnitAMI = AuditMutuInternal::where('id_unit', $unit->id)->first();
+            // Cek apakah unit terkait dengan User atau AuditMutuInternal
+            $checkUnitUser = User::where('id_unit', $unit->id)->exists();
+            $checkUnitAMI = AuditMutuInternal::where('id_unit', $unit->id)->exists();
 
+            // Jika terkait dengan entitas lain, rollback dan return pesan error
             if ($checkUnitUser || $checkUnitAMI) {
                 DB::rollBack();
                 return response()->json(['message' => 'Tidak dapat menghapus Unit karena masih terkait dengan entitas lain.'], 400);
             }
 
+            // Jika tidak terkait, hapus unit
             $unit->delete();
 
             DB::commit();
@@ -108,7 +111,6 @@ class UnitController extends Controller
             return response()->json(['message' => 'Unit berhasil dihapus!'], 200);
         } catch (Exception $e) {
             DB::rollBack();
-
             return response()->json(['message' => 'Terjadi kesalahan!'], 500);
         }
     }
