@@ -271,11 +271,10 @@
 
                                                     <!-- Tanggapan Auditee -->
                                                     <div class="{{ $display }}">
-                                                        <h4 class="mt-4">Tanggapan Auditee <span
-                                                                class="font-italic font-weight-bolder">
-                                                                belum mencapai</span>
-                                                        </h4>
-                                                        <div class="form-group mt-4">
+                                                        <h3 class="mt-4">Diisi Auditee</h3>
+                                                        <h6>Bila Status Temuan Belum Mencapai (Optional)</h6>
+                                                        <div class="form-group mt-2">
+                                                            <label>Tanggapan Auditee</label>
                                                             <input type="text" name="tanggapan_auditee"
                                                                 id="tanggapan_auditee"
                                                                 class="form-control bg-white @error('tanggapan_auditee') is-invalid @enderror"

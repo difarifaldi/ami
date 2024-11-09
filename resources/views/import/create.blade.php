@@ -42,11 +42,11 @@
                                             <li class="font-weight-normal">
                                                 2. Kolom Nomor Pernyataan Standar dan Pernyataan Standar di merge cell
                                                 sesuai
-                                                dengan data indikator br
+                                                dengan data indikator
                                             </li>
                                             <li>
-                                                <img src="{{ asset('../assets/images/contohMerge.png') }}" class="img-fluid"
-                                                    width="50%" />
+                                                <img src="{{ asset('../assets/images/contohMerge.png') }}"
+                                                    class="img-fluid mt-2" width="50%" />
                                             </li>
                                         </ul>
                                         <hr>

@@ -41,9 +41,9 @@
                      
                          $auditMutuIds = App\Models\AuditMutuInternal::where('status_audit', '=', 'belum selesai')->where('id_user_manajemen', $userId)->pluck('id')->toArray();
                      
-                         $instruments = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_akhir')->whereNotNull('id_status_temuan')->get();
+                         $instruments = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNull('id_status_akhir')->whereNotNull('id_status_temuan')->get();
                      
-                         $instrumentsCount = App\Models\InstrumenAudit::where('id_AMI', $auditMutuIds)->whereNull('id_status_akhir')->whereNotNull('id_status_temuan')->count();
+                         $instrumentsCount = App\Models\InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->whereNull('id_status_akhir')->whereNotNull('id_status_temuan')->count();
                      
                          //  Admin
                      } elseif (Auth::user()->hasRole('admin')) {
