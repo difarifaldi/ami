@@ -18,19 +18,19 @@ class LhaController extends Controller
         if (auth()->user()->hasRole('manajemen')) {
             $audits = AuditMutuInternal::with(['instrument'])
                 ->where('id_user_manajemen', $userID)
-                ->get();
+                ->paginate(9);
         } else if (auth()->user()->hasRole('auditee')) {
             $audits = AuditMutuInternal::with(['instrument'])
                 ->where('id_user_auditee', $userID)
-                ->get();
+                ->paginate(9);
         } else if (auth()->user()->hasRole('auditor')) {
             $audits = AuditMutuInternal::with(['instrument'])
                 ->where(function ($query) use ($userID) {
                     $query->where('id_user_auditor_ketua', $userID)->orWhere('id_user_auditor_anggota1', $userID)->orWhere('id_user_auditor_anggota2', $userID);
                 })
-                ->get();
+                ->paginate(9);
         } else {
-            $audits = AuditMutuInternal::with(['instrument'])->get();
+            $audits = AuditMutuInternal::with(['instrument'])->paginate(9);
         }
         return view('lha.index', compact('audits'));
     }

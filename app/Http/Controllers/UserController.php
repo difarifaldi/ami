@@ -287,10 +287,11 @@ class UserController extends Controller
 
     public function editProfile($id)
     {
-        $currentUser = Auth::user();
-
-
+        $currentUser = Auth::user()->id;
         $user = User::findOrFail($id);
+        if ($currentUser != $id) {
+            return redirect('/')->with('failed', 'Anda Tidak Berwenang Mengakses Profil Ini.');
+        }
         $roles = Role::all();
         $units = Unit::all();
 

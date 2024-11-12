@@ -47,10 +47,9 @@
                                 </div>
                             </div>
                         @endforeach
-
-
-
-
+                    </div>
+                    <div class="justify-content-center d-flex mt-3">
+                        {{ $audits->links() }}
                     </div>
                 </div>
             </div>
