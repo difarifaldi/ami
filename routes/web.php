@@ -74,7 +74,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/statusAudit/filter', [StatusTemuanController::class, 'filter'])->name('statusAudit.filter');
 
 
-    Route::get('/pernyataan/by-unit/{unitId}', [IndikatorController::class, 'getPernyataanByUnit'])->name('pernyataan.byUnit');
+    Route::get('/pernyataan/by-unit/{unitId}/{taId}', [IndikatorController::class, 'getPernyataanByUnit'])->name('pernyataan.byUnit');
 
     Route::get('/auditee/by-unit/{unitId}', [AuditMutuInternalController::class, 'getAuditeeByUnit']);
 

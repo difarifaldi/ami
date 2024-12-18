@@ -7,6 +7,7 @@ use App\Http\Requests\StoreIndikatorRequest;
 use App\Http\Requests\UpdateIndikatorRequest;
 use App\Models\InstrumenAudit;
 use App\Models\PernyataanStandar;
+use App\Models\TahunAkademik;
 use App\Models\Unit;
 use Exception;
 use Illuminate\Http\Request;
@@ -29,14 +30,14 @@ class IndikatorController extends Controller
      */
     public function create()
     {
-        $pernyataans = PernyataanStandar::where('status', 'aktif')->get();
-        $units = Unit::all(); // Pastikan untuk mendapatkan semua unit
-        return view('indikator.create', compact('pernyataans', 'units'));
+        $pernyataans = PernyataanStandar::all();
+        $units = Unit::all();
+        $tahunAkademiks = TahunAkademik::all();
+        return view('indikator.create', compact('pernyataans', 'units', 'tahunAkademiks'));
     }
-    public function getPernyataanByUnit($unitId)
+    public function getPernyataanByUnit($unitId, $taId)
     {
-        $pernyataans = PernyataanStandar::where('id_unit', $unitId)
-            ->where('status', 'aktif')
+        $pernyataans = PernyataanStandar::where('id_unit', $unitId)->where('id_TA', $taId)
             ->get();
         return response()->json($pernyataans);
     }

@@ -37,6 +37,19 @@
                                             @csrf
 
                                             <div class="form-group mt-4">
+                                                <label>Tahun Akademik</label>
+                                                <select name="id_TA" id="id_TA" class="single-select">
+                                                    <option value="">Silahkan Pilih Tahun Akademik</option>
+                                                    @foreach ($tahunAkademiks as $ta)
+                                                        <option value="{{ $ta->id }}"
+                                                            {{ old('id_TA') == $ta->id ? 'selected' : '' }}>
+                                                            {{ $ta->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group mt-4">
                                                 <label>No Pernyataan Standar</label>
                                                 <input type="text" name="no_ps" id="no_ps"
                                                     class="form-control @error('no_ps')

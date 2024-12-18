@@ -35,9 +35,24 @@
                                         <form id="indikator-form" action="{{ route('indikator.store') }}" method="POST"
                                             enctype="multipart/form-data">
                                             @csrf
+
+                                            <div class="form-group mt-4">
+                                                <label>Tahun Akademik</label>
+                                                <select name="id_TA" id="id_TA" class="single-select"
+                                                    onchange="fetchPernyataanByUnit()">
+                                                    <option value="">Silahkan Pilih Tahun Akademik</option>
+                                                    @foreach ($tahunAkademiks as $ta)
+                                                        <option value="{{ $ta->id }}"
+                                                            {{ old('id_TA') == $ta->id ? 'selected' : '' }}>
+                                                            {{ $ta->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
                                             <div class="form-group mt-4">
                                                 <label>Unit</label>
-                                                <select name="id_unit" id="id_unit" class="form-control bg-white"
+                                                <select name="id_unit" id="id_unit" class="single-select"
                                                     onchange="fetchPernyataanByUnit()">
                                                     <option value="">Silahkan Pilih Unit</option>
                                                     @foreach ($units as $unit)
@@ -108,12 +123,13 @@
     <script>
         function fetchPernyataanByUnit() {
             var unitId = document.getElementById('id_unit').value;
+            var taId = document.getElementById('id_TA').value;
 
             var pernyataanSelect = document.getElementById('id_pernyataan');
             pernyataanSelect.innerHTML = '<option value="">Silahkan Pilih Pernyataan Standar</option>';
 
-            if (unitId) {
-                fetch(`/pernyataan/by-unit/${unitId}`)
+            if (unitId && taId) {
+                fetch(`/pernyataan/by-unit/${unitId}/${taId}`)
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(pernyataan => {

@@ -35,7 +35,8 @@ class PernyataanStandarController extends Controller
     public function create()
     {
         $units = Unit::all();
-        return view('pernyataan.create', compact('units'));
+        $tahunAkademiks = TahunAkademik::all();
+        return view('pernyataan.create', compact('units', 'tahunAkademiks'));
     }
 
     /**
@@ -47,8 +48,9 @@ class PernyataanStandarController extends Controller
             'no_ps' => 'required|numeric',
             'pernyataan_standar' => 'required',
             'id_unit' => 'required',
+            'id_TA' => 'required',
         ]);
-        $existPernyataan = PernyataanStandar::where('no_ps', $validatedData['no_ps'])->where('id_unit', $validatedData['id_unit'])->where('status', 'aktif')->exists();
+        $existPernyataan = PernyataanStandar::where('no_ps', $validatedData['no_ps'])->where('id_unit', $validatedData['id_unit'])->where('id_TA', $validatedData['id_TA'])->exists();
 
         if ($existPernyataan) {
             return redirect()->back()->with('failed', 'Sudah terdapat pernyataan standar pada unit ini');
