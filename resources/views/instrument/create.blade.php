@@ -76,7 +76,21 @@
                                                 </div>
                                             </div>
 
-
+                                            <!--  Status Tercapai -->
+                                            <hr class="border border-primary border-3 opacity-75">
+                                            <h3>Bagian Auditee</h3>
+                                            <div class="form-group mt-4">
+                                                <label>Status Tercapai</label>
+                                                <select name="id_status_tercapai" id="id_status_tercapai"
+                                                    class="form-control bg-white">
+                                                    @foreach ($status_tercapai as $trcapai)
+                                                        <option value="{{ $trcapai->id }}"
+                                                            {{ old('id_status_tercapai') == $trcapai->id ? 'selected' : '' }}>
+                                                            {{ $trcapai->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
 
                                             <div class="form-group mt-4">
                                                 <label>Deskripsi Temuan</label>
@@ -93,7 +107,7 @@
 
                                             <!--  Akar Penyebab -->
                                             <div class="form-group mt-4">
-                                                <label>Akar Penyebab</label>
+                                                <label id="label_penyebab">Akar Penyebab</label>
                                                 <input type="text" name="akar_penyebab" id="akar_penyebab"
                                                     class="form-control bg-white @error('akar_penyebab')
                                                     is-invalid
@@ -133,23 +147,9 @@
                                                 @error('bukti')
                                                     <div class="d-block text-danger">{{ $message }}</div>
                                                 @enderror
-
-
                                             </div>
 
-                                            <!--  Status Tercapai -->
-                                            <div class="form-group mt-4">
-                                                <label>Status Tercapai</label>
-                                                <select name="id_status_tercapai" id="id_status_tercapai"
-                                                    class="form-control bg-white">
-                                                    @foreach ($status_tercapai as $trcapai)
-                                                        <option value="{{ $trcapai->id }}"
-                                                            {{ old('id_status_tercapai') == $trcapai->id ? 'selected' : '' }}>
-                                                            {{ $trcapai->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+
                                             <div class="btn-group mt-3 w-100">
                                                 <button type="submit" class="btn btn-primary btn-block">Simpan</button>
                                             </div>
@@ -237,6 +237,23 @@
         }
 
         updateIndikator();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusTercapai = document.getElementById('id_status_tercapai');
+            const labelPenyebab = document.getElementById('label_penyebab');
+
+
+            function updateLabel() {
+                if (statusTercapai.value == 1) {
+                    labelPenyebab.innerText = 'Akar Penyebab';
+                } else {
+                    labelPenyebab.innerText = 'Penunjang';
+                }
+            }
+
+            updateLabel();
+            statusTercapai.addEventListener('change', updateLabel);
+        });
     </script>
 
     @if ($message = Session::get('success'))
