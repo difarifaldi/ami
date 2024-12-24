@@ -29,6 +29,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">No</th>
+                                                <th scope="col">Id Unit</th>
                                                 <th scope="col">Nama</th>
                                                 <th scope="col">Sampul</th>
                                                 <th scope="col">Aksi</th>
@@ -39,6 +40,7 @@
                                             @forelse ($units as $unit)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $unit->id }}</td>
                                                     <td>{{ $unit->nama }}</td>
 
                                                     <td>
