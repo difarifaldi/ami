@@ -93,7 +93,7 @@
                                             </div>
 
                                             <div class="form-group mt-4">
-                                                <label>Deskripsi Temuan</label>
+                                                <label>Deskripsi Kondisi Saat Ini</label>
                                                 <input type="text" name="deskripsi_temuan" id="deskripsi_temuan"
                                                     class="form-control bg-white @error('deskripsi_temuan')
                                                     is-invalid
