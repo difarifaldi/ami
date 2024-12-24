@@ -64,6 +64,16 @@ class InstrumenAuditController extends Controller
         if (User::find(auth()->user()->id)->hasRole('auditee')) {
             $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where('id_user_auditee', $userId)->pluck('id');
             $instrumentsQuery->whereIn('id_AMI', $auditMutuIds);
+
+
+            // Indikator yang belum
+            $instrumentIds = InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->pluck('id_indikator')->toArray();
+            $auditMutu = AuditMutuInternal::where('id_user_auditee', $userId)->where('status_audit', 'belum selesai')->get();
+            $pernyataanIds = PernyataanStandar::where('id_unit', Auth::user()->id_unit)->where('id_TA', $auditMutu->first()->id_TA)->pluck('id');
+
+            $indikators = Indikator::whereIn('id_pernyataan', $pernyataanIds)
+                ->whereNotIn('id', $instrumentIds)->orderBy('no', 'ASC')
+                ->get();
         }
         if (User::find(auth()->user()->id)->hasRole('auditor')) {
             $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where(function ($query) use ($userId) {
@@ -78,6 +88,8 @@ class InstrumenAuditController extends Controller
             $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_temuan');
         }
 
+
+
         // Ambil unit yang terkait dengan user
         $uniqueUnits = Unit::whereIn('id', $unitIds)->get();
 
@@ -86,6 +98,7 @@ class InstrumenAuditController extends Controller
             'allInstruments' => $allInstruments,
             'uniqueUnits' => $uniqueUnits,
             'selectedUnitId' => $unitId,
+            'indikators' => $indikators,
         ]);
     }
 
