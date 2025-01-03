@@ -91,149 +91,41 @@
                         </div>
                     </div>
 
-                    <div class="card-deck">
-                        <!-- UPT Urusan Internasional (KUI) -->
-                        <div class="card radius-15">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <h5 class="mb-0 font-weight-bold">UPT Urusan Internasional (KUI)</h5>
-                                    </div>
-                                </div>
-                                <div class="row mt-3 m-0">
-                                    <select name="select_TA_KUI" id="select_TA_KUI" class="form-control w-50">
-                                        @foreach ($tahuns as $tahun)
-                                            <option value="{{ $tahun->id }}"
-                                                {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mt-4">
-                                    <canvas id="statusTemuanChartKUI" width="400" height="400"></canvas>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="row">
+                        @foreach ($units as $unit)
+                            @hasrole('auditee')
+                                <div class="col-lg-12">
+                                @else
+                                    <div class="col-lg-6">
+                                    @endhasrole
 
-                        <!-- UPA Layanan Uji Kompetensi -->
-                        <div class="card radius-15">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <h5 class="mb-0 font-weight-bold">UPA Layanan Uji Kompetensi</h5>
+                                    <div class="card radius-15">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                    <h5 class="mb-0 font-weight-bold">{{ $unit->nama }}</h5>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3 m-0">
+                                                <select name="select_TA_{{ $unit->id }}"
+                                                    id="select_TA_{{ $unit->id }}" class="form-control w-50">
+                                                    @foreach ($tahuns as $tahun)
+                                                        <option value="{{ $tahun->id }}"
+                                                            {{ $selectedTA == $tahun->id ? 'selected' : '' }}>
+                                                            {{ $tahun->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="mt-4">
+                                                <canvas id="statusTemuanChart{{ $unit->id }}" width="400"
+                                                    height="400"></canvas>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row mt-3 m-0">
-                                    <select name="select_TA_Layanan" id="select_TA_Layanan" class="form-control w-50">
-                                        @foreach ($tahuns as $tahun)
-                                            <option value="{{ $tahun->id }}"
-                                                {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mt-4">
-                                    <canvas id="statusTemuanChartLayanan" width="400" height="400"></canvas>
-                                </div>
-                            </div>
-                        </div>
 
-                    </div>
-                    <div class="card-deck">
-                        <!-- UPA Rekaya Teknologi dan Produk Unggulan -->
-                        <div class="card radius-15">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <h5 class="mb-0 font-weight-bold">UPA Rekaya Teknologi dan Produk Unggulan</h5>
-                                    </div>
                                 </div>
-                                <div class="row mt-3 m-0">
-                                    <select name="select_TA_Rekayasa" id="select_TA_Rekayasa" class="form-control w-50">
-                                        @foreach ($tahuns as $tahun)
-                                            <option value="{{ $tahun->id }}"
-                                                {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mt-4">
-                                    <canvas id="statusTemuanChartRekayasa" width="400" height="400"></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- UPA Perpustakaan -->
-                        <div class="card radius-15">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <h5 class="mb-0 font-weight-bold">UPA Perpustakaan</h5>
-                                    </div>
-                                </div>
-                                <div class="row mt-3 m-0">
-                                    <select name="select_TA_Perpus" id="select_TA_Perpus" class="form-control w-50">
-                                        @foreach ($tahuns as $tahun)
-                                            <option value="{{ $tahun->id }}"
-                                                {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mt-4">
-                                    <canvas id="statusTemuanChartPerpus" width="400" height="400"></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="card-deck">
-                        <!-- UPA Perawatan dan Perbaikan -->
-                        <div class="card radius-15">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <h5 class="mb-0 font-weight-bold">UPA Perawatan dan Perbaikan</h5>
-                                    </div>
-                                </div>
-                                <div class="row mt-3 m-0">
-                                    <select name="select_TA_Perawatan" id="select_TA_Perawatan"
-                                        class="form-control w-50">
-                                        @foreach ($tahuns as $tahun)
-                                            <option value="{{ $tahun->id }}"
-                                                {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mt-4">
-                                    <canvas id="statusTemuanChartPerawatan" width="400" height="400"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- UPA Teknologi Informasi dan Komunikasi -->
-                        <div class="card radius-15">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <h5 class="mb-0 font-weight-bold">UPA Teknologi Informasi dan Komunikasi</h5>
-                                    </div>
-                                </div>
-                                <div class="row mt-3 m-0">
-                                    <select name="select_TA_TIK" id="select_TA_TIK" class="form-control w-50">
-                                        @foreach ($tahuns as $tahun)
-                                            <option value="{{ $tahun->id }}"
-                                                {{ $selectedTA == $tahun->id ? 'selected' : '' }}>{{ $tahun->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mt-4">
-                                    <canvas id="statusTemuanChartTIK" width="400" height="400"></canvas>
-                                </div>
-                            </div>
-                        </div>
-
+                        @endforeach
                     </div>
 
 
@@ -425,36 +317,19 @@
                                             label: 'Jumlah Status Temuan',
                                             data: [],
                                             backgroundColor: [
-                                                'rgba(255, 99, 132, 0.6)',
-                                                'rgba(54, 162, 235, 0.6)',
-                                                'rgba(255, 205, 86, 0.6)',
-                                                'rgba(75, 192, 192, 0.6)',
-                                                'rgba(153, 102, 255, 0.6)',
-                                                'rgba(255, 159, 64, 0.6)',
-                                                'rgba(255, 0, 0, 0.6)',
-                                                'rgba(0, 255, 0, 0.6)',
-                                                'rgba(0, 0, 255, 0.6)',
-                                                'rgba(255, 255, 0, 0.6)',
-                                                'rgba(0, 255, 255, 0.6)',
-                                                'rgba(128, 0, 128, 0.6)',
-                                                'rgba(128, 128, 0, 0.6)',
+                                                'rgba(255, 99, 132, 0.6)', // Merah
+                                                'rgba(54, 162, 235, 0.6)', // Biru
+                                                'rgba(75, 192, 192, 0.6)', // Hijau
+                                                'rgba(255, 206, 86, 0.6)', // Kuning
+                                                'rgba(153, 102, 255, 0.6)', // Ungu
                                             ],
                                             borderColor: [
-                                                'rgba(255, 99, 132, 1)',
-                                                'rgba(54, 162, 235, 1)',
-                                                'rgba(255, 205, 86, 1)',
-                                                'rgba(75, 192, 192, 1)',
-                                                'rgba(153, 102, 255, 1)',
-                                                'rgba(255, 159, 64, 1)',
-                                                'rgba(255, 0, 0, 1)',
-                                                'rgba(0, 255, 0, 1)',
-                                                'rgba(0, 0, 255, 1)',
-                                                'rgba(255, 255, 0, 1)',
-                                                'rgba(0, 255, 255, 1)',
-                                                'rgba(128, 0, 128, 1)',
-                                                'rgba(128, 128, 0, 1)',
+                                                'rgba(255, 99, 132, 1)', // Merah
+                                                'rgba(54, 162, 235, 1)', // Biru
+                                                'rgba(75, 192, 192, 1)', // Hijau
+                                                'rgba(255, 206, 86, 1)', // Kuning
+                                                'rgba(153, 102, 255, 1)', // Ungu
                                             ],
-
                                             borderWidth: 1
                                         }]
                                     },
@@ -471,12 +346,22 @@
                                 });
                             }
 
-                            const chartStatusTemuanKUI = createChart('statusTemuanChartKUI');
-                            const chartStatusTemuanPerpus = createChart('statusTemuanChartPerpus');
-                            const chartStatusTemuanRekayasa = createChart('statusTemuanChartRekayasa');
-                            const chartStatusTemuanLayanan = createChart('statusTemuanChartLayanan');
-                            const chartStatusTemuanPerawatan = createChart('statusTemuanChartPerawatan');
-                            const chartStatusTemuanTIK = createChart('statusTemuanChartTIK');
+                            const units = @json($units); // Kirim data unit dari Laravel ke JavaScript
+                            const charts = {};
+
+                            units.forEach(unit => {
+                                const chartId = `statusTemuanChart${unit.id}`;
+                                const selectId = `select_TA_${unit.id}`;
+                                charts[unit.id] = createChart(chartId);
+
+                                // Fetch data for each unit
+                                fetchStatusTemuanData(selectId, charts[unit.id], unit.id);
+
+                                // Add event listener for each select element
+                                document.getElementById(selectId).addEventListener('change', function() {
+                                    fetchStatusTemuanData(selectId, charts[unit.id], unit.id);
+                                });
+                            });
 
                             function fetchStatusTemuanData(selectElementId, chart, unitId) {
                                 const selectTA = document.getElementById(selectElementId);
@@ -498,39 +383,10 @@
                                         console.error('Error fetching data:', error);
                                     });
                             }
-
-                            // Initial data fetch
-                            fetchStatusTemuanData('select_TA_KUI', chartStatusTemuanKUI, 1);
-                            fetchStatusTemuanData('select_TA_Perpus', chartStatusTemuanPerpus, 2);
-                            fetchStatusTemuanData('select_TA_Rekayasa', chartStatusTemuanRekayasa, 3);
-                            fetchStatusTemuanData('select_TA_Layanan', chartStatusTemuanLayanan, 4);
-                            fetchStatusTemuanData('select_TA_Perawatan', chartStatusTemuanPerawatan, 5);
-                            fetchStatusTemuanData('select_TA_TIK', chartStatusTemuanTIK, 6);
-
-                            // Add event listeners
-                            document.getElementById('select_TA_KUI').addEventListener('change', function() {
-                                fetchStatusTemuanData('select_TA_KUI', chartStatusTemuanKUI, 1);
-                            });
-                            document.getElementById('select_TA_Perpus').addEventListener('change', function() {
-                                fetchStatusTemuanData('select_TA_Perpus', chartStatusTemuanPerpus, 2);
-                            });
-                            document.getElementById('select_TA_Rekayasa').addEventListener('change', function() {
-                                fetchStatusTemuanData('select_TA_Rekayasa', chartStatusTemuanRekayasa, 3);
-                            });
-                            document.getElementById('select_TA_Layanan').addEventListener('change', function() {
-                                fetchStatusTemuanData('select_TA_Layanan', chartStatusTemuanLayanan, 4);
-                            });
-                            document.getElementById('select_TA_Perawatan').addEventListener('change', function() {
-                                fetchStatusTemuanData('select_TA_Perawatan', chartStatusTemuanPerawatan, 5);
-                            });
-                            document.getElementById('select_TA_TIK').addEventListener('change', function() {
-                                fetchStatusTemuanData('select_TA_TIK', chartStatusTemuanTIK, 6);
-                            });
-
                         });
                     </script>
 
-                    {{-- Bar Chart --}}
+                    {{-- Line Chart --}}
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
                             function createLineChart(chartId) {

@@ -7,8 +7,10 @@ use App\Models\InstrumenAudit;
 use App\Models\StatusTemuan;
 use App\Models\TahunAkademik;
 use App\Models\Unit;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
@@ -16,11 +18,19 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        $units = Unit::all();
+        if (User::find(Auth::user()->id)->hasRole('auditee')) {
+            $units = Unit::where('id', Auth::user()->id_unit)->get();
+            $statusInstrument = InstrumenAudit::whereHas('ami', function ($query) {
+                $query->where('id_user_auditee', Auth::user()->id);
+            })->get();
+        } else {
+            $units = Unit::all();
+            $statusInstrument = InstrumenAudit::all();
+        }
         $selectedTA = $request->input('select_TA');
         $selectedUnit = $request->input('select_Unit');
         $tahuns = TahunAkademik::all();
-        $statusInstrument = InstrumenAudit::all();
+
 
         // History
         $selectedUnit2 = $request->input('select_unit2');
