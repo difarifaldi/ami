@@ -317,18 +317,14 @@
                                             label: 'Jumlah Status Temuan',
                                             data: [],
                                             backgroundColor: [
-                                                'rgba(255, 99, 132, 0.6)', // Merah
-                                                'rgba(54, 162, 235, 0.6)', // Biru
-                                                'rgba(75, 192, 192, 0.6)', // Hijau
-                                                'rgba(255, 206, 86, 0.6)', // Kuning
-                                                'rgba(153, 102, 255, 0.6)', // Ungu
+                                                'rgba(255, 204, 0, 0.6)', // Belum Mencapai (Kuning Cerah)
+                                                'rgba(102, 179, 255, 0.6)', // Mencapai (Biru Terang)
+                                                'rgba(255, 161, 181, 0.6)', // Melampaui (Merah Muda)
                                             ],
                                             borderColor: [
-                                                'rgba(255, 99, 132, 1)', // Merah
-                                                'rgba(54, 162, 235, 1)', // Biru
-                                                'rgba(75, 192, 192, 1)', // Hijau
-                                                'rgba(255, 206, 86, 1)', // Kuning
-                                                'rgba(153, 102, 255, 1)', // Ungu
+                                                'rgba(255, 204, 0, 1)', // Border Belum Mencapai
+                                                'rgba(102, 179, 255, 1)', // Border Mencapai
+                                                'rgba(255, 161, 181, 1)', // Border Melampaui
                                             ],
                                             borderWidth: 1
                                         }]
