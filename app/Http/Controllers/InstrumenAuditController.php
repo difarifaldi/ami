@@ -65,7 +65,6 @@ class InstrumenAuditController extends Controller
             $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where('id_user_auditee', $userId)->pluck('id');
             $instrumentsQuery->whereIn('id_AMI', $auditMutuIds);
 
-
             // Indikator yang belum
             $instrumentIds = InstrumenAudit::whereIn('id_AMI', $auditMutuIds)->pluck('id_indikator')->toArray();
             $auditMutu = AuditMutuInternal::where('id_user_auditee', $userId)->where('status_audit', 'belum selesai')->get();
@@ -82,10 +81,12 @@ class InstrumenAuditController extends Controller
                     ->orWhere('id_user_auditor_anggota2', $userId);
             })->pluck('id');
             $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_tercapai');
+            $indikators = null;
         }
         if (User::find(auth()->user()->id)->hasRole('manajemen')) {
             $auditMutuIds = AuditMutuInternal::where('status_audit', 'belum selesai')->where('id_user_manajemen', $userId)->pluck('id');
             $instrumentsQuery->whereIn('id_AMI', $auditMutuIds)->whereNotNull('id_status_temuan');
+            $indikators = null;
         }
 
 

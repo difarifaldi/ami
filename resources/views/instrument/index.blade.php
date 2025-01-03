@@ -1,6 +1,6 @@
 @extends('layouts.layouts')
 
-@section('content') 
+@section('content')
     <div class="wrapper">
         <!--page-wrapper-->
         <div class="page-wrapper">
@@ -85,18 +85,20 @@
                                 <hr />
                                 <a href="instrument/create" class="btn btn-primary mb-3">Audit Instrumen</a>
 
-                                <div class="alert alert-danger" role="alert">
-                                    <h4 class="alert-heading">Perhatian!</h4>
-                                    <p>Anda belum melakukan pengisian data pada indikator Berikut.</p>
-                                    <hr>
-                                    <ul class="d-flex flex-wrap gap-3">
-                                        @foreach ($indikators as $indikator)
-                                            <li class="flex-fill">{{ $indikator->no }}</li>
-                                        @endforeach
-                                    </ul>
-                                    <hr>
-                                    <p>Harap segera mengisi data pada indikator yang tertera</p>
-                                </div>
+                                @if ($indikators->isNotEmpty())
+                                    <div class="alert alert-danger" role="alert">
+                                        <h4 class="alert-heading">Perhatian!</h4>
+                                        <p>Anda belum melakukan pengisian data pada indikator Berikut.</p>
+                                        <hr>
+                                        <ul class="d-flex flex-wrap gap-3">
+                                            @foreach ($indikators as $indikator)
+                                                <li class="flex-fill">{{ $indikator->no }}</li>
+                                            @endforeach
+                                        </ul>
+                                        <hr>
+                                        <p>Harap segera mengisi data pada indikator yang tertera</p>
+                                    </div>
+                                @endif
                             @endrole
 
                             <div class="table-responsive">
