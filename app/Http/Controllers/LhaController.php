@@ -49,9 +49,18 @@ class LhaController extends Controller
         $hasUnfinishedAudit = $auditMutuInternals->where('status_audit', 'belum selesai')->isNotEmpty();
 
         // Dapatkan semua instrumen yang terkait dengan audit
-        $instruments = InstrumenAudit::whereIn('id_AMI', $ami)->get();
-        $positiveInstruments = InstrumenAudit::whereIn('id_AMI', $ami)->whereNot('id_status_temuan', 1)->get();
-        $negativeInstruments = InstrumenAudit::whereIn('id_AMI', $ami)->where('id_status_temuan', 1)->get();
+        $instruments = InstrumenAudit::whereIn('id_AMI', $ami)->get()->sortBy(function ($instrument) {
+            // Urutkan berdasarkan nomor indikator sebagai angka (bukan string)
+            return floatval($instrument->indikator->no);
+        });
+        $positiveInstruments = InstrumenAudit::whereIn('id_AMI', $ami)->whereNot('id_status_temuan', 1)->get()->sortBy(function ($instrument) {
+            // Urutkan berdasarkan nomor indikator sebagai angka (bukan string)
+            return floatval($instrument->indikator->no);
+        });
+        $negativeInstruments = InstrumenAudit::whereIn('id_AMI', $ami)->where('id_status_temuan', 1)->get()->sortBy(function ($instrument) {
+            // Urutkan berdasarkan nomor indikator sebagai angka (bukan string)
+            return floatval($instrument->indikator->no);
+        });
 
         // Periksa apakah ada InstrumenAudit yang id_status_temuan-nya null
         $hasNullStatusTemuan = $instruments->whereNull('id_status_temuan')->isNotEmpty();
