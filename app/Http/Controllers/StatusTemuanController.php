@@ -26,6 +26,7 @@ class StatusTemuanController extends Controller
 
         // Query status temuan dengan relasi instrument
         $query = StatusTemuan::with(['instrument' => function ($query) use ($selectedUnit, $selectedTA) {
+            // Filter berdasarkan unit dan tahun akademik
             if ($selectedUnit) {
                 $query->whereHas('ami.unit', function ($query) use ($selectedUnit) {
                     $query->where('nama', $selectedUnit);
@@ -36,10 +37,14 @@ class StatusTemuanController extends Controller
                     $query->where('nama', $selectedTA);
                 });
             }
+
+            // Tambahkan pengurutan berdasarkan indikator->no
+            $query->orderByIndikatorNo();
         }]);
 
-        // Ambil data status temuan berdasarkan filter
+        // Ambil data status temuan
         $status = $query->get();
+
 
         // Hitung total jumlah instrumen untuk semua status
         $totalInstruments = $status->sum(function ($status) {

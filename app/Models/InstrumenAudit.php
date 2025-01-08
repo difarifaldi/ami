@@ -30,4 +30,11 @@ class InstrumenAudit extends Model
     {
         return $this->belongsTo(StatusAkhir::class, 'id_status_akhir');
     }
+
+    public function scopeOrderByIndikatorNo($query)
+    {
+        return $query->join('indikators', 'instrumen_audits.id_indikator', '=', 'indikators.id')
+            ->orderByRaw('CAST(indikators.no AS DECIMAL) ASC')
+            ->select('instrumen_audits.*'); // Pastikan memilih kolom sesuai kebutuhan
+    }
 }
