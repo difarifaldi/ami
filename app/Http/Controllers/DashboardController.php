@@ -21,7 +21,7 @@ class DashboardController extends Controller
         if (User::find(Auth::user()->id)->hasRole('auditee')) {
             $units = Unit::where('id', Auth::user()->id_unit)->get();
             $statusInstrument = InstrumenAudit::whereHas('ami', function ($query) {
-                $query->where('id_user_auditee', Auth::user()->id);
+                $query->where('id_unit', Auth::user()->id_unit);
             })->get();
         } else {
             $units = Unit::all();
