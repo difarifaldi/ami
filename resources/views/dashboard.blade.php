@@ -302,15 +302,19 @@
 
                 @section('scripts')
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 
-                    {{-- pie Chart --}}
+                    {{-- Doughnut Chart --}}
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
+                            // Daftarkan plugin ChartDataLabels
+                            Chart.register(ChartDataLabels);
+
                             function createChart(chartId) {
                                 const ctx = document.getElementById(chartId).getContext('2d');
                                 return new Chart(ctx, {
-                                    type: 'pie',
+                                    type: 'doughnut', // Ubah tipe menjadi doughnut
                                     data: {
                                         labels: [],
                                         datasets: [{
@@ -336,9 +340,23 @@
                                             title: {
                                                 display: true,
                                                 text: 'Grafik Status Temuan'
+                                            },
+                                            datalabels: {
+                                                color: '#000', // Warna label
+                                                font: {
+                                                    size: 12
+                                                },
+                                                formatter: (value, context) => {
+                                                    const dataset = context.chart.data.datasets[0];
+                                                    const total = dataset.data.reduce((acc, curr) => acc + curr, 0);
+                                                    const percentage = ((value / total) * 100).toFixed(
+                                                        2); // Hitung persentase
+                                                    return `${percentage}%`; // Tampilkan persentase
+                                                }
                                             }
                                         }
-                                    }
+                                    },
+                                    plugins: [ChartDataLabels] // Tambahkan plugin ChartDataLabels
                                 });
                             }
 
@@ -381,6 +399,7 @@
                             }
                         });
                     </script>
+
 
                     {{-- Line Chart --}}
                     <script>
