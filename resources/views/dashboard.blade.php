@@ -404,13 +404,13 @@
                     {{-- Line Chart --}}
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            function createLineChart(chartId) {
+                            function createBarChart(chartId) {
                                 const ctx = document.getElementById(chartId).getContext('2d');
                                 return new Chart(ctx, {
-                                    type: 'line',
+                                    type: 'bar', // Ubah tipe menjadi bar
                                     data: {
-                                        labels: [],
-                                        datasets: [],
+                                        labels: [], // Label akan diisi dari server
+                                        datasets: [], // Dataset akan diisi dari server
                                     },
                                     options: {
                                         responsive: true,
@@ -421,25 +421,24 @@
                                                 text: 'Grafik Data Status Temuan Berdasarkan Tanggal'
                                             }
                                         },
-                                        elements: {
-                                            line: {
-                                                tension: 0.4,
-                                                borderWidth: 2,
-                                                borderColor: '#007bff',
-                                                backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                                        scales: {
+                                            x: {
+                                                beginAtZero: true
                                             },
-                                            point: {
-                                                radius: 3,
-
+                                            y: {
+                                                beginAtZero: true,
+                                                ticks: {
+                                                    precision: 0 // Menampilkan angka tanpa desimal
+                                                }
                                             }
                                         }
                                     }
                                 });
                             }
 
-                            const chartData = createLineChart('chartData');
+                            const chartData = createBarChart('chartData');
 
-                            function fetchLineChartData(selectElementId, chart) {
+                            function fetchBarChartData(selectElementId, chart) {
                                 const selectUnit = document.getElementById(selectElementId);
                                 const selectedUnit = selectUnit.value;
                                 fetch(`/fetch-line-chart-data?unit_id=${selectedUnit}`)
@@ -451,8 +450,12 @@
                                     })
                                     .then(data => {
                                         console.log(data); // Debugging data
-                                        chart.data.labels = data.labels;
-                                        chart.data.datasets = data.datasets;
+                                        chart.data.labels = data.labels; // Set label
+                                        chart.data.datasets = data.datasets.map(dataset => ({
+                                            ...dataset,
+                                            backgroundColor: dataset
+                                                .borderColor // Gunakan warna border sebagai warna batang
+                                        }));
                                         chart.update();
                                     })
                                     .catch(error => {
@@ -462,10 +465,10 @@
                             }
 
                             // Initial data fetch
-                            fetchLineChartData('select_unit', chartData);
+                            fetchBarChartData('select_unit', chartData);
 
                             document.getElementById('select_unit').addEventListener('change', function() {
-                                fetchLineChartData('select_unit', chartData);
+                                fetchBarChartData('select_unit', chartData);
                             });
                         });
                     </script>

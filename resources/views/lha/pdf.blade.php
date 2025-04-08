@@ -486,18 +486,14 @@
         <ul>
             <li>Faktor Penyebab Keberhasilan Ketercapaian</li>
             <ul class="list-alpha">
-                @foreach ($instruments as $instrument)
-                    @if ($instrument->statusTemuan->id == 2)
-                        <li>{{ $instrument->akar_penyebab ? $instrument->akar_penyebab : '' }}</li>
-                    @endif
+                @foreach ($positiveInstruments as $instrument)
+                    <li>{{ $instrument->akar_penyebab ? $instrument->akar_penyebab : '' }}</li>
                 @endforeach
             </ul>
             <li>Akar Masalah Ketidak Tercapaian Standar</li>
             <ul class="list-alpha">
-                @foreach ($instruments as $instrument)
-                    @if ($instrument->statusTemuan->id == 1)
-                        <li>{{ $instrument->akar_penyebab ? $instrument->akar_penyebab : '' }}</li>
-                    @endif
+                @foreach ($negativeInstruments as $instrument)
+                    <li>{{ $instrument->akar_penyebab ? $instrument->akar_penyebab : '' }}</li>
                 @endforeach
             </ul>
         </ul>
@@ -507,18 +503,14 @@
         <ul>
             <li>Rekomendasi Ketercapaian</li>
             <ul class="list-alpha">
-                @foreach ($instruments as $instrument)
-                    @if ($instrument->statusTemuan->id == 2)
-                        <li>{{ $instrument->rekomendasi_auditor ? $instrument->rekomendasi_auditor : '' }}</li>
-                    @endif
+                @foreach ($positiveInstruments as $instrument)
+                    <li>{{ $instrument->rekomendasi_auditor ? $instrument->rekomendasi_auditor : '' }}</li>
                 @endforeach
             </ul>
             <li>Rekomendasi Ketidaktercapaian</li>
             <ul class="list-alpha">
-                @foreach ($instruments as $instrument)
-                    @if ($instrument->statusTemuan->id == 1)
-                        <li>{{ $instrument->rekomendasi_auditor ? $instrument->rekomendasi_auditor : '' }}</li>
-                    @endif
+                @foreach ($negativeInstruments as $instrument)
+                    <li>{{ $instrument->rekomendasi_auditor ? $instrument->rekomendasi_auditor : '' }}</li>
                 @endforeach
             </ul>
         </ul>
