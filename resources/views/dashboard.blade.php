@@ -69,7 +69,8 @@
                     </div>
                     <!--statistik Status End-->
 
-                    <div class="card radius-15">
+                    {{-- Bar Chart --}}
+                    {{-- <div class="card radius-15">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div>
@@ -89,7 +90,7 @@
                                 <canvas id="chartData" width="400" height="400"></canvas>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="row">
                         @foreach ($units as $unit)
