@@ -388,11 +388,35 @@
                                         return response.json();
                                     })
                                     .then(data => {
-                                        console.log(data); // Debugging data
+                                        const labelColorMap = {
+                                            'belum mencapai': {
+                                                backgroundColor: 'rgba(255, 0, 0, 0.7)', // 🔴 Merah terang
+                                                borderColor: 'rgba(255, 0, 0, 1)'
+                                            },
+                                            'tercapai': {
+                                                backgroundColor: 'rgba(0, 123, 255, 0.7)', // 🔵 Biru tegas (Bootstrap blue)
+                                                borderColor: 'rgba(0, 123, 255, 1)'
+                                            },
+                                            'melampaui': {
+                                                backgroundColor: 'rgba(40, 167, 69, 0.7)', // 🟢 Hijau tegas (Bootstrap success)
+                                                borderColor: 'rgba(40, 167, 69, 1)'
+                                            }
+                                        };
+
+
+                                        // Buat array warna sesuai urutan label dari response
+                                        const backgroundColors = data.labels.map(label => labelColorMap[label]
+                                            ?.backgroundColor || 'rgba(201, 203, 207, 0.6)');
+                                        const borderColors = data.labels.map(label => labelColorMap[label]?.borderColor ||
+                                            'rgba(201, 203, 207, 1)');
+
                                         chart.data.labels = data.labels;
                                         chart.data.datasets[0].data = data.values;
+                                        chart.data.datasets[0].backgroundColor = backgroundColors;
+                                        chart.data.datasets[0].borderColor = borderColors;
                                         chart.update();
                                     })
+
                                     .catch(error => {
                                         console.error('Error fetching data:', error);
                                     });
