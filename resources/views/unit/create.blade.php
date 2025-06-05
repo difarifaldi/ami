@@ -48,6 +48,25 @@
                                                     <div class="d-block text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-md-2 control-label text-left" for="id_parent">Unit
+                                                    Utama</label>
+                                                <div class="col-md-10 mt-4 col-sm-12">
+                                                    <div style="overflow: auto; max-height: 300px;">
+                                                        <ul style="list-style-type: none; padding-left: 0;">
+                                                            @foreach ($types as $type)
+                                                                @include('unit.type_node', [
+                                                                    'type' => $type,
+                                                                    'level' => 0,
+                                                                    'selectedType' => $selectedType ?? null,
+                                                                ])
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="form-group mt-4">
                                                 <label for="gambar" class="form-label">Logo</label>
                                                 <img class="img-preview img-fluid mb-3 col-sm-3">

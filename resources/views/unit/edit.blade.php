@@ -49,6 +49,25 @@
                                                 @enderror
                                             </div>
 
+                                            <div class="form-group row">
+                                                <label class="col-md-2 control-label text-left" for="id_parent">Kategori
+                                                    Utama
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="col-md-10 col-sm-12">
+                                                    <div style="overflow: auto; max-height: 300px;">
+                                                        <ul style="list-style-type: none; padding-left: 0;">
+                                                            @foreach ($types as $type)
+                                                                @include('unit.type_node', [
+                                                                    'type' => $type,
+                                                                    'level' => 0,
+                                                                    'selectedType' => $unit->id_parent, // Kirim data yang terpilih
+                                                                ])
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
 
                                             <div class="form-group mt-4">
                                                 <label for="gambar" class="form-label d-block">Logo Unit</label>

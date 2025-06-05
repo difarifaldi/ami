@@ -23,4 +23,13 @@ class Unit extends Model
     {
         return $this->hasMany(AuditMutuInternal::class, 'id_unit');
     }
+
+    public function children()
+    {
+        return $this->hasMany(Unit::class, 'id_parent');
+    }
+    public function parent()
+    {
+        return $this->belongsTo(Unit::class, 'id_parent');
+    }
 }

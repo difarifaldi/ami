@@ -28,7 +28,8 @@ class UnitController extends Controller
      */
     public function create()
     {
-        return view('unit.create');
+        $types = Unit::where('id_parent', 0)->with('children')->get();
+        return view('unit.create', compact('types'));
     }
 
     /**
@@ -38,11 +39,13 @@ class UnitController extends Controller
     {
         $validatedData = $request->validate([
             'nama' => 'required',
-            'gambar' => 'nullable|image|file'
+            'gambar' => 'nullable|image|file',
+            'id_parent' => 'nullable',
         ]);
         if ($request->file('gambar')) {
             $validatedData['gambar'] = $request->file('gambar')->store('unit-images', 'public');
         }
+        $validatedData['id_parent'] = isset($request->id_parent) ? $request->id_parent : 0;
 
         Unit::create($validatedData);
         return redirect('/unit')->with('success', 'Unit baru berhasil ditambahkan');
@@ -61,7 +64,8 @@ class UnitController extends Controller
      */
     public function edit(Unit $unit)
     {
-        return view('unit.edit', compact('unit'));
+        $types = Unit::where('id_parent', 0)->with('children')->get();
+        return view('unit.edit', compact('unit', 'types'));
     }
 
     /**
@@ -72,9 +76,11 @@ class UnitController extends Controller
 
         $validatedData = $request->validate([
             'nama' => 'required',
-            'gambar' => 'nullable|image|file'
+            'gambar' => 'nullable|image|file',
+            'id_parent' => 'nullable',
         ]);
 
+        $validatedData['id_parent'] = isset($request->id_parent) ? $request->id_parent : 0;
         if ($request->file('gambar')) {
             if ($unit->gambar) {
                 Storage::delete($unit->gambar);
