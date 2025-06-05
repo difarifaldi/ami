@@ -86,24 +86,30 @@
                                                                 class="img-preview-ttd img-fluid mb-3 col-sm-3">
                                                         @endif
 
-                                                        <div class="mb-3">
-                                                            <label class="form-label font-weight-bold">Pilih Metode Tanda
-                                                                Tangan</label>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    name="metode_ttd" id="uploadOption" value="upload"
-                                                                    checked>
-                                                                <label class="form-check-label" for="uploadOption">Upload
-                                                                    File</label>
+                                                        <label class="form-label font-weight-bold d-block">Pilih Metode
+                                                            Tanda
+                                                            Tangan</label>
+                                                        <div class="row mb-3">
+                                                            <div class="col-12 col-md-6">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="metode_ttd" id="uploadOption" value="upload"
+                                                                        checked>
+                                                                    <label class="form-check-label"
+                                                                        for="uploadOption">Upload File</label>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    name="metode_ttd" id="signatureOption"
-                                                                    value="signature">
-                                                                <label class="form-check-label" for="signatureOption">Tanda
-                                                                    Tangan Online</label>
+                                                            <div class="col-12 col-md-6">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="metode_ttd" id="signatureOption"
+                                                                        value="signature">
+                                                                    <label class="form-check-label"
+                                                                        for="signatureOption">Tanda Tangan Online</label>
+                                                                </div>
                                                             </div>
                                                         </div>
+
 
                                                         {{-- Upload File --}}
                                                         <div id="upload-file-form">
