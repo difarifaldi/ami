@@ -78,24 +78,31 @@ class DashboardController extends Controller
             foreach ($unit->auditMutu as $ami) {
                 foreach ($ami->instrument as $instrumen) {
                     $status = strtolower($instrumen->statusTemuan->nama ?? '');
-                    if (in_array($status, ['belum mencapai', 'tercapai', 'melampaui'])) {
-                        if ($status === 'belum mencapai') $counts['belum_mencapai']++;
-                        if ($status === 'tercapai') $counts['tercapai']++;
-                        if ($status === 'melampaui') $counts['melampaui']++;
-                    }
+                    if ($status === 'belum mencapai') $counts['belum_mencapai']++;
+                    if ($status === 'tercapai') $counts['tercapai']++;
+                    if ($status === 'melampaui') $counts['melampaui']++;
                 }
             }
+
+            $total = $counts['belum_mencapai'] + $counts['tercapai'] + $counts['melampaui'];
+            $positif = $counts['tercapai'] + $counts['melampaui'];
+            $percentage = $total > 0 ? round(($positif / $total) * 100, 2) : 0;
 
             return [
                 'unit_nama' => $unit->nama,
                 'belum_mencapai' => $counts['belum_mencapai'],
                 'tercapai' => $counts['tercapai'],
                 'melampaui' => $counts['melampaui'],
+                'positif_persen' => $percentage,
             ];
         });
 
+        // Top 3 unit dengan presentase positif tertinggi
+        $top3Units = $statusCountsPerUnit->sortByDesc('positif_persen')->take(3)->values(); // ->values() akan reset index array ke 0, 1, 2,
 
-        return view('dashboard', compact('units', 'selectedTA', 'selectedUnit', 'tahuns', 'statusInstrument', 'selectedUnit2', 'statusHistory', 'statusCountsPerUnit'));
+
+
+        return view('dashboard', compact('units', 'selectedTA', 'selectedUnit', 'tahuns', 'statusInstrument', 'selectedUnit2', 'statusHistory', 'statusCountsPerUnit', 'top3Units'));
     }
 
 

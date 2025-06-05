@@ -122,6 +122,43 @@
                             </div>
 
                         </div>
+                        <div class="col-lg-4">
+                            <div class="card radius-15 p-3 shadow-sm">
+                                <h5 class="text-center font-weight-bold text-warning">
+                                    <i class="bx bx-trophy"></i> Top 3 Unit
+                                </h5>
+                                <p class="text-center" style="color: rgb(204, 194, 194)">Berdasarkan rasio status positif
+                                </p>
+                                <ul class="list-group ">
+                                    @foreach ($top3Units as $index => $unit)
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                {{-- Medali --}}
+                                                <span style="font-size: 1rem; margin-right: 10px;">
+                                                    @if ($index == 0)
+                                                        🥇
+                                                    @elseif($index == 1)
+                                                        🥈
+                                                    @elseif($index == 2)
+                                                        🥉
+                                                    @endif
+                                                </span>
+                                                <div>
+                                                    <strong>{{ $unit['unit_nama'] }}</strong><br>
+                                                    <small>{{ $unit['positif_persen'] }}%</small>
+                                                </div>
+                                            </div>
+                                            {{-- Badge --}}
+                                            {{-- <span class="badge rounded-pill p-1 bg-success text-white">
+                                                {{ $unit['tercapai'] + $unit['melampaui'] }}
+                                            </span> --}}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
+
                     </div>
 
                     <div class="row">
