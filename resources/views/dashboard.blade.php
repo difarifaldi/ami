@@ -91,6 +91,38 @@
                             </div>
                         </div>
                     </div> --}}
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card radius-15 p-3">
+                                <h5>Rekap Status Temuan per Unit</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Unit</th>
+                                                <th>Belum Mencapai</th>
+                                                <th>Tercapai</th>
+                                                <th>Melampaui</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($statusCountsPerUnit as $index => $data)
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $data['unit_nama'] }}</td>
+                                                    <td>{{ $data['belum_mencapai'] }}</td>
+                                                    <td>{{ $data['tercapai'] }}</td>
+                                                    <td>{{ $data['melampaui'] }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
 
                     <div class="row">
                         @foreach ($units as $unit)

@@ -67,8 +67,35 @@ class DashboardController extends Controller
             ]);
         }
 
+        // Rekap Jumlah Status Temuan per Unit
+        $statusCountsPerUnit = Unit::with(['auditMutu.instrument.statusTemuan'])->get()->map(function ($unit) {
+            $counts = [
+                'belum_mencapai' => 0,
+                'tercapai' => 0,
+                'melampaui' => 0,
+            ];
 
-        return view('dashboard', compact('units', 'selectedTA', 'selectedUnit', 'tahuns', 'statusInstrument', 'selectedUnit2', 'statusHistory'));
+            foreach ($unit->auditMutu as $ami) {
+                foreach ($ami->instrument as $instrumen) {
+                    $status = strtolower($instrumen->statusTemuan->nama ?? '');
+                    if (in_array($status, ['belum mencapai', 'tercapai', 'melampaui'])) {
+                        if ($status === 'belum mencapai') $counts['belum_mencapai']++;
+                        if ($status === 'tercapai') $counts['tercapai']++;
+                        if ($status === 'melampaui') $counts['melampaui']++;
+                    }
+                }
+            }
+
+            return [
+                'unit_nama' => $unit->nama,
+                'belum_mencapai' => $counts['belum_mencapai'],
+                'tercapai' => $counts['tercapai'],
+                'melampaui' => $counts['melampaui'],
+            ];
+        });
+
+
+        return view('dashboard', compact('units', 'selectedTA', 'selectedUnit', 'tahuns', 'statusInstrument', 'selectedUnit2', 'statusHistory', 'statusCountsPerUnit'));
     }
 
 
