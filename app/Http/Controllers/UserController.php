@@ -302,45 +302,48 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($request->user_id);
 
-            // Validasi data input
-            $validatedData = $request->validate([
-                'ttd' => 'nullable|image|file|max:1024',
+            $request->validate([
+                'metode_ttd' => 'required|in:upload,signature',
+                'ttd_upload' => 'nullable|image|file|max:1024',
+                'ttd_signature' => 'nullable|string',
                 'foto' => 'nullable|image|file|max:1024',
             ]);
 
-            // Cek jika ada file 'ttd' yang diunggah
-            if ($request->file('ttd')) {
+            $dataToUpdate = [];
+
+            // Proses tanda tangan
+            if ($request->input('metode_ttd') === 'upload' && $request->hasFile('ttd_upload')) {
                 if ($user->ttd) {
                     Storage::disk('public')->delete($user->ttd);
                 }
-                $validatedData['ttd'] = $request->file('ttd')->store('tanda-tangan', 'public');
+                $dataToUpdate['ttd'] = $request->file('ttd_upload')->store('tanda-tangan', 'public');
+            } elseif ($request->input('metode_ttd') === 'signature' && $request->filled('ttd_signature')) {
+                if ($user->ttd) {
+                    Storage::disk('public')->delete($user->ttd);
+                }
+                $base64 = str_replace('data:image/png;base64,', '', $request->input('ttd_signature'));
+                $imageName = 'signature-' . time() . '.png';
+                Storage::disk('public')->put("tanda-tangan/{$imageName}", base64_decode($base64));
+                $dataToUpdate['ttd'] = "tanda-tangan/{$imageName}";
             }
 
-            // Cek jika ada file 'foto' yang diunggah
+            // Proses foto
             if ($request->file('foto')) {
                 if ($user->foto) {
                     Storage::disk('public')->delete($user->foto);
                 }
-                $validatedData['foto'] = $request->file('foto')->store('foto-profile', 'public');
-            }
-
-
-            // Tambahkan 'ttd' dan 'foto' jika ada di $validatedData
-            if (isset($validatedData['ttd'])) {
-                $dataToUpdate['ttd'] = $validatedData['ttd'];
-            }
-            if (isset($validatedData['foto'])) {
-                $dataToUpdate['foto'] = $validatedData['foto'];
+                $dataToUpdate['foto'] = $request->file('foto')->store('foto-profile', 'public');
             }
 
             // Update user
             $user->update($dataToUpdate);
 
-            return redirect('/')->with('success', 'Berhasil Update User.');
+            return redirect('/')->with('success', 'Berhasil Update Profil.');
         } catch (Exception $e) {
             return redirect()->back()->with(['failed' => $e->getMessage()])->withInput();
         }
     }
+
     public function changePassword(Request $request)
     {
 

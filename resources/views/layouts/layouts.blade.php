@@ -48,6 +48,9 @@
     <!-- Example using SweetAlert2 for notifications -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+    <!-- Tanda tangan Digital -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.5/dist/signature_pad.umd.min.js"></script>
+
     <!-- App CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/dark-sidebar.css') }}">

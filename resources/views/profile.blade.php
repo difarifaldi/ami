@@ -86,18 +86,52 @@
                                                                 class="img-preview-ttd img-fluid mb-3 col-sm-3">
                                                         @endif
 
-                                                        <div class="custom-file">
-                                                            <input type="file"
-                                                                class="custom-file-input @error('ttd')is-invalid @enderror"
-                                                                name="ttd" id="ttd"
-                                                                aria-describedby="inputGroupFileAddon01"
-                                                                onchange="previewImage('ttd', 'img-preview-ttd')">
-                                                            <label class="custom-file-label" for="ttd">Choose
-                                                                File</label>
+                                                        <div class="mb-3">
+                                                            <label class="form-label font-weight-bold">Pilih Metode Tanda
+                                                                Tangan</label>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="metode_ttd" id="uploadOption" value="upload"
+                                                                    checked>
+                                                                <label class="form-check-label" for="uploadOption">Upload
+                                                                    File</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="metode_ttd" id="signatureOption"
+                                                                    value="signature">
+                                                                <label class="form-check-label" for="signatureOption">Tanda
+                                                                    Tangan Online</label>
+                                                            </div>
                                                         </div>
-                                                        @error('ttd')
-                                                            <div class="d-block text-danger">{{ $message }}</div>
-                                                        @enderror
+
+                                                        {{-- Upload File --}}
+                                                        <div id="upload-file-form">
+                                                            <label for="ttd-upload"
+                                                                class="form-label d-block font-weight-bold">Upload
+                                                                File</label>
+                                                            <div class="custom-file">
+                                                                <input type="file"
+                                                                    class="custom-file-input @error('ttd')is-invalid @enderror"
+                                                                    name="ttd_upload" id="ttd-upload"
+                                                                    onchange="previewImage('ttd-upload', 'img-preview-ttd')">
+                                                                <label class="custom-file-label" for="ttd-upload">Upload
+                                                                    File</label>
+                                                            </div>
+                                                        </div>
+
+                                                        {{-- Signature Online --}}
+                                                        <div id="signature-online-form" style="display: none;">
+                                                            <label class="form-label d-block font-weight-bold">Tanda Tangan
+                                                                Online</label>
+                                                            <canvas id="signature-pad" width=400 height=200
+                                                                style="border:1px solid #ccc; border-radius: 8px;"></canvas>
+                                                            <button type="button" class="btn btn-sm btn-secondary mt-2"
+                                                                id="clear-signature">Clear</button>
+                                                            <input type="hidden" name="ttd_signature"
+                                                                id="ttd-signature">
+                                                        </div>
+
                                                     </div>
 
                                                     <div class="btn-group mt-3 d-flex">
@@ -173,6 +207,8 @@
             });
         </script>
     @endif
+
+    {{-- Preview Image --}}
     <script>
         // resources/js/profile.js
 
@@ -234,6 +270,43 @@
                     })
                 }
             })
+        });
+    </script>
+
+    {{-- Signature Online --}}
+    <script>
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas);
+        const clearBtn = document.getElementById('clear-signature');
+        const signatureInput = document.getElementById('ttd-signature');
+
+        clearBtn.addEventListener('click', function() {
+            signaturePad.clear();
+        });
+
+        // Toggle method
+        const uploadForm = document.getElementById('upload-file-form');
+        const signatureForm = document.getElementById('signature-online-form');
+
+        document.querySelectorAll('input[name="metode_ttd"]').forEach((el) => {
+            el.addEventListener('change', function() {
+                if (this.value === 'upload') {
+                    uploadForm.style.display = 'block';
+                    signatureForm.style.display = 'none';
+                } else {
+                    uploadForm.style.display = 'none';
+                    signatureForm.style.display = 'block';
+                }
+            });
+        });
+
+        // Saat form dikirim
+        document.querySelector('form').addEventListener('submit', function() {
+            // Kalau signature dipilih, isi hidden input dengan data base64
+            const selected = document.querySelector('input[name="metode_ttd"]:checked').value;
+            if (selected === 'signature' && !signaturePad.isEmpty()) {
+                signatureInput.value = signaturePad.toDataURL();
+            }
         });
     </script>
 @endsection
