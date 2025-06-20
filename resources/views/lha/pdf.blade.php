@@ -344,7 +344,7 @@
                             $datattd1 = file_get_contents($pathttd1);
                             $base64ttd1 = 'data:image/' . $typettd1 . ';base64,' . base64_encode($datattd1);
                         } else {
-                            echo 'File tidak ditemukan: ' . $pathttd1;
+                            // echo 'File tidak ditemukan: ' . $pathttd1;
                         }
                     }
                     ?>
@@ -368,7 +368,7 @@
                             $datattd2 = file_get_contents($pathttd2);
                             $base64ttd2 = 'data:image/' . $typettd2 . ';base64,' . base64_encode($datattd2);
                         } else {
-                            echo 'File tidak ditemukan: ' . $pathttd2;
+                            // echo 'File tidak ditemukan: ' . $pathttd2;
                         }
                     }
                     ?>
@@ -392,7 +392,7 @@
                                 $datattd3 = file_get_contents($pathttd3);
                                 $base64ttd3 = 'data:image/' . $typettd3 . ';base64,' . base64_encode($datattd3);
                             } else {
-                                echo 'File tidak ditemukan: ' . $pathttd3;
+                                // echo 'File tidak ditemukan: ' . $pathttd3;
                             }
                         }
                         ?>
@@ -467,12 +467,16 @@
                     <tr>
                         <td>{{ $instrument->indikator->no }}</td>
                         <td style="text-align: justify; padding: 12px">{!! $instrument->indikator->indikator !!}</td>
-                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">{!! $instrument->statusTemuan->nama == 'melampaui' ? '4' : '' !!}
+                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">
+                            {!! optional($instrument->statusTemuan)->nama == 'melampaui' ? '4' : '' !!}
                         </td>
-                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">{!! $instrument->statusTemuan->nama == 'tercapai' ? '4' : '' !!}
+                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">
+                            {!! optional($instrument->statusTemuan)->nama == 'tercapai' ? '4' : '' !!}
                         </td>
-                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">{!! $instrument->statusTemuan->nama == 'belum mencapai' ? '4' : '' !!}
+                        <td style="font-family: ZapfDingbats, sans-serif; text-align: center">
+                            {!! optional($instrument->statusTemuan)->nama == 'belum mencapai' ? '4' : '' !!}
                         </td>
+
 
                     </tr>
                 @endforeach
@@ -586,7 +590,7 @@
                                 $datattd4 = file_get_contents($pathttd4);
                                 $base64ttd4 = 'data:image/' . $typettd4 . ';base64,' . base64_encode($datattd4);
                             } else {
-                                echo 'File tidak ditemukan: ' . $pathttd4;
+                                // echo 'File tidak ditemukan: ' . $pathttd4;
                             }
                         }
                         ?>
@@ -605,7 +609,7 @@
                                 $datattd1 = file_get_contents($pathttd1);
                                 $base64ttd1 = 'data:image/' . $typettd1 . ';base64,' . base64_encode($datattd1);
                             } else {
-                                echo 'File tidak ditemukan: ' . $pathttd1;
+                                // echo 'File tidak ditemukan: ' . $pathttd1;
                             }
                         }
                         ?>
@@ -631,7 +635,7 @@
                                 $datattd5 = file_get_contents($pathttd5);
                                 $base64ttd5 = 'data:image/' . $typettd5 . ';base64,' . base64_encode($datattd5);
                             } else {
-                                echo 'File tidak ditemukan: ' . $pathttd5;
+                                // echo 'File tidak ditemukan: ' . $pathttd5;
                             }
                         }
                         ?>

@@ -59,13 +59,13 @@
                                                             <div class="d-block text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
-                                                    @if ($user->forgot_password == 'ya')
-                                                        <div class="form-group mt-4">
-                                                            <label>Password Baru</label>
-                                                            <input type="password" name="password" id="password"
-                                                                class="form-control" placeholder="Masukan password baru" />
-                                                        </div>
-                                                    @endif
+
+                                                    <div class="form-group mt-4">
+                                                        <label>Password Baru</label>
+                                                        <input type="password" name="password" id="password"
+                                                            class="form-control" placeholder="Masukan password baru" />
+                                                    </div>
+
 
                                                     <div class="form-group mt-4">
                                                         <label>NIP</label>

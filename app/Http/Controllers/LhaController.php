@@ -71,9 +71,9 @@ class LhaController extends Controller
         }
 
         // Jika ada status temuan yang null dan audit belum selesai, kembalikan pesan error
-        if ($hasNullStatusTemuan && $hasUnfinishedAudit) {
-            return redirect()->back()->with('error', 'Auditor Belum Mengaudit Semua Indikator');
-        }
+        // if ($hasNullStatusTemuan && $hasUnfinishedAudit) {
+        //     return redirect()->back()->with('error', 'Auditor Belum Mengaudit Semua Indikator');
+        // }
 
         //untuk export managemen
         $hasNoNullStatusSelesai = $instruments->whereNull('id_status_akhir')->isEmpty();
