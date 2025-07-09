@@ -227,7 +227,7 @@
         <table>
             <tr>
                 <th colspan="2" style="font-weight: 500">LAPORAN HASIL AUDIT <br> TAHUN 2024</th>
-                <th colspan="2">AUDIT MUTU INTERNAL <br> UNIT <br>
+                <th colspan="2">AUDIT MUTU INTERNAL <br> UNIT/BAGIAN <br>
                     {{ $instruments->first()->ami->unit->nama }}
                 </th>
             </tr>
@@ -434,7 +434,7 @@
             @foreach ($positiveInstruments as $instrument)
                 <tr>
                     <td>{{ $instrument->indikator->no }}</td>
-                    <td> {!! $instrument->indikator->indikator !!}</td>
+                    <td> {!! $instrument->deskripsi_temuan !!}</td>
                 </tr>
             @endforeach
         </table>
