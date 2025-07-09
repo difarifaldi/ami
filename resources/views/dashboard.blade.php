@@ -94,7 +94,7 @@
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="card radius-15 p-3">
-                                <h5>Rekap Status Temuan per Unit</h5>
+                                <h5>Rekap Status Temuan per Unit/Bagian</h5>
                                 <div class="table-responsive">
                                     <table class="table table-sm">
                                         <thead class="table-light">
@@ -125,7 +125,7 @@
                         <div class="col-lg-4">
                             <div class="card radius-15 p-3 shadow-sm">
                                 <h5 class="text-center font-weight-bold text-warning">
-                                    <i class="bx bx-trophy"></i> Top 3 Unit
+                                    <i class="bx bx-trophy"></i> Top 3 Unit/Bagian
                                 </h5>
                                 <p class="text-center" style="color: rgb(204, 194, 194)">Berdasarkan rasio status positif
                                 </p>
@@ -200,7 +200,7 @@
 
 
                     {{-- History --}}
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-body">
                             <h4 class="text-center my-4">Riwayat Status Temuan Audit</h4>
 
@@ -249,7 +249,7 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -366,8 +366,6 @@
                             updateTable(); // Memuat data pertama kali
                         });
                     </script>
-
-
                 @endsection
 
                 @section('scripts')

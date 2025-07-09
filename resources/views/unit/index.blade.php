@@ -17,11 +17,11 @@
                         <div class="card-body">
                             <div class="card-title">
                                 <!-- Isi judul card -->
-                                <h4 class="text-center my-4">Daftar Unit</h4>
+                                <h4 class="text-center my-4">Daftar Unit & Bagian</h4>
                             </div>
                             <hr />
 
-                            <a href="/unit/create" class="btn btn-md btn-success mb-3 ml-3">Unit Baru</a>
+                            <a href="/unit/create" class="btn btn-md btn-success mb-3 ml-3">Unit & Bagian Baru</a>
 
                             <div class="table-responsive">
                                 <div class="card-body">
@@ -29,7 +29,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">No</th>
-                                                <th scope="col">Id Unit</th>
+                                                <th scope="col">Id Unit/Bagian</th>
                                                 <th scope="col">Nama</th>
                                                 <th scope="col">Sampul</th>
                                                 <th scope="col">Aksi</th>

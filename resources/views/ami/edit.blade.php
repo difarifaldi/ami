@@ -40,7 +40,7 @@
                                             <div class="row">
                                                 <div class="col-6">
                                                     <div class="form-group mt-4">
-                                                        <label>Unit</label>
+                                                        <label>Unit/Bagian</label>
                                                         <input type="text" class="form-control bg-white"
                                                             value="{{ $audit->unit->nama }}" readonly>
                                                     </div>

@@ -38,10 +38,10 @@
                                             <div class="row">
                                                 <div class="col-6">
                                                     <div class="form-group mt-4">
-                                                        <label>Unit</label>
+                                                        <label>Unit/Bagian</label>
                                                         <select name="id_unit" id="id_unit" class="single-select"
                                                             onchange="fetchAuditeeByUnit()">
-                                                            <option value="">Silahkan Pilih Unit</option>
+                                                            <option value="">Silahkan Pilih Unit/Bagian</option>
                                                             @foreach ($units as $unit)
                                                                 <option value="{{ $unit->id }}"
                                                                     {{ old('id_unit') == $unit->id ? 'selected' : '' }}>

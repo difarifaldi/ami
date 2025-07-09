@@ -16,7 +16,7 @@
                                 <ol class="breadcrumb mb-0 p-0">
                                     <li class="breadcrumb-item"><a href="/unit"><i class='bx bx-home-alt'></i></a>
                                     </li>
-                                    <li class="breadcrumb-item active" aria-current="page">Form Unit</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Form Unit / Bagian</li>
                                 </ol>
                             </nav>
                         </div>
@@ -28,7 +28,7 @@
                                 <div class="card border-0 shadow-sm rounded">
                                     <div class="card-body">
                                         <div>
-                                            <h4 class="text-center my-4">Form Unit</h4>
+                                            <h4 class="text-center my-4">Form Unit / Bagian</h4>
                                         </div>
                                         <hr />
                                         <!-- Formulir pendaftaran -->
@@ -37,7 +37,7 @@
                                             @csrf
 
                                             <div class="form-group mt-4">
-                                                <label>Nama Unit</label>
+                                                <label>Nama Unit/Bagian</label>
                                                 <input type="text" name="nama" id="nama"
                                                     class="form-control @error('nama')
                                                     is-invalid
@@ -50,7 +50,7 @@
                                             </div>
 
                                             <div class="form-group row">
-                                                <label class="col-md-2 control-label text-left" for="id_parent">Unit
+                                                <label class="col-md-2 control-label text-left" for="id_parent">Unit/Bagian
                                                     Utama</label>
                                                 <div class="col-md-10 mt-4 col-sm-12">
                                                     <div style="overflow: auto; max-height: 300px;">

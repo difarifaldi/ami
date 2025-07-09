@@ -100,8 +100,8 @@
                                                     </div>
 
                                                     <div class="form-group mt-4">
-                                                        <label>Units</label>
-                                                        <select class="form-control" name="id_unit" id="id_unit">
+                                                        <label>Unit/Bagian</label>
+                                                        <select class="single-select" name="id_unit" id="id_unit">
                                                             @foreach ($units as $unit)
                                                                 @if ($user->id_unit === $unit->id)
                                                                     <option value="{{ $unit->id }}" selected>

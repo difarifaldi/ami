@@ -148,10 +148,10 @@
                     <a class="has-arrow" href="javascript:;">
                         <div class="parent-icon text-success"> <i class="bi bi-building-gear"></i>
                         </div>
-                        <div class="menu-title ">Unit</div>
+                        <div class="menu-title ">Unit & Bagian</div>
                     </a>
                     <ul>
-                        <li> <a href="/unit"><i class="bi bi-list-stars"></i>Daftar Unit</a>
+                        <li> <a href="/unit"><i class="bi bi-list-stars"></i>Daftar Unit & Bagian</a>
                         </li>
 
 

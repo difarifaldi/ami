@@ -100,13 +100,14 @@
                                             </div>
 
                                             <div class="form-group mt-4">
-                                                <label>Unit <span class="text-danger">*</span></label>
-                                                <select class="form-control" name="id_unit" id="id_unit">
+                                                <label>Unit/Bagian <span class="text-danger">*</span></label>
+                                                <select class="single-select" name="id_unit" id="id_unit">
                                                     @foreach ($units as $unit)
                                                         <option value="{{ $unit->id }}">{{ $unit->nama }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
+
                                             <div class="form-group mt-4">
                                                 <label>Status <span class="text-danger">*</span></label>
                                                 <select class="form-control" name="status" id="status">

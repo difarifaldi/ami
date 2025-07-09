@@ -78,9 +78,9 @@
                                                 @enderror
                                             </div>
                                             <div class="form-group mt-4">
-                                                <label>Unit</label>
-                                                <select name="id_unit" class="form-control" id="id_unit">
-                                                    <option value="">Silahkan Pilih Unit</option>
+                                                <label>Unit/Bagian</label>
+                                                <select name="id_unit" class="single-select" id="id_unit">
+                                                    <option value="">Silahkan Pilih Unit/Bagian</option>
                                                     @foreach ($units as $unit)
                                                         <option value="{{ $unit->id }}"
                                                             {{ old('id_unit') == $unit->id ? 'selected' : '' }}>

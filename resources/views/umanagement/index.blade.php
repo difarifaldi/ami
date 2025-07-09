@@ -55,7 +55,7 @@
                                                 <th scope="col">Email</th>
                                                 <th scope="col">NIP</th>
                                                 <th scope="col">Peran</th>
-                                                <th scope="col">Unit</th>
+                                                <th scope="col">Unit/Bagian</th>
                                                 <th scope="col">Tanda Tangan</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">foto</th>
@@ -181,7 +181,7 @@
                             1. Baris pertama pada file Excel terdiri dari header
                         </li>
                         <li class="font-weight-normal">
-                            2. Asal unit pada file Excel harus diubah dengan aturan sebagai berikut:
+                            2. Asal unit/bagian pada file Excel harus diubah dengan aturan sebagai berikut:
                             <ul class="font-weight-normal">
                                 <li>1 = UPT Urusan Internasional (KUI) </li>
                                 <li>2 = UPA Perpustakaan </li>

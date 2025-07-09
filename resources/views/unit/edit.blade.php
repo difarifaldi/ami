@@ -37,7 +37,7 @@
                                             @csrf
                                             @method('PATCH')
                                             <div class="form-group mt-4">
-                                                <label>Nama Unit</label>
+                                                <label>Nama Unit/Bagian</label>
                                                 <input type="text" name="nama" id="nama"
                                                     class="form-control @error('nama')
                                                     is-invalid
@@ -70,7 +70,7 @@
 
 
                                             <div class="form-group mt-4">
-                                                <label for="gambar" class="form-label d-block">Logo Unit</label>
+                                                <label for="gambar" class="form-label d-block">Logo Unit/Bagian</label>
 
                                                 @if ($unit->gambar)
                                                     <img src="{{ asset('/storage/' . $unit->gambar) }}"
